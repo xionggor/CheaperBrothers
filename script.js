@@ -125,3 +125,4 @@ function displayResults(combos){
 window.onload = () => {
   loadSubmissions();
 };
+
