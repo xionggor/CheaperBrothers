@@ -12,12 +12,17 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
     adverb2: document.getElementById('adverb2').value,
     remark: document.getElementById('remark').value
   };
+  
   await fetch(sheetUrl + "?action=submit", {
     method: 'POST',
     body: JSON.stringify(data)
   });
-  document.getElementById('form-message').innerText = "提交成功！";
+
+  alert("提交成功！"); // 弹窗提醒
   document.getElementById('giftForm').reset();
+
+  // 刷新提交信息列表
+  loadSubmissions();
 });
 
 // 主持人登录
@@ -67,6 +72,36 @@ document.getElementById('assignBtn').addEventListener('click', async () => {
   displayResults(combos);
 });
 
+// 加载已提交信息
+async function loadSubmissions() {
+  const res = await fetch(sheetUrl + "?action=get");
+  const entries = await res.json();
+  const containerId = 'submissionList';
+  let container = document.getElementById(containerId);
+
+  // 如果不存在容器就创建
+  if(!container){
+    container = document.createElement('div');
+    container.id = containerId;
+    container.innerHTML = "<h3>已提交信息</h3>";
+    document.getElementById('form-section').appendChild(container);
+  }
+
+  // 清空原有列表
+  container.innerHTML = "<h3>已提交信息</h3>";
+
+  entries.forEach(e => {
+    const div = document.createElement('div');
+    div.style.border = "1px solid #ccc";
+    div.style.margin = "5px 0";
+    div.style.padding = "5px";
+    div.style.borderRadius = "8px";
+    div.style.backgroundColor = "#fff3e0";
+    div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+    container.appendChild(div);
+  });
+}
+
 // 工具函数
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
@@ -85,3 +120,8 @@ function displayResults(combos){
     ul.appendChild(li);
   });
 }
+
+// 页面加载时显示已有提交信息
+window.onload = () => {
+  loadSubmissions();
+};
