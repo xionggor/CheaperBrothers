@@ -1,5 +1,8 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbz6k7HAwZtm-FyNa0tcBmsyUFJCMNibFBPCEnlpHNA2caYf8I7TJRHucN1wgh4_EqC7/exec";
+// ✅ 更新为你的新 Web App URL
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
+
 let isAdmin = false;
+
 // 提交表单
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -61,20 +64,33 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     });
   }
 
-  await fetch(sheetUrl + "?action=save_combos", {
-    method: 'POST',
-    body: JSON.stringify(combinations)
-  });
-
   displayResults(combinations);
 });
 
-// 随机分配
+// 随机分配（重新显示组合）
 document.getElementById('assignBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
-  const res = await fetch(sheetUrl + "?action=get_combos");
-  const combos = await res.json();
-  displayResults(combos);
+  const res = await fetch(sheetUrl + "?action=get");
+  const entries = await res.json();
+
+  let verbs = [];
+  let adverbs = [];
+  entries.forEach(e => {
+    verbs.push(e.verb1, e.verb2);
+    adverbs.push(e.adverb1, e.adverb2);
+  });
+  verbs = shuffle(verbs);
+  adverbs = shuffle(adverbs);
+
+  const combinations = [];
+  for(let i=0; i<entries.length; i++){
+    combinations.push({
+      name: entries[i].name,
+      combo: `${adverbs[i % adverbs.length]} ${verbs[i % verbs.length]}`
+    });
+  }
+
+  displayResults(combinations);
 });
 
 // 加载已提交信息
@@ -107,7 +123,7 @@ async function loadSubmissions() {
   }
 }
 
-// 工具函数
+// 工具函数：数组随机打乱
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -116,6 +132,7 @@ function shuffle(array){
   return array;
 }
 
+// 显示抽签结果
 function displayResults(combos){
   const ul = document.getElementById('resultsList');
   ul.innerHTML = '';
