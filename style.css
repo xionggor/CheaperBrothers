@@ -1,78 +1,121 @@
+/* 基本全局样式 */
 body {
-  font-family: 'Comic Sans MS', sans-serif;
-  background-color: #fff8f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff9f0;
   color: #333;
   margin: 0;
   padding: 0;
-  text-align: center;
 }
 
 header {
-  background: linear-gradient(90deg, #e53935, #43a047);
-  color: #fff;
+  background: linear-gradient(to right, #c62828, #2e7d32);
+  color: white;
   padding: 20px;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+  text-align: center;
 }
 
 header h1 {
-  font-size: 2em;
-  margin: 0;
+  margin: 0 0 10px 0;
+  font-size: 1.8em;
 }
 
 header p {
+  margin: 0;
   font-size: 1em;
-  margin-top: 5px;
 }
 
-section {
-  margin: 20px auto;
+main {
   padding: 20px;
-  max-width: 500px;
-  border-radius: 20px;
-  background-color: #fff2e6;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 报名表样式 */
+form {
+  background-color: #fffbf0;
+  border: 2px dashed #c62828;
+  padding: 15px;
+  border-radius: 12px;
 }
 
 label {
   display: block;
-  margin: 10px 0;
+  margin: 10px 0 5px 0;
   font-weight: bold;
 }
 
 input[type="text"], input[type="password"] {
-  width: 80%;
+  width: 95%;
   padding: 8px;
-  border-radius: 10px;
   border: 1px solid #ccc;
-  margin-top: 5px;
+  border-radius: 6px;
+  margin-top: 2px;
 }
 
 button {
-  margin: 10px 5px;
-  padding: 10px 20px;
-  border-radius: 15px;
-  border: none;
-  background-color: #ff7043;
+  background-color: #2e7d32;
   color: white;
-  font-weight: bold;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #f4511e;
+  background-color: #1b5e20;
 }
 
-#resultsList {
-  list-style-type: none;
-  padding: 0;
-  font-size: 1.1em;
+/* 示例词语 */
+.example {
+  font-size: 0.85em;
+  color: #888;
+  margin: 0 0 10px 5px;
+}
+
+/* 提交信息列表 */
+#submissionList div {
+  border: 1px solid #ccc;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #fff3e0;
+}
+
+/* 主持人操作部分 */
+#admin-section {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #e8f5e9;
+  border-radius: 12px;
+  border: 2px dashed #2e7d32;
+}
+
+#admin-controls {
+  display: none;
+  margin-top: 10px;
+}
+
+/* 抽签结果 */
+#results-section {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #fff3e0;
+  border-radius: 12px;
+  border: 2px dashed #c62828;
 }
 
 #resultsList li {
-  background-color: #ffe0b2;
   margin: 5px 0;
+  padding: 5px;
+  border-radius: 6px;
+  background-color: #ffe0b2;
+}
+
+/* 页脚 */
+footer {
+  text-align: center;
+  margin-top: 40px;
   padding: 10px;
-  border-radius: 10px;
+  color: #555;
 }
