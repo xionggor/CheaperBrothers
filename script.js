@@ -1,6 +1,5 @@
 const sheetUrl = "https://script.google.com/macros/s/AKfycbz6k7HAwZtm-FyNa0tcBmsyUFJCMNibFBPCEnlpHNA2caYf8I7TJRHucN1wgh4_EqC7/exec";
 let isAdmin = false;
-
 // 提交表单
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -12,7 +11,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
     adverb2: document.getElementById('adverb2').value,
     remark: document.getElementById('remark').value
   };
-  
+
   try {
     await fetch(sheetUrl + "?action=submit", {
       method: 'POST',
@@ -21,7 +20,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
     alert("提交成功！");
     document.getElementById('giftForm').reset();
     loadSubmissions();
-  } catch(err) {
+  } catch(err){
     alert("提交失败，请稍后再试");
     console.error(err);
   }
@@ -44,6 +43,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
+
   let verbs = [];
   let adverbs = [];
   entries.forEach(e => {
@@ -52,6 +52,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   });
   verbs = shuffle(verbs);
   adverbs = shuffle(adverbs);
+
   const combinations = [];
   for(let i=0; i<entries.length; i++){
     combinations.push({
@@ -59,10 +60,12 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
       combo: `${adverbs[i % adverbs.length]} ${verbs[i % verbs.length]}`
     });
   }
+
   await fetch(sheetUrl + "?action=save_combos", {
     method: 'POST',
     body: JSON.stringify(combinations)
   });
+
   displayResults(combinations);
 });
 
@@ -79,17 +82,7 @@ async function loadSubmissions() {
   try {
     const res = await fetch(sheetUrl + "?action=get");
     const entries = await res.json();
-
-    const containerId = 'submissionList';
-    let container = document.getElementById(containerId);
-
-    if(!container){
-      container = document.createElement('div');
-      container.id = containerId;
-      container.innerHTML = "<h3>已提交信息</h3>";
-      document.getElementById('form-section').appendChild(container);
-    }
-
+    const container = document.getElementById('submissionList');
     container.innerHTML = "<h3>已提交信息</h3>";
 
     entries.forEach(e => {
