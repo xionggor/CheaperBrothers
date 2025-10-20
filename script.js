@@ -13,16 +13,18 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
     remark: document.getElementById('remark').value
   };
   
-  await fetch(sheetUrl + "?action=submit", {
-    method: 'POST',
-    body: JSON.stringify(data)
-  });
-
-  alert("提交成功！"); // 弹窗提醒
-  document.getElementById('giftForm').reset();
-
-  // 刷新提交信息列表
-  loadSubmissions();
+  try {
+    await fetch(sheetUrl + "?action=submit", {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    alert("提交成功！");
+    document.getElementById('giftForm').reset();
+    loadSubmissions();
+  } catch(err) {
+    alert("提交失败，请稍后再试");
+    console.error(err);
+  }
 });
 
 // 主持人登录
@@ -74,32 +76,42 @@ document.getElementById('assignBtn').addEventListener('click', async () => {
 
 // 加载已提交信息
 async function loadSubmissions() {
-  const res = await fetch(sheetUrl + "?action=get");
-  const entries = await res.json();
-  const containerId = 'submissionList';
-  let container = document.getElementById(containerId);
+  try {
+    const res = await fetch(sheetUrl + "?action=get");
+    const entries = await res.json();
 
-  // 如果不存在容器就创建
-  if(!container){
-    container = document.createElement('div');
-    container.id = containerId;
+    const containerId = 'submissionList';
+    let container = document.getElementById(containerId);
+
+    if(!container){
+      container = document.createElement('div');
+      container.id = containerId;
+      container.innerHTML = "<h3>已提交信息</h3>";
+      document.getElementById('form-section').appendChild(container);
+    }
+
     container.innerHTML = "<h3>已提交信息</h3>";
-    document.getElementById('form-section').appendChild(container);
+
+    entries.forEach(e => {
+      const name = e.name || "";
+      const verb1 = e.verb1 || "";
+      const verb2 = e.verb2 || "";
+      const adverb1 = e.adverb1 || "";
+      const adverb2 = e.adverb2 || "";
+      const remark = e.remark || "";
+
+      const div = document.createElement('div');
+      div.style.border = "1px solid #ccc";
+      div.style.margin = "5px 0";
+      div.style.padding = "5px";
+      div.style.borderRadius = "8px";
+      div.style.backgroundColor = "#fff3e0";
+      div.innerText = `名字: ${name} | 动词: ${verb1}, ${verb2} | 副词: ${adverb1}, ${adverb2} | 备注: ${remark}`;
+      container.appendChild(div);
+    });
+  } catch(err){
+    console.error("加载提交信息失败:", err);
   }
-
-  // 清空原有列表
-  container.innerHTML = "<h3>已提交信息</h3>";
-
-  entries.forEach(e => {
-    const div = document.createElement('div');
-    div.style.border = "1px solid #ccc";
-    div.style.margin = "5px 0";
-    div.style.padding = "5px";
-    div.style.borderRadius = "8px";
-    div.style.backgroundColor = "#fff3e0";
-    div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
-    container.appendChild(div);
-  });
 }
 
 // 工具函数
@@ -125,4 +137,3 @@ function displayResults(combos){
 window.onload = () => {
   loadSubmissions();
 };
-
