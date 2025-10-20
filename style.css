@@ -1,0 +1,71 @@
+body {
+  font-family: 'Comic Sans MS', sans-serif;
+  background-color: #fdfdfd;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+header {
+  background-color: #e53935;
+  color: #fff;
+  padding: 20px;
+}
+
+header h1 {
+  font-size: 2em;
+  margin: 0;
+}
+
+header p {
+  font-size: 1em;
+}
+
+section {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 500px;
+  border: 2px solid #4caf50;
+  border-radius: 15px;
+  background-color: #fffbe6;
+}
+
+label {
+  display: block;
+  margin: 10px 0;
+}
+
+input[type="text"], input[type="password"] {
+  width: 80%;
+  padding: 5px;
+}
+
+button {
+  margin: 5px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* 雪花动画 */
+.snow {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="2" fill="white"/></svg>') repeat;
+  animation: snow 10s linear infinite;
+}
+
+@keyframes snow {
+  0% {background-position: 0 0;}
+  100% {background-position: 0 1000px;}
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="snow"></div>
+
+  <header>
+    <h1>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</h1>
+    <p>欢迎来到年度最离谱的圣诞礼物现场！每个人贡献 2 个动词 + 2 个副词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
+
+  <section id="form-section">
+    <h2>报名表</h2>
+    <form id="giftForm">
+      <label>名字: <input type="text" id="name" required></label>
+      <label>动词1: <input type="text" id="verb1" required></label>
+      <label>动词2: <input type="text" id="verb2" required></label>
+      <label>副词1: <input type="text" id="adverb1" required></label>
+      <label>副词2: <input type="text" id="adverb2" required></label>
+      <label>备注: <input type="text" id="remark"></label>
+      <button type="submit">提交</button>
+    </form>
+    <p id="form-message"></p>
+  </section>
+
+  <section id="admin-section">
+    <h2>主持人操作</h2>
+    <label>密码: <input type="password" id="adminPassword"></label>
+    <button id="loginBtn">登录</button>
+
+    <div id="admin-controls" style="display:none;">
+      <button id="startBtn">开始报名</button>
+      <button id="endBtn">结束报名</button>
+      <button id="generateBtn">生成组合</button>
+      <button id="assignBtn">随机分配</button>
+    </div>
+    <p id="status-message"></p>
+  </section>
+
+  <section id="results-section">
+    <h2>抽签结果</h2>
+    <ul id="resultsList"></ul>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
