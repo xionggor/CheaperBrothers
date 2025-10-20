@@ -1,7 +1,19 @@
-// ✅ 更新为你的新 Web App URL
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
 let isAdmin = false;
+
+// 示例词语
+const verbExamples = ["跳", "跑", "吃", "笑", "唱"];
+const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地"];
+
+// 给输入框右边添加示例
+function addExamples() {
+  document.getElementById('verb1').placeholder = "示例: " + verbExamples.join(", ");
+  document.getElementById('verb2').placeholder = "示例: " + verbExamples.join(", ");
+  document.getElementById('adverb1').placeholder = "示例: " + adverbExamples.join(", ");
+  document.getElementById('adverb2').placeholder = "示例: " + adverbExamples.join(", ");
+}
+addExamples();
 
 // 提交表单
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
@@ -41,12 +53,13 @@ document.getElementById('loginBtn').addEventListener('click', () => {
   }
 });
 
-// 生成组合
+// 生成组合，保证不重复使用动词和副词
 document.getElementById('generateBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
+  // 所有词语收集并打乱
   let verbs = [];
   let adverbs = [];
   entries.forEach(e => {
@@ -57,17 +70,21 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   adverbs = shuffle(adverbs);
 
   const combinations = [];
-  for(let i=0; i<entries.length; i++){
+  entries.forEach((e,i)=>{
+    const v1 = verbs.pop() || "";
+    const v2 = verbs.pop() || "";
+    const a1 = adverbs.pop() || "";
+    const a2 = adverbs.pop() || "";
     combinations.push({
-      name: entries[i].name,
-      combo: `${adverbs[i % adverbs.length]} ${verbs[i % verbs.length]}`
+      name: e.name,
+      combo: `${a1} ${v1}, ${a2} ${v2}`
     });
-  }
+  });
 
   displayResults(combinations);
 });
 
-// 随机分配（重新显示组合）
+// 随机分配（重新显示组合），同样不重复
 document.getElementById('assignBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
@@ -83,12 +100,16 @@ document.getElementById('assignBtn').addEventListener('click', async () => {
   adverbs = shuffle(adverbs);
 
   const combinations = [];
-  for(let i=0; i<entries.length; i++){
+  entries.forEach((e,i)=>{
+    const v1 = verbs.pop() || "";
+    const v2 = verbs.pop() || "";
+    const a1 = adverbs.pop() || "";
+    const a2 = adverbs.pop() || "";
     combinations.push({
-      name: entries[i].name,
-      combo: `${adverbs[i % adverbs.length]} ${verbs[i % verbs.length]}`
+      name: e.name,
+      combo: `${a1} ${v1}, ${a2} ${v2}`
     });
-  }
+  });
 
   displayResults(combinations);
 });
