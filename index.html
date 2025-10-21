@@ -59,13 +59,55 @@
 
     <section id="results-section">
       <h2>抽签结果</h2>
-      <ul id="resultsList"></ul>
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <div style="flex:1;">
+          <h3>生成组合</h3>
+          <ul id="generateResults"></ul>
+        </div>
+        <div style="flex:1;">
+          <h3>匹配名字</h3>
+          <ul id="assignResults"></ul>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer>
     <p>Cheaper Brothers 🎄 2025</p>
   </footer>
+
+  <script>
+    // 页面加载后随机示例
+    document.addEventListener("DOMContentLoaded", () => {
+      const funnyVerbs = [
+        "打滚", "挖鼻孔", "假笑", "摸鱼", "刷手机", "装忙", "偷看", "打嗝",
+        "偷吃", "假摔", "放空", "翻白眼", "摆烂", "叹气", "偷懒", "飘走",
+        "掏耳朵", "打喷嚏", "甩锅", "假装忙碌"
+      ];
+      const funnyAdverbs = [
+        "悄悄地", "心虚地", "死命地", "尴尬地", "装酷地", "像没事人一样地", "崩溃地",
+        "满脸问号地", "假装镇定地", "毫无尊严地", "若无其事地", "带点绝望地",
+        "边哭边笑地", "强颜欢笑地", "理直气壮地", "假装快乐地",
+        "偷偷摸摸地", "若有所思地", "一点都不想地", "咬牙切齿地"
+      ];
+
+      function pickFourRandom(arr) {
+        const shuffled = [...arr].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, 4).join("、");
+      }
+
+      document.getElementById("verb1-example").textContent = "示例: " + pickFourRandom(funnyVerbs);
+      document.getElementById("verb2-example").textContent = "示例: " + pickFourRandom(funnyVerbs);
+      document.getElementById("adverb1-example").textContent = "示例: " + pickFourRandom(funnyAdverbs);
+      document.getElementById("adverb2-example").textContent = "示例: " + pickFourRandom(funnyAdverbs);
+
+      const inputs = document.querySelectorAll("input[type='text']");
+      inputs.forEach(input => {
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("placeholder", "");
+      });
+    });
+  </script>
 
   <script src="script.js"></script>
 </body>
