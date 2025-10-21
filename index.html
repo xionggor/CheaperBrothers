@@ -15,33 +15,21 @@
     <section id="form-section">
       <h2>报名表</h2>
       <form id="giftForm">
-        <label>名字:
-          <input type="text" id="name" required autocomplete="off">
-        </label>
+        <label>名字: <input type="text" id="name" required></label>
 
-        <label>动词1:
-          <input type="text" id="verb1" required autocomplete="off">
-        </label>
+        <label>动词1: <input type="text" id="verb1" required></label>
         <div class="example" id="verb1-example"></div>
 
-        <label>动词2:
-          <input type="text" id="verb2" required autocomplete="off">
-        </label>
+        <label>动词2: <input type="text" id="verb2" required></label>
         <div class="example" id="verb2-example"></div>
 
-        <label>副词1:
-          <input type="text" id="adverb1" required autocomplete="off">
-        </label>
+        <label>副词1: <input type="text" id="adverb1" required></label>
         <div class="example" id="adverb1-example"></div>
 
-        <label>副词2:
-          <input type="text" id="adverb2" required autocomplete="off">
-        </label>
+        <label>副词2: <input type="text" id="adverb2" required></label>
         <div class="example" id="adverb2-example"></div>
 
-        <label>备注:
-          <input type="text" id="remark" autocomplete="off">
-        </label>
+        <label>备注: <input type="text" id="remark"></label>
 
         <button type="submit">提交</button>
       </form>
@@ -53,9 +41,7 @@
 
     <section id="admin-section">
       <h2>主持人操作</h2>
-      <label>密码:
-        <input type="password" id="adminPassword" autocomplete="off">
-      </label>
+      <label>密码: <input type="password" id="adminPassword"></label>
       <button id="loginBtn">登录</button>
 
       <div id="admin-controls">
@@ -74,18 +60,24 @@
     <p>Cheaper Brothers 🎄 2025</p>
   </footer>
 
-  <!-- 随机生成示例 -->
   <script>
+    // 页面加载后随机示例
     document.addEventListener("DOMContentLoaded", () => {
-      const verbs = ["跳", "跑", "吃", "唱", "打", "笑", "飞", "画", "写", "玩"];
-      const adverbs = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "优雅地", "笨拙地", "偷偷地"];
+      const verbs = ["跳", "跑", "吃", "唱", "打", "笑", "飞"];
+      const adverbs = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "优雅地", "笨拙地"];
 
       function pickTwoRandom(arr) {
-        const shuffled = [...arr].sort(() => Math.random() - 0.5);
+        const shuffled = arr.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, 2).join("、");
       }
 
       document.getElementById("verb1-example").textContent = "示例: " + pickTwoRandom(verbs);
       document.getElementById("verb2-example").textContent = "示例: " + pickTwoRandom(verbs);
       document.getElementById("adverb1-example").textContent = "示例: " + pickTwoRandom(adverbs);
-      document.getElementById
+      document.getElementById("adverb2-example").textContent = "示例: " + pickTwoRandom(adverbs);
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
