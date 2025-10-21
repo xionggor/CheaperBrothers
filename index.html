@@ -1,4 +1,177 @@
 <!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheaper Brothers - 抽签报名</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 20px;
+      color: #111;
+    }
+    form {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 480px;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 12px;
+      display: block;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    small {
+      display: block;
+      margin-top: 4px;
+      color: #888;
+      font-size: 13px;
+    }
+    button {
+      margin-top: 18px;
+      width: 100%;
+      padding: 12px;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #333;
+    }
+    .submitted-list {
+      margin-top: 40px;
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .submitted-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .submitted-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cheaper Brothers 抽签报名</h1>
+
+  <form id="submitForm">
+    <label>名字：</label>
+    <input type="text" id="name" required />
+
+    <label>动词1：</label>
+    <input type="text" id="verb1" required />
+    <small id="verb1Example"></small>
+
+    <label>动词2：</label>
+    <input type="text" id="verb2" required />
+    <small id="verb2Example"></small>
+
+    <label>副词1：</label>
+    <input type="text" id="adv1" required />
+    <small id="adv1Example"></small>
+
+    <label>副词2：</label>
+    <input type="text" id="adv2" required />
+    <small id="adv2Example"></small>
+
+    <label>备注：</label>
+    <textarea id="note" rows="3"></textarea>
+
+    <button type="submit">提交</button>
+  </form>
+
+  <div class="submitted-list" id="submittedList">
+    <h3>已提交的信息：</h3>
+    <div id="listContainer"></div>
+  </div>
+
+  <script>
+    const verbs = [
+      '打滚','挖鼻孔','假笑','摸鱼','刷手机','装忙','偷看','打嗝','偷吃','假摔','放空','翻白眼','摆烂','叹气','偷懒','飘走','掏耳朵','打喷嚏','甩锅','假装忙碌'
+    ];
+    const adverbs = [
+      '悄悄地','心虚地','死命地','尴尬地','装酷地','像没事人一样地','崩溃地','满脸问号地','假装镇定地','毫无尊严地',
+      '若无其事地','带点绝望地','边哭边笑地','强颜欢笑地','理直气壮地','假装快乐地','偷偷摸摸地','若有所思地','一点都不想地','咬牙切齿地'
+    ];
+
+    function randomExamples(arr, n = 3) {
+      const shuffled = arr.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, n).join('、');
+    }
+
+    function setExamples() {
+      document.getElementById('verb1Example').innerText = '例子：' + randomExamples(verbs);
+      document.getElementById('verb2Example').innerText = '例子：' + randomExamples(verbs);
+      document.getElementById('adv1Example').innerText = '例子：' + randomExamples(adverbs);
+      document.getElementById('adv2Example').innerText = '例子：' + randomExamples(adverbs);
+    }
+
+    setExamples();
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec';
+    const form = document.getElementById('submitForm');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = {
+        name: form.name.value,
+        verb1: form.verb1.value,
+        verb2: form.verb2.value,
+        adv1: form.adv1.value,
+        adv2: form.adv2.value,
+        note: form.note.value
+      };
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          alert('提交成功！');
+          addSubmittedItem(data);
+          form.reset();
+          setExamples();
+        })
+        .catch(error => alert('提交失败，请重试。'));
+    });
+
+    function addSubmittedItem(data) {
+      const container = document.getElementById('listContainer');
+      const div = document.createElement('div');
+      div.className = 'submitted-item';
+      div.innerText = `名字: ${data.name} | 动词: ${data.verb1}, ${data.verb2} | 副词: ${data.adv1}, ${data.adv2} | 备注: ${data.note}`;
+      container.prepend(div);
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -97,3 +270,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
