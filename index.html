@@ -82,4 +82,18 @@
       // 在下方显示示例，不在输入框里
       document.getElementById("verb1-example").textContent = "示例: " + pickTwoRandom(verbs);
       document.getElementById("verb2-example").textContent = "示例: " + pickTwoRandom(verbs);
-      document.getElementBy
+      document.getElementById("adverb1-example").textContent = "示例: " + pickTwoRandom(adverbs);
+      document.getElementById("adverb2-example").textContent = "示例: " + pickTwoRandom(adverbs);
+
+      // 禁用浏览器自动填充提示（防止再次出现灰字）
+      const inputs = document.querySelectorAll("input[type='text']");
+      inputs.forEach(input => {
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("placeholder", ""); // 确保无默认文本
+      });
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
