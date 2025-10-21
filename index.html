@@ -52,9 +52,11 @@
       <input type="password" id="adminPassword">
       <button id="loginBtn">登录</button>
 
-      <div id="admin-controls">
-        <button id="generateBtn">生成组合</button>
-        <button id="assignBtn">随机分配</button>
+       <div id="admin-controls" style="display:none; margin-top:10px;">
+       <!-- 保留一个按钮生成组合 -->
+       <button id="generateBtn">生成组合（每人一组）</button>
+       <!-- 修改按钮文本，表示匹配名字 -->
+       <button id="assignBtn">匹配名字（随机送礼）</button>
       </div>
     </section>
 
@@ -106,3 +108,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
