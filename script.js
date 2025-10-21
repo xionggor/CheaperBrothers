@@ -3,19 +3,27 @@ const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5
 let isAdmin = false;
 
 // 示例词语
-const verbExamples = ["跳", "跑", "吃", "笑", "唱"];
-const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地"];
+const verbExamples = ["跳", "跑", "吃", "笑", "唱", "打滚", "偷吃", "飞"];
+const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "笨拙地", "优雅地", "悄悄地"];
 
-// 给输入框右边添加示例
+// 给输入框右边添加示例（小字灰色）
 function addExamples() {
-  document.getElementById('verb1').placeholder = "示例: " + verbExamples.join(", ");
-  document.getElementById('verb2').placeholder = "示例: " + verbExamples.join(", ");
-  document.getElementById('adverb1').placeholder = "示例: " + adverbExamples.join(", ");
-  document.getElementById('adverb2').placeholder = "示例: " + adverbExamples.join(", ");
+  document.getElementById('verb1-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
+  document.getElementById('verb2-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
+  document.getElementById('adverb1-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
+  document.getElementById('adverb2-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
 }
+
+function pickRandomExamples(arr, count){
+  const shuffled = [...arr].sort(()=>0.5 - Math.random());
+  return shuffled.slice(0, count).join(", ");
+}
+
 addExamples();
 
+// ------------------------
 // 提交表单
+// ------------------------
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
@@ -32,7 +40,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
       method: 'POST',
       body: JSON.stringify(data)
     });
-    alert("提交成功！");
+    alert("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
   } catch(err){
@@ -41,7 +49,9 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
   }
 });
 
+// ------------------------
 // 主持人登录
+// ------------------------
 document.getElementById('loginBtn').addEventListener('click', () => {
   const pw = document.getElementById('adminPassword').value;
   if(pw === "zxc123456"){
@@ -54,25 +64,25 @@ document.getElementById('loginBtn').addEventListener('click', () => {
 });
 
 // ------------------------
-// 生成组合：每人只分配一组动词+副词
+// 生成组合（每人一组）
 // ------------------------
 document.getElementById('generateBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
-  // 所有词语收集并打乱
   let verbs = [];
   let adverbs = [];
   entries.forEach(e => {
     verbs.push(e.verb1, e.verb2);
     adverbs.push(e.adverb1, e.adverb2);
   });
+
   verbs = shuffle(verbs);
   adverbs = shuffle(adverbs);
 
   const combinations = [];
-  entries.forEach((e,i)=>{
+  entries.forEach(e=>{
     const v1 = verbs.pop() || "";
     const v2 = verbs.pop() || "";
     const a1 = adverbs.pop() || "";
@@ -87,7 +97,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
 });
 
 // ------------------------
-// 匹配名字：每个人随机送礼给另一人
+// 匹配名字（每人随机送礼给另一人）
 // ------------------------
 document.getElementById('assignBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
@@ -120,7 +130,9 @@ document.getElementById('assignBtn').addEventListener('click', async () => {
   displayResults(combos);
 });
 
+// ------------------------
 // 加载已提交信息
+// ------------------------
 async function loadSubmissions() {
   try {
     const res = await fetch(sheetUrl + "?action=get");
@@ -150,7 +162,9 @@ async function loadSubmissions() {
   }
 }
 
-// 工具函数：数组随机打乱
+// ------------------------
+// 工具函数
+// ------------------------
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
