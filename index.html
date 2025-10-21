@@ -1,213 +1,99 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cheaper Brothers 抽签报名</title>
-  <style>
-    body {
-      font-family: "Noto Sans SC", sans-serif;
-      background: linear-gradient(135deg, #f0f0f0, #fafafa);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding: 40px 20px;
-    }
-
-    h1 {
-      font-size: 26px;
-      margin-bottom: 20px;
-      color: #222;
-    }
-
-    form {
-      background: #fff;
-      padding: 25px 30px;
-      border-radius: 14px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-      max-width: 420px;
-      width: 100%;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px 12px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    small {
-      display: block;
-      color: #888;
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    button {
-      margin-top: 25px;
-      background: #111;
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    button:hover {
-      background: #333;
-    }
-
-    #result {
-      margin-top: 40px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-      max-width: 480px;
-      width: 100%;
-    }
-
-    .entry {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-    }
-
-    .entry:last-child {
-      border-bottom: none;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Cheaper Brothers 抽签报名表</h1>
+  <header>
+    <h1>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</h1>
+    <p>欢迎来到年度最离谱的圣诞礼物现场！每个人贡献 2 个动词 + 2 个副词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
 
-  <form id="myForm">
-    <label for="name">名字:</label>
-    <input type="text" id="name" name="name" />
+  <main>
+    <section id="form-section">
+      <h2>报名表</h2>
+      <form id="giftForm" autocomplete="off">
+        
+        <label>名字:</label>
+        <input type="text" id="name" required>
 
-    <label for="verb1">动词 1:</label>
-    <input type="text" id="verb1" name="verb1" />
-    <small id="verb1Examples"></small>
+        <label>动词1:</label>
+        <input type="text" id="verb1" required>
+        <div class="example" id="verb1-example"></div>
 
-    <label for="verb2">动词 2:</label>
-    <input type="text" id="verb2" name="verb2" />
-    <small id="verb2Examples"></small>
+        <label>动词2:</label>
+        <input type="text" id="verb2" required>
+        <div class="example" id="verb2-example"></div>
 
-    <label for="adv1">副词 1:</label>
-    <input type="text" id="adv1" name="adv1" />
-    <small id="adv1Examples"></small>
+        <label>副词1:</label>
+        <input type="text" id="adverb1" required>
+        <div class="example" id="adverb1-example"></div>
 
-    <label for="adv2">副词 2:</label>
-    <input type="text" id="adv2" name="adv2" />
-    <small id="adv2Examples"></small>
+        <label>副词2:</label>
+        <input type="text" id="adverb2" required>
+        <div class="example" id="adverb2-example"></div>
 
-    <label for="note">备注:</label>
-    <textarea id="note" name="note"></textarea>
+        <label>备注:</label>
+        <input type="text" id="remark">
 
-    <button type="submit">提交</button>
-  </form>
+        <button type="submit">提交</button>
+      </form>
 
-  <div id="result"></div>
+      <div id="submissionList">
+        <h3>已提交信息</h3>
+      </div>
+    </section>
+
+    <section id="admin-section">
+      <h2>主持人操作</h2>
+      <label>密码:</label>
+      <input type="password" id="adminPassword">
+      <button id="loginBtn">登录</button>
+
+      <div id="admin-controls">
+        <button id="generateBtn">生成组合</button>
+        <button id="assignBtn">随机分配</button>
+      </div>
+    </section>
+
+    <section id="results-section">
+      <h2>抽签结果</h2>
+      <ul id="resultsList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Cheaper Brothers 🎄 2025</p>
+  </footer>
 
   <script>
-    // 示例词库
-    const verbs = [
-      "打滚", "挖鼻孔", "假笑", "摸鱼", "刷手机", "装忙", "偷看", "打嗝", "偷吃",
-      "假摔", "放空", "翻白眼", "摆烂", "叹气", "偷懒", "飘走", "掏耳朵", "打喷嚏",
-      "甩锅", "假装忙碌"
-    ];
+    // 页面加载后随机示例
+    document.addEventListener("DOMContentLoaded", () => {
+      const verbs = ["跳", "跑", "吃", "唱", "打", "笑", "飞"];
+      const adverbs = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "优雅地", "笨拙地"];
 
-    const adverbs = [
-      "悄悄地", "心虚地", "死命地", "尴尬地", "装酷地", "像没事人一样地", "崩溃地",
-      "满脸问号地", "假装镇定地", "毫无尊严地", "若无其事地", "带点绝望地", "边哭边笑地",
-      "强颜欢笑地", "理直气壮地", "假装快乐地", "偷偷摸摸地", "若有所思地", "一点都不想地", "咬牙切齿地"
-    ];
-
-    // 随机选取 n 个不重复项
-    function getRandomExamples(arr, n) {
-      const shuffled = [...arr].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, n).join("、");
-    }
-
-    // 显示例子
-    document.getElementById("verb1Examples").textContent = "例如：" + getRandomExamples(verbs, 4);
-    document.getElementById("verb2Examples").textContent = "例如：" + getRandomExamples(verbs, 4);
-    document.getElementById("adv1Examples").textContent = "例如：" + getRandomExamples(adverbs, 4);
-    document.getElementById("adv2Examples").textContent = "例如：" + getRandomExamples(adverbs, 4);
-
-    // 提交数据
-    const form = document.getElementById("myForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const data = {
-        name: form.name.value,
-        verb1: form.verb1.value,
-        verb2: form.verb2.value,
-        adv1: form.adv1.value,
-        adv2: form.adv2.value,
-        note: form.note.value
-      };
-
-      const res = await fetch("https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-        mode: "no-cors"
-      });
-
-      alert("提交成功！");
-
-      form.reset();
-      loadData();
-    });
-
-    // 载入已提交资料
-    async function loadData() {
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "<p>加载中...</p>";
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec");
-        const data = await res.json();
-
-        resultDiv.innerHTML = "<h3>已提交信息：</h3>";
-
-        data.forEach((row) => {
-          resultDiv.innerHTML += `
-            <div class="entry">
-              名字: ${row.name} |
-              动词: ${row.verb1}, ${row.verb2} |
-              副词: ${row.adv1}, ${row.adv2} |
-              备注: ${row.note || "无"}
-            </div>
-          `;
-        });
-      } catch (err) {
-        resultDiv.innerHTML = "<p>无法加载资料</p>";
+      function pickTwoRandom(arr) {
+        const shuffled = arr.sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, 2).join("、");
       }
-    }
 
-    loadData();
+      // 在下方显示示例，不在输入框里
+      document.getElementById("verb1-example").textContent = "示例: " + pickTwoRandom(verbs);
+      document.getElementById("verb2-example").textContent = "示例: " + pickTwoRandom(verbs);
+      document.getElementById("adverb1-example").textContent = "示例: " + pickTwoRandom(adverbs);
+      document.getElementById("adverb2-example").textContent = "示例: " + pickTwoRandom(adverbs);
+
+      // 禁用浏览器自动填充提示（防止再次出现灰字）
+      const inputs = document.querySelectorAll("input[type='text']");
+      inputs.forEach(input => {
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("placeholder", ""); // 确保无默认文本
+      });
+    });
   </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
