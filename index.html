@@ -1,128 +1,195 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cheaper Brothers 抽词报名</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>词语抽签系统</title>
   <style>
     body {
-      font-family: "Noto Sans SC", sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      text-align: center;
-      padding: 40px;
+      font-family: 'Noto Sans SC', sans-serif;
+      background: #fafafa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
+
     h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: #111;
+      margin-top: 40px;
+      color: #333;
     }
-    form {
-      background: #fff;
-      max-width: 450px;
-      margin: 0 auto;
-      padding: 25px 35px;
+
+    .form-container {
+      background: white;
       border-radius: 16px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 90%;
+      margin-top: 20px;
     }
+
     label {
+      font-weight: bold;
+      color: #444;
       display: block;
-      text-align: left;
-      margin-top: 18px;
-      font-weight: 600;
+      margin-top: 15px;
     }
-    input,
-    textarea {
+
+    input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    textarea {
-      resize: none;
-      height: 70px;
-    }
-    button {
-      background: #000;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      margin-top: 25px;
-      cursor: pointer;
+      border-radius: 8px;
+      margin-top: 5px;
       font-size: 15px;
     }
-    button:hover {
-      background: #444;
-    }
-    .examples {
-      font-size: 12px;
+
+    small {
       color: #999;
-      text-align: left;
+      font-size: 13px;
+      display: block;
       margin-top: 3px;
     }
-    .submitted-info {
-      background: #fff;
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      width: 100%;
     }
-    .submitted-info h3 {
-      margin-top: 0;
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .submitted-info {
+      margin-top: 40px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .submitted-info h2 {
+      color: #333;
+    }
+
+    .entry {
+      background: #fff;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      font-size: 15px;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <h1>Cheaper Brothers 抽词报名</h1>
-  <form id="wordForm">
-    <label>名字：</label>
-    <input type="text" id="name" name="name" required />
+  <h1>词语抽签系统</h1>
+  <div class="form-container">
+    <label>名字:</label>
+    <input type="text" id="name" placeholder="">
+    
+    <label>动词1:</label>
+    <input type="text" id="verb1" placeholder="">
+    <small id="verb1Examples"></small>
 
-    <label>动词1：</label>
-    <input type="text" id="verb1" name="verb1" required />
-    <div class="examples" id="verb1Examples"></div>
+    <label>动词2:</label>
+    <input type="text" id="verb2" placeholder="">
+    <small id="verb2Examples"></small>
 
-    <label>动词2：</label>
-    <input type="text" id="verb2" name="verb2" required />
-    <div class="examples" id="verb2Examples"></div>
+    <label>副词1:</label>
+    <input type="text" id="adv1" placeholder="">
+    <small id="adv1Examples"></small>
 
-    <label>副词1：</label>
-    <input type="text" id="adv1" name="adv1" required />
-    <div class="examples" id="adv1Examples"></div>
+    <label>副词2:</label>
+    <input type="text" id="adv2" placeholder="">
+    <small id="adv2Examples"></small>
 
-    <label>副词2：</label>
-    <input type="text" id="adv2" name="adv2" required />
-    <div class="examples" id="adv2Examples"></div>
+    <label>备注:</label>
+    <textarea id="remark" rows="3" placeholder=""></textarea>
 
-    <label>备注：</label>
-    <textarea id="note" name="note" placeholder="可留空"></textarea>
+    <button onclick="submitForm()">提交</button>
+  </div>
 
-    <button type="submit">提交</button>
-  </form>
-
-  <div class="submitted-info" id="submittedInfo" style="display:none;">
-    <h3>已提交的信息：</h3>
-    <p id="infoText"></p>
+  <div class="submitted-info">
+    <h2>已提交信息</h2>
+    <div id="submittedData"></div>
   </div>
 
   <script>
-    // 动词与副词的搞笑/无下限例子
-    const verbExamples = [
-      "打滚", "挖鼻孔", "假笑", "摸鱼", "刷手机", "装忙", "偷看", "打嗝", "偷吃", 
-      "假摔", "放空", "翻白眼", "摆烂", "叹气", "偷懒", "飘走", "掏耳朵", "打喷嚏", "甩锅", "假装忙碌"
-    ];
-    const advExamples = [
-      "悄悄地", "心虚地", "死命地", "尴尬地", "装酷地", "像没事人一样地", "崩溃地", 
-      "满脸问号地", "假装镇定地", "毫无尊严地", "若无其事地", "带点绝望地", "边哭边笑地", 
-      "强颜欢笑地", "理直气壮地", "假装快乐地", "偷偷摸摸地", "若有所思地", "一点都不想地", "咬牙切齿地"
+    const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
+
+    // 搞笑/无下限 动词 & 副词
+    const funnyVerbs = [
+      "打滚", "挖鼻孔", "假笑", "摸鱼", "刷手机", "装忙", "偷看", "打嗝", 
+      "偷吃", "假摔", "放空", "翻白眼", "摆烂", "叹气", "偷懒", "飘走",
+      "掏耳朵", "打喷嚏", "甩锅", "假装忙碌"
     ];
 
-    function getRandomItems(arr, count
+    const funnyAdverbs = [
+      "悄悄地", "心虚地", "死命地", "尴尬地", "装酷地", "像没事人一样地",
+      "崩溃地", "满脸问号地", "假装镇定地", "毫无尊严地", "若无其事地",
+      "带点绝望地", "边哭边笑地", "强颜欢笑地", "理直气壮地", "假装快乐地",
+      "偷偷摸摸地", "若有所思地", "一点都不想地", "咬牙切齿地"
+    ];
+
+    // 随机抽取4个例子
+    function randomExamples(arr) {
+      const shuffled = [...arr].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 4).join("、");
+    }
+
+    function showExamples() {
+      document.getElementById("verb1Examples").innerText = "例如: " + randomExamples(funnyVerbs);
+      document.getElementById("verb2Examples").innerText = "例如: " + randomExamples(funnyVerbs);
+      document.getElementById("adv1Examples").innerText = "例如: " + randomExamples(funnyAdverbs);
+      document.getElementById("adv2Examples").innerText = "例如: " + randomExamples(funnyAdverbs);
+    }
+
+    showExamples();
+
+    async function submitForm() {
+      const data = {
+        name: document.getElementById("name").value,
+        verb1: document.getElementById("verb1").value,
+        verb2: document.getElementById("verb2").value,
+        adv1: document.getElementById("adv1").value,
+        adv2: document.getElementById("adv2").value,
+        remark: document.getElementById("remark").value
+      };
+
+      if (!data.name) {
+        alert("请输入名字！");
+        return;
+      }
+
+      const res = await fetch(sheetUrl, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+      });
+
+      alert("提交成功！🎉");
+
+      // 清空输入框
+      document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+      
+      // 显示刚提交的信息
+      const div = document.createElement("div");
+      div.className = "entry";
+      div.innerText = `名字: ${data.name} | 动词: ${data.verb1}, ${data.verb2} | 副词: ${data.adv1}, ${data.adv2} | 备注: ${data.remark}`;
+      document.getElementById("submittedData").prepend(div);
+
+      showExamples(); // 每次提交后刷新新的例子
+    }
+  </script>
+</body>
+</html>
