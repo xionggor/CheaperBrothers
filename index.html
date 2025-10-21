@@ -1,28 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <h2>报名表</h2>
-  <input id="name" placeholder="姓名">
-  <input id="email" placeholder="Email">
-  <input id="message" placeholder="留言">
-  <button onclick="submitForm()">提交</button>
+  <header>
+    <h1>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</h1>
+    <p>欢迎来到年度最离谱的圣诞礼物现场！每个人贡献 2 个动词 + 2 个副词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
 
-  <h3>已提交资料</h3>
-  <div id="submittedData"></div>
+  <main>
+    <!-- 报名表 -->
+    <section id="form-section">
+      <h2>报名表</h2>
+      <form id="giftForm" autocomplete="off">
+        <label>名字:</label>
+        <input type="text" id="name" required>
 
-  <hr>
+        <label>动词1:</label>
+        <input type="text" id="verb1" required>
+        <div class="example" id="verb1-example"></div>
 
-  <button onclick="adminLogin()">主持人登录</button>
-  <div id="adminPanel" style="display:none;">
-    <button onclick="generateGroups()">生成组合（每人一组）</button>
-    <button onclick="generateMatches()">匹配名字（随机送礼）</button>
-  </div>
+        <label>动词2:</label>
+        <input type="text" id="verb2" required>
+        <div class="example" id="verb2-example"></div>
 
-  <h3>抽签结果（公开显示）</h3>
-  <div>
-    <h4>组合结果</h4>
-    <div id="groupResults"></div>
-    <h4>匹配名字结果</h4>
-    <div id="matchResults"></div>
-  </div>
+        <label>副词1:</label>
+        <input type="text" id="adverb1" required>
+        <div class="example" id="adverb1-example"></div>
 
+        <label>副词2:</label>
+        <input type="text" id="adverb2" required>
+        <div class="example" id="adverb2-example"></div>
+
+        <label>备注:</label>
+        <input type="text" id="remark">
+
+        <button type="submit">提交</button>
+      </form>
+
+      <div id="submissionList">
+        <h3>已提交信息</h3>
+      </div>
+    </section>
+
+    <!-- 主持人操作 -->
+    <section id="admin-section">
+      <h2>主持人操作</h2>
+      <label>密码:</label>
+      <input type="password" id="adminPassword">
+      <button id="loginBtn">登录</button>
+
+      <div id="admin-controls" style="display:none; margin-top:10px;">
+        <button id="generateBtn">生成组合（每人一组）</button>
+        <button id="matchBtn">匹配名字（随机送礼）</button>
+      </div>
+    </section>
+
+    <!-- 抽签结果 -->
+    <section id="results-section">
+      <h2>抽签结果</h2>
+      <ul id="resultsList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Cheaper Brothers 🎄 2025</p>
+  </footer>
+
+  <!-- JS 示例词语显示 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const verbExamples = ["跳", "跑", "吃", "笑", "唱"];
+      const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地"];
+
+      function pickRandom(arr, count){
+        const shuffled = [...arr].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count).join(", ");
+      }
+
+      document.getElementById("verb1-example").textContent = "示例: " + pickRandom(verbExamples,4);
+      document.getElementById("verb2-example").textContent = "示例: " + pickRandom(verbExamples,4);
+      document.getElementById("adverb1-example").textContent = "示例: " + pickRandom(adverbExamples,4);
+      document.getElementById("adverb2-example").textContent = "示例: " + pickRandom(adverbExamples,4);
+
+      const inputs = document.querySelectorAll("input[type='text']");
+      inputs.forEach(input => {
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("placeholder","");
+      });
+    });
+  </script>
+
+  <!-- 引入主 JS -->
   <script src="script.js"></script>
 </body>
+</html>
