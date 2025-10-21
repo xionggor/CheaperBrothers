@@ -152,3 +152,36 @@ function displayResults(combos,targetId){
   ul.innerHTML="";
   combos.forEach(c=>{
     const li=document.createElement('li');
+    li.innerText=`${c.name} → ${c.combo}`;
+    ul.appendChild(li);
+  });
+}
+
+// ------------------------
+// 工具函数
+// ------------------------
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
+
+// 页面加载显示提交信息和抽签结果
+window.onload=()=>{
+  loadSubmissions();
+  loadResults();
+};
+
+// ------------------------
+// 加载抽签结果（生成组合 + 匹配名字）
+// ------------------------
+async function loadResults(){
+  try{
+    const res = await fetch(sheetUrl+"?action=getResults"); // 需后台返回 {generate:[], assign:[]}
+    const data = await res.json();
+    if(data.generate) displayResults(data.generate,"resultsListGenerate");
+    if(data.assign) displayResults(data.assign,"resultsListAssign");
+  }catch(err){ console.error(err); }
+}
