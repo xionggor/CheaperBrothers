@@ -53,7 +53,9 @@ document.getElementById('loginBtn').addEventListener('click', () => {
   }
 });
 
-// 生成组合，保证不重复使用动词和副词
+// ------------------------
+// 生成组合：每人只分配一组动词+副词
+// ------------------------
 document.getElementById('generateBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
@@ -84,34 +86,38 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   displayResults(combinations);
 });
 
-// 随机分配（重新显示组合），同样不重复
+// ------------------------
+// 匹配名字：每个人随机送礼给另一人
+// ------------------------
 document.getElementById('assignBtn').addEventListener('click', async () => {
   if(!isAdmin) return;
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
-  let verbs = [];
-  let adverbs = [];
-  entries.forEach(e => {
-    verbs.push(e.verb1, e.verb2);
-    adverbs.push(e.adverb1, e.adverb2);
-  });
-  verbs = shuffle(verbs);
-  adverbs = shuffle(adverbs);
+  if(entries.length < 2){
+    alert("需要至少 2 个参与者才能匹配名字！");
+    return;
+  }
 
-  const combinations = [];
-  entries.forEach((e,i)=>{
-    const v1 = verbs.pop() || "";
-    const v2 = verbs.pop() || "";
-    const a1 = adverbs.pop() || "";
-    const a2 = adverbs.pop() || "";
-    combinations.push({
-      name: e.name,
-      combo: `${a1} ${v1}, ${a2} ${v2}`
+  const names = entries.map(e => e.name);
+  let shuffled = [...names].sort(() => 0.5 - Math.random());
+
+  // 确保没人抽到自己
+  for(let i=0;i<names.length;i++){
+    if(names[i] === shuffled[i]){
+      [shuffled[i], shuffled[shuffled.length-1]] = [shuffled[shuffled.length-1], shuffled[i]];
+    }
+  }
+
+  const combos = [];
+  for(let i=0;i<names.length;i++){
+    combos.push({
+      name: names[i],
+      combo: shuffled[i] // 表示送礼给谁
     });
-  });
+  }
 
-  displayResults(combinations);
+  displayResults(combos);
 });
 
 // 加载已提交信息
