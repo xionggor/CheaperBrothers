@@ -14,7 +14,8 @@
   <main>
     <section id="form-section">
       <h2>报名表</h2>
-      <form id="giftForm">
+      <form id="giftForm" autocomplete="off">
+        
         <label>名字:</label>
         <input type="text" id="name" required>
 
@@ -78,13 +79,7 @@
         return shuffled.slice(0, 2).join("、");
       }
 
+      // 在下方显示示例，不在输入框里
       document.getElementById("verb1-example").textContent = "示例: " + pickTwoRandom(verbs);
       document.getElementById("verb2-example").textContent = "示例: " + pickTwoRandom(verbs);
-      document.getElementById("adverb1-example").textContent = "示例: " + pickTwoRandom(adverbs);
-      document.getElementById("adverb2-example").textContent = "示例: " + pickTwoRandom(adverbs);
-    });
-  </script>
-
-  <script src="script.js"></script>
-</body>
-</html>
+      document.getElementBy
