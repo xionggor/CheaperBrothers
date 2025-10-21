@@ -15,7 +15,6 @@
     <section id="form-section">
       <h2>报名表</h2>
       <form id="giftForm" autocomplete="off">
-        
         <label>名字:</label>
         <input type="text" id="name" required>
 
@@ -52,11 +51,9 @@
       <input type="password" id="adminPassword">
       <button id="loginBtn">登录</button>
 
-       <div id="admin-controls" style="display:none; margin-top:10px;">
-       <!-- 保留一个按钮生成组合 -->
-       <button id="generateBtn">生成组合（每人一组）</button>
-       <!-- 修改按钮文本，表示匹配名字 -->
-       <button id="assignBtn">匹配名字（随机送礼）</button>
+      <div id="admin-controls" style="display:none; margin-top:10px;">
+        <button id="generateBtn">生成组合（每人一组）</button>
+        <button id="assignBtn">匹配名字（随机送礼）</button>
       </div>
     </section>
 
@@ -70,42 +67,6 @@
     <p>Cheaper Brothers 🎄 2025</p>
   </footer>
 
-  <script>
-    // 页面加载后随机示例
-    document.addEventListener("DOMContentLoaded", () => {
-      const funnyVerbs = [
-        "打滚", "挖鼻孔", "假笑", "摸鱼", "刷手机", "装忙", "偷看", "打嗝",
-        "偷吃", "假摔", "放空", "翻白眼", "摆烂", "叹气", "偷懒", "飘走",
-        "掏耳朵", "打喷嚏", "甩锅", "假装忙碌"
-      ];
-
-      const funnyAdverbs = [
-        "悄悄地", "心虚地", "死命地", "尴尬地", "装酷地", "像没事人一样地", "崩溃地",
-        "满脸问号地", "假装镇定地", "毫无尊严地", "若无其事地", "带点绝望地",
-        "边哭边笑地", "强颜欢笑地", "理直气壮地", "假装快乐地",
-        "偷偷摸摸地", "若有所思地", "一点都不想地", "咬牙切齿地"
-      ];
-
-      function pickFourRandom(arr) {
-        const shuffled = [...arr].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, 4).join("、");
-      }
-
-      document.getElementById("verb1-example").textContent = "示例: " + pickFourRandom(funnyVerbs);
-      document.getElementById("verb2-example").textContent = "示例: " + pickFourRandom(funnyVerbs);
-      document.getElementById("adverb1-example").textContent = "示例: " + pickFourRandom(funnyAdverbs);
-      document.getElementById("adverb2-example").textContent = "示例: " + pickFourRandom(funnyAdverbs);
-
-      // 禁用浏览器自动填充提示
-      const inputs = document.querySelectorAll("input[type='text']");
-      inputs.forEach(input => {
-        input.setAttribute("autocomplete", "off");
-        input.setAttribute("placeholder", ""); // 确保输入框无文字
-      });
-    });
-  </script>
-
   <script src="script.js"></script>
 </body>
 </html>
-
