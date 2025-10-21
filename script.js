@@ -3,19 +3,27 @@ const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5
 let isAdmin = false;
 
 // 示例词语
-const verbExamples = ["跳", "跑", "吃", "笑", "唱"];
-const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地"];
+const verbExamples = ["跳", "跑", "吃", "笑", "唱", "打滚", "偷吃", "飞"];
+const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "笨拙地", "优雅地", "悄悄地"];
 
-// 给输入框右边添加示例
+// 给输入框右边添加示例（小字灰色）
 function addExamples() {
-  document.getElementById('verb1').placeholder = "示例: " + verbExamples.join(", ");
-  document.getElementById('verb2').placeholder = "示例: " + verbExamples.join(", ");
-  document.getElementById('adverb1').placeholder = "示例: " + adverbExamples.join(", ");
-  document.getElementById('adverb2').placeholder = "示例: " + adverbExamples.join(", ");
+  document.getElementById('verb1-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
+  document.getElementById('verb2-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
+  document.getElementById('adverb1-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
+  document.getElementById('adverb2-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
 }
+
+function pickRandomExamples(arr, count){
+  const shuffled = [...arr].sort(()=>0.5 - Math.random());
+  return shuffled.slice(0, count).join(", ");
+}
+
 addExamples();
 
+// ------------------------
 // 提交表单
+// ------------------------
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
@@ -32,19 +40,21 @@ document.getElementById('giftForm').addEventListener('submit', async (e) => {
       method: 'POST',
       body: JSON.stringify(data)
     });
-    alert("提交成功！");
+    alert("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
-  } catch (err) {
+  } catch(err){
     alert("提交失败，请稍后再试");
     console.error(err);
   }
 });
 
+// ------------------------
 // 主持人登录
+// ------------------------
 document.getElementById('loginBtn').addEventListener('click', () => {
   const pw = document.getElementById('adminPassword').value;
-  if (pw === "zxc123456") {
+  if(pw === "zxc123456"){
     isAdmin = true;
     document.getElementById('admin-controls').style.display = "block";
     alert("登录成功！你现在可以操作主持人功能。");
@@ -53,9 +63,13 @@ document.getElementById('loginBtn').addEventListener('click', () => {
   }
 });
 
-// 生成组合，保证不重复使用动词和副词
+// ------------------------
+// 生成组合（每人一组）
+// ------------------------
 document.getElementById('generateBtn').addEventListener('click', async () => {
-  if (!isAdmin) return;
+  if(!isAdmin) return;
+
+  // 只用 GET 获取数据，不写入 Google Sheet
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
@@ -65,11 +79,12 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     verbs.push(e.verb1, e.verb2);
     adverbs.push(e.adverb1, e.adverb2);
   });
+
   verbs = shuffle(verbs);
   adverbs = shuffle(adverbs);
 
   const combinations = [];
-  entries.forEach((e) => {
+  entries.forEach(e=>{
     const v1 = verbs.pop() || "";
     const v2 = verbs.pop() || "";
     const a1 = adverbs.pop() || "";
@@ -80,49 +95,48 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     });
   });
 
-  displayResults(combinations, "生成组合结果");
-  saveResults(combinations);
+  displayResults(combinations);
 });
 
-// 匹配名字（随机送礼）
-document.getElementById('matchBtn').addEventListener('click', async () => {
-  if (!isAdmin) return;
+// ------------------------
+// 匹配名字（每人随机送礼给另一人）
+// ------------------------
+document.getElementById('assignBtn').addEventListener('click', async () => {
+  if(!isAdmin) return;
+
+  // 只用 GET 获取数据，不写入 Google Sheet
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
-  let givers = shuffle([...entries]);
-  let receivers = shuffle([...entries]);
+  if(entries.length < 2){
+    alert("需要至少 2 个参与者才能匹配名字！");
+    return;
+  }
 
-  // 防止自己抽到自己
-  for (let i = 0; i < givers.length; i++) {
-    if (givers[i].name === receivers[i].name) {
-      const swapIndex = (i + 1) % receivers.length;
-      [receivers[i], receivers[swapIndex]] = [receivers[swapIndex], receivers[i]];
+  const names = entries.map(e => e.name);
+  let shuffled = [...names].sort(() => 0.5 - Math.random());
+
+  // 确保没人抽到自己
+  for(let i=0;i<names.length;i++){
+    if(names[i] === shuffled[i]){
+      [shuffled[i], shuffled[(i+1)%shuffled.length]] = [shuffled[(i+1)%shuffled.length], shuffled[i]];
     }
   }
 
-  const pairs = givers.map((g, i) => ({
-    name: g.name,
-    combo: `送礼给 ${receivers[i].name}`
-  }));
+  const combos = [];
+  for(let i=0;i<names.length;i++){
+    combos.push({
+      name: names[i],
+      combo: shuffled[i] // 表示送礼给谁
+    });
+  }
 
-  displayResults(pairs, "匹配名字结果");
-  saveResults(pairs);
+  displayResults(combos);
 });
 
-// 保存结果到 Google Sheet
-async function saveResults(data) {
-  try {
-    await fetch(sheetUrl + "?action=saveResults", {
-      method: 'POST',
-      body: JSON.stringify({ results: data })
-    });
-  } catch (err) {
-    console.error("保存结果失败:", err);
-  }
-}
-
+// ------------------------
 // 加载已提交信息
+// ------------------------
 async function loadSubmissions() {
   try {
     const res = await fetch(sheetUrl + "?action=get");
@@ -131,53 +145,50 @@ async function loadSubmissions() {
     container.innerHTML = "<h3>已提交信息</h3>";
 
     entries.forEach(e => {
+      const name = e.name || "";
+      const verb1 = e.verb1 || "";
+      const verb2 = e.verb2 || "";
+      const adverb1 = e.adverb1 || "";
+      const adverb2 = e.adverb2 || "";
+      const remark = e.remark || "";
+
       const div = document.createElement('div');
       div.style.border = "1px solid #ccc";
       div.style.margin = "5px 0";
       div.style.padding = "5px";
       div.style.borderRadius = "8px";
       div.style.backgroundColor = "#fff3e0";
-      div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      div.innerText = `名字: ${name} | 动词: ${verb1}, ${verb2} | 副词: ${adverb1}, ${adverb2} | 备注: ${remark}`;
       container.appendChild(div);
     });
-  } catch (err) {
+  } catch(err){
     console.error("加载提交信息失败:", err);
   }
 }
 
-// 加载抽签结果
-async function loadResults() {
-  try {
-    const res = await fetch(sheetUrl + "?action=getResults");
-    const data = await res.json();
-    displayResults(data, "最新结果");
-  } catch (err) {
-    console.error("加载抽签结果失败:", err);
-  }
-}
-
-// 工具函数：数组随机打乱
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+// ------------------------
+// 工具函数
+// ------------------------
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
   }
   return array;
 }
 
 // 显示抽签结果
-function displayResults(combos, title = "结果") {
+function displayResults(combos){
   const ul = document.getElementById('resultsList');
-  ul.innerHTML = `<h3>${title}</h3>`;
-  combos.forEach(c => {
+  ul.innerHTML = '';
+  combos.forEach(c=>{
     const li = document.createElement('li');
     li.innerText = `${c.name} → ${c.combo}`;
     ul.appendChild(li);
   });
 }
 
-// 页面加载时显示已有提交信息和结果
+// 页面加载时显示已有提交信息
 window.onload = () => {
   loadSubmissions();
-  loadResults();
 };
