@@ -79,4 +79,44 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
     }
   }
 
-  const pairs = names.map((sender,i)=>({ sender, receiver:rece
+  const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
+  displayResults(pairs,"匹配名字（随机送礼）结果",true);
+});
+
+// 加载报名信息
+async function loadSubmissions(){
+  try{
+    const res = await fetch(sheetUrl);
+    const entries = await res.json();
+    const container = document.getElementById('submissionList');
+    container.innerHTML="<h3>已提交信息</h3>";
+    entries.forEach(e=>{
+      const div=document.createElement('div');
+      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      container.appendChild(div);
+    });
+  }catch(err){ console.error("加载提交信息失败:",err);}
+}
+
+// 工具函数
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
+
+// 显示结果
+function displayResults(list,title,isGift=false){
+  const ul=document.getElementById('resultsList');
+  ul.innerHTML=`<h3>${title}</h3>`;
+  list.forEach(c=>{
+    const li=document.createElement('li');
+    li.innerText=isGift?`${c.sender} 🎁 送给 → ${c.receiver}`:`${c.name} → ${c.combo}`;
+    ul.appendChild(li);
+  });
+}
+
+// 页面加载
+window.onload=()=>{ loadSubmissions(); };
