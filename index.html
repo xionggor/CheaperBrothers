@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</title>
+  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Cheaper Brothers 2025 第一届动词副词交换礼物 🎅🎄</h1>
-    <p>欢迎来到年度最离谱的圣诞礼物现场！每个人贡献 2 个动词 + 2 个副词，看看命运会给你什么惊喜吧 😂</p>
+    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
+    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
   </header>
 
   <main>
@@ -27,11 +27,11 @@
         <input type="text" id="verb2" required>
         <div class="example" id="verb2-example"></div>
 
-        <label>副词1:</label>
+        <label>形容词1:</label>
         <input type="text" id="adverb1" required>
         <div class="example" id="adverb1-example"></div>
 
-        <label>副词2:</label>
+        <label>形容词2:</label>
         <input type="text" id="adverb2" required>
         <div class="example" id="adverb2-example"></div>
 
@@ -70,11 +70,10 @@
     <p>Cheaper Brothers 🎄 2025</p>
   </footer>
 
-  <!-- JS 示例词语显示（搞怪版） -->
-<!-- JS 超搞怪示例词语显示 -->
-<script>
+  <!-- JS 示例词语显示（搞怪形容词+动词） -->
+  <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // 超搞怪动词（50+）
+  // 超搞怪动词
   const verbExamples = [
     "挖鼻孔","打滚撒欢","偷吃圣诞糖","装死","飘起来","拍屁屁",
     "假装唱歌","假笑晃脑袋","掏耳朵给猫听","翻白眼吐舌头","舔手指",
@@ -88,17 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
     "做鬼脸","拿勺子敲桌子","假装踩到香蕉皮","背着书跑","一边吃糖一边哭"
   ];
 
-  // 超搞怪副词（50+）
-  const adverbExamples = [
-    "悄悄地","尴尬地","疯狂地","像没事人一样地","炸裂地","崩溃地",
-    "鬼畜地","一脸问号地","带点绝望地","边哭边笑地","强颜欢笑地",
-    "偷偷摸摸地","像企鹅一样地","理直气壮地","假装快乐地","咬牙切齿地",
-    "飞快地","缓慢地","像蜗牛一样地","超级猖狂地","做作地","抽风般地",
-    "乱七八糟地","忍不住地","瑟瑟发抖地","夸张地","像猫一样灵活地","自顾自地",
-    "胡乱挥舞地","咯咯笑着地","边吃边跳地","像风一样地","无厘头地","像小丑般地",
-    "夸夸其谈地","像吸血鬼一样地","边滚边叫地","奇怪地","像僵尸般慢慢地",
-    "像火箭般冲刺地","边跳边唱地","像外星人一样地","疯狂翻滚地","神经质地",
-    "梦游般地","像鹦鹉模仿地","乱喊乱叫地","像章鱼一样摆动地","无节操地","边哭边笑地"
+  // 超搞怪形容词
+  const adjectiveExamples = [
+    "高冷","骚动的","疯癫的","无厘头的","臭美的","猖狂的",
+    "神经质的","疯狂的","古怪的","怪异的","奇葩的","邪恶的",
+    "浮夸的","暴躁的","糊涂的","大胆的","蠢萌的","魔性的",
+    "阴险的","妖娆的","呆萌的","傻气的","猥琐的","疯狂发光的",
+    "跳跃的","吓人的","发疯的","诡异的","萌炸的","虚弱的",
+    "炫酷的","跳舞的","滑稽的","无节操的","嗨翻的","迷幻的",
+    "恐怖的","傲娇的","疯狂变色的","憨憨的","奇怪的","离谱的",
+    "醉醺醺的","狂野的","恐慌的","怪力乱神的","瘆人的","神奇的",
+    "搞笑的","邪魅的","魔幻的","吼叫的","乱蹦乱跳的","阴阳怪气的"
   ];
 
   function pickRandom(arr, count){
@@ -108,8 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("verb1-example").textContent = "示例: " + pickRandom(verbExamples,4);
   document.getElementById("verb2-example").textContent = "示例: " + pickRandom(verbExamples,4);
-  document.getElementById("adverb1-example").textContent = "示例: " + pickRandom(adverbExamples,4);
-  document.getElementById("adverb2-example").textContent = "示例: " + pickRandom(adverbExamples,4);
+  document.getElementById("adverb1-example").textContent = "示例: " + pickRandom(adjectiveExamples,4);
+  document.getElementById("adverb2-example").textContent = "示例: " + pickRandom(adjectiveExamples,4);
 
   const inputs = document.querySelectorAll("input[type='text']");
   inputs.forEach(input => {
@@ -117,11 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
     input.setAttribute("placeholder","");
   });
 });
-</script>
-
+  </script>
 
   <!-- 引入主 JS -->
   <script src="script.js"></script>
 </body>
 </html>
-
