@@ -1,4 +1,4 @@
-const sheetUrl = "YOUR_DEPLOYED_WEBAPP_URL";
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
 let isAdmin = false;
 
@@ -120,3 +120,4 @@ function displayResults(list,title,isGift=false){
 
 // 页面加载
 window.onload=()=>{ loadSubmissions(); };
+
