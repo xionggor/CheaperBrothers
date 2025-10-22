@@ -99,4 +99,19 @@ async function loadSubmissions(){
 // ------------------------
 // 工具函数
 // ------------------------
-function shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math
+function shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}return array;}
+
+// ------------------------
+// 显示结果
+// ------------------------
+function displayResults(list,title,isGift=false){
+  const ul=document.getElementById('resultsList');
+  ul.innerHTML=`<h3>${title}</h3>`;
+  list.forEach(c=>{
+    const li=document.createElement('li');
+    li.innerText=isGift?`${c.giver} 🎁 送给 → ${c.receiver}`:`${c.name} → ${c.combo}`;
+    ul.appendChild(li);
+  });
+}
+
+window.onload=()=>{loadSubmissions();};
