@@ -121,3 +121,4 @@ function displayResults(list,title,isGift=false){
 // 页面加载
 window.onload=()=>{ loadSubmissions(); };
 
+
