@@ -6,7 +6,7 @@ let isAdmin = false;
 const verbExamples = ["跳", "跑", "吃", "笑", "唱", "打滚", "偷吃", "飞"];
 const adverbExamples = ["快速地", "开心地", "轻轻地", "大声地", "慢慢地", "笨拙地", "优雅地", "悄悄地"];
 
-// 给输入框右边添加示例（小字灰色）
+// 显示示例
 function addExamples() {
   document.getElementById('verb1-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
   document.getElementById('verb2-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
@@ -22,7 +22,7 @@ function pickRandomExamples(arr, count){
 addExamples();
 
 // ------------------------
-// 提交表单
+// 表单提交
 // ------------------------
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -67,12 +67,12 @@ document.getElementById('loginBtn').addEventListener('click', () => {
 // 生成组合（每人一组）
 // ------------------------
 document.getElementById('generateBtn').addEventListener('click', async () => {
-  if(!isAdmin) return;
+  if(!isAdmin) return alert("请先登录主持人账号");
 
-  // 只用 GET 获取数据，不写入 Google Sheet
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
+  // 收集所有动词和副词
   let verbs = [];
   let adverbs = [];
   entries.forEach(e => {
@@ -84,58 +84,50 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   adverbs = shuffle(adverbs);
 
   const combinations = [];
-  entries.forEach(e=>{
-    const v1 = verbs.pop() || "";
-    const v2 = verbs.pop() || "";
-    const a1 = adverbs.pop() || "";
-    const a2 = adverbs.pop() || "";
+
+  // 每人只生成一组组合
+  entries.forEach(e => {
+    const v = verbs.pop() || "";
+    const a = adverbs.pop() || "";
     combinations.push({
       name: e.name,
-      combo: `${a1} ${v1}, ${a2} ${v2}`
+      combo: `${a} ${v}`
     });
   });
 
-  displayResults(combinations);
+  displayResults(combinations, "生成组合（每人一组）结果");
 });
 
 // ------------------------
-// 匹配名字（每人随机送礼给另一人）
+// 匹配名字（随机送礼）
 // ------------------------
 document.getElementById('assignBtn').addEventListener('click', async () => {
-  if(!isAdmin) return;
+  if(!isAdmin) return alert("请先登录主持人账号");
 
-  // 只用 GET 获取数据，不写入 Google Sheet
   const res = await fetch(sheetUrl + "?action=get");
   const entries = await res.json();
 
-  if(entries.length < 2){
-    alert("需要至少 2 个参与者才能匹配名字！");
-    return;
-  }
-
   const names = entries.map(e => e.name);
-  let shuffled = [...names].sort(() => 0.5 - Math.random());
+  let receivers = shuffle([...names]);
 
-  // 确保没人抽到自己
-  for(let i=0;i<names.length;i++){
-    if(names[i] === shuffled[i]){
-      [shuffled[i], shuffled[(i+1)%shuffled.length]] = [shuffled[(i+1)%shuffled.length], shuffled[i]];
+  // 确保没人送自己
+  for (let i = 0; i < names.length; i++) {
+    if (names[i] === receivers[i]) {
+      const j = (i + 1) % names.length;
+      [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
     }
   }
 
-  const combos = [];
-  for(let i=0;i<names.length;i++){
-    combos.push({
-      name: names[i],
-      combo: shuffled[i] // 表示送礼给谁
-    });
-  }
+  const pairs = names.map((sender, i) => ({
+    sender,
+    receiver: receivers[i]
+  }));
 
-  displayResults(combos);
+  displayResults(pairs, "匹配名字（随机送礼）结果", true);
 });
 
 // ------------------------
-// 加载已提交信息
+// 加载报名信息
 // ------------------------
 async function loadSubmissions() {
   try {
@@ -145,20 +137,8 @@ async function loadSubmissions() {
     container.innerHTML = "<h3>已提交信息</h3>";
 
     entries.forEach(e => {
-      const name = e.name || "";
-      const verb1 = e.verb1 || "";
-      const verb2 = e.verb2 || "";
-      const adverb1 = e.adverb1 || "";
-      const adverb2 = e.adverb2 || "";
-      const remark = e.remark || "";
-
       const div = document.createElement('div');
-      div.style.border = "1px solid #ccc";
-      div.style.margin = "5px 0";
-      div.style.padding = "5px";
-      div.style.borderRadius = "8px";
-      div.style.backgroundColor = "#fff3e0";
-      div.innerText = `名字: ${name} | 动词: ${verb1}, ${verb2} | 副词: ${adverb1}, ${adverb2} | 备注: ${remark}`;
+      div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
       container.appendChild(div);
     });
   } catch(err){
@@ -177,18 +157,23 @@ function shuffle(array){
   return array;
 }
 
-// 显示抽签结果
-function displayResults(combos){
+// ------------------------
+// 显示结果
+// ------------------------
+function displayResults(list, title, isGift = false){
   const ul = document.getElementById('resultsList');
-  ul.innerHTML = '';
-  combos.forEach(c=>{
+  ul.innerHTML = `<h3>${title}</h3>`;
+
+  list.forEach(c => {
     const li = document.createElement('li');
-    li.innerText = `${c.name} → ${c.combo}`;
+    li.innerText = isGift ? `${c.sender} 🎁 送给 → ${c.receiver}` : `${c.name} → ${c.combo}`;
     ul.appendChild(li);
   });
 }
 
-// 页面加载时显示已有提交信息
+// ------------------------
+// 页面加载时执行
+// ------------------------
 window.onload = () => {
   loadSubmissions();
 };
