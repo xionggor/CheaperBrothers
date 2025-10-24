@@ -2,25 +2,6 @@ const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5
 
 let isAdmin = false;
 
-// 示例词语
-const verbExamples = ["跳","跑","吃","笑","唱","打滚","偷吃","飞"];
-const adverbExamples = ["快速地","开心地","轻轻地","大声地","慢慢地","笨拙地","优雅地","悄悄地"];
-
-// 显示示例
-function addExamples() {
-  document.getElementById('verb1-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
-  document.getElementById('verb2-example').textContent = "示例: " + pickRandomExamples(verbExamples, 4);
-  document.getElementById('adverb1-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
-  document.getElementById('adverb2-example').textContent = "示例: " + pickRandomExamples(adverbExamples, 4);
-}
-
-function pickRandomExamples(arr, count){
-  const shuffled = [...arr].sort(()=>0.5 - Math.random());
-  return shuffled.slice(0, count).join(", ");
-}
-
-addExamples();
-
 // ------------------------
 // 表单提交
 // ------------------------
@@ -117,7 +98,7 @@ async function loadSubmissions(){
     container.innerHTML="<h3>已提交信息</h3>";
     entries.forEach(e=>{
       const div=document.createElement('div');
-      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
       container.appendChild(div);
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
