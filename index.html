@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cheaper Brothers - 靠上模板</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cheaper Brothers - Flash Template</title>
 
-  <!-- 主字体 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&display=swap" rel="stylesheet">
-
-  <!-- 副字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      background-color: #000;
-      color: #f5deb3;
-      font-family: "BBH Sans Hegarty", sans-serif;
-      height: 100vh;
+    :root {
+      --ink: #f5deb3;
+    }
+
+    html, body {
+      height: 100%;
       margin: 0;
+      background-color: #000;
+      color: var(--ink);
+      font-family: "BBH Sans Hegarty", sans-serif;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* 从顶部开始排列 */
+      justify-content: flex-start;
       align-items: center;
-      padding-top: 15vh; /* 调整距离顶部高度，可微调 */
+      padding-top: 15vh;
       text-align: center;
     }
 
@@ -48,16 +47,16 @@
       animation: flicker 1.2s ease forwards;
     }
 
-    /* CHEAPER */
+    /* CHEAPER delays */
     .line1 span:nth-child(1) { animation-delay: 0.1s; }
     .line1 span:nth-child(2) { animation-delay: 0.25s; }
     .line1 span:nth-child(3) { animation-delay: 0.4s; }
     .line1 span:nth-child(4) { animation-delay: 0.55s; }
     .line1 span:nth-child(5) { animation-delay: 0.7s; }
     .line1 span:nth-child(6) { animation-delay: 0.85s; }
-    .line1 span:nth-child(7) { animation-delay: 1s; }
+    .line1 span:nth-child(7) { animation-delay: 1.0s; }
 
-    /* BROTHERS */
+    /* BROTHERS delays */
     .line2 span:nth-child(1) { animation-delay: 1.15s; }
     .line2 span:nth-child(2) { animation-delay: 1.3s; }
     .line2 span:nth-child(3) { animation-delay: 1.45s; }
@@ -75,6 +74,20 @@
       100% { opacity: 1; }
     }
 
+    /* 循环微闪动画（更柔和） */
+    @keyframes neonLoop {
+      0%, 100% { opacity: 1; filter: brightness(1); }
+      50% { opacity: 0.85; filter: brightness(1.2); }
+      75% { opacity: 0.95; }
+    }
+
+    .loop {
+      animation-name: neonLoop;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+
     footer {
       position: absolute;
       bottom: 30px;
@@ -88,13 +101,18 @@
     }
 
     footer a {
-      color: #f5deb3;
+      color: var(--ink);
       text-decoration: none;
     }
 
     @keyframes fadeInFooter {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 0.8; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 3.2rem; }
+      body { padding-top: 10vh; }
     }
   </style>
 </head>
@@ -107,10 +125,31 @@
       <span>B</span><span>R</span><span>O</span><span>T</span><span>H</span><span>E</span><span>R</span><span>S</span>
     </span>
   </h1>
+
   <footer>
-    <a href="lottery.html">Cheaper Brothers Co. 廉价洋行 🎄 </a>
+    <a href="lottery.html">Cheaper Brothers Co. 廉价洋行 🎄</a>
   </footer>
+
+  <script>
+    // 获取所有字母
+    const letters = document.querySelectorAll('.line > span');
+
+    letters.forEach(letter => {
+      letter.addEventListener('animationend', (e) => {
+        if (e.animationName === 'flicker') {
+          // 随机时长与延迟
+          const dur = (1.5 + Math.random()).toFixed(2);
+          const delay = (Math.random() * 2).toFixed(2);
+
+          // 先移除动画再重新加，强制刷新触发动画
+          letter.style.animation = 'none';
+          void letter.offsetWidth; // 强制 reflow
+          letter.classList.add('loop');
+          letter.style.animationDuration = `${dur}s`;
+          letter.style.animationDelay = `${delay}s`;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
-
