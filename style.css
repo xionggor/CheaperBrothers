@@ -1,67 +1,84 @@
+/* 全局 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fff9f0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(120deg, #fefefe, #f3f3f3);
   color: #333;
   margin: 0;
   padding: 0;
 }
 
 header {
-  background: linear-gradient(to right, #c62828, #2e7d32);
-  color: white;
-  padding: 20px;
   text-align: center;
+  padding: 20px;
+  background: linear-gradient(to right, #4caf50, #81c784);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 header h1 {
   margin: 0 0 10px 0;
-  font-size: 1.8em;
+  font-weight: 700;
+  font-size: 2rem;
 }
 
 header p {
   margin: 0;
-  font-size: 1em;
+  font-weight: 400;
 }
 
 main {
   padding: 20px;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
-form {
-  background-color: #fffbf0;
-  border: 2px dashed #c62828;
-  padding: 15px;
+/* 卡片样式 */
+.card {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
   border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
 }
 
 label {
   display: block;
   margin: 10px 0 5px 0;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 input[type="text"], input[type="password"] {
-  width: 95%;
-  padding: 8px;
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 2px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+  outline: none;
 }
 
 button {
-  background-color: #2e7d32;
+  background: linear-gradient(45deg, #4caf50, #81c784);
   color: white;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
 }
-
 button:hover {
-  background-color: #1b5e20;
+  background: linear-gradient(45deg, #388e3c, #66bb6a);
+  transform: translateY(-2px);
 }
 
 .example {
@@ -71,19 +88,15 @@ button:hover {
 }
 
 #submissionList div {
-  border: 1px solid #ccc;
+  border: 1px solid #eee;
   margin: 5px 0;
-  padding: 8px;
+  padding: 10px;
   border-radius: 8px;
-  background-color: #fff3e0;
+  background-color: #f9f9f9;
 }
 
 #admin-section {
   margin-top: 30px;
-  padding: 15px;
-  background-color: #e8f5e9;
-  border-radius: 12px;
-  border: 2px dashed #2e7d32;
 }
 
 #admin-controls {
@@ -93,22 +106,18 @@ button:hover {
 
 #results-section {
   margin-top: 30px;
-  padding: 15px;
-  background-color: #fff3e0;
-  border-radius: 12px;
-  border: 2px dashed #c62828;
 }
 
 #resultsList li {
   margin: 5px 0;
-  padding: 5px;
-  border-radius: 6px;
-  background-color: #ffe0b2;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #e8f5e9;
 }
 
 footer {
   text-align: center;
   margin-top: 40px;
-  padding: 10px;
+  padding: 15px;
   color: #555;
 }
