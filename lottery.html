@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
+    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
+
+  <main>
+    <!-- 报名表 -->
+    <section id="form-section">
+      <h2>报名表</h2>
+      <form id="giftForm" autocomplete="off">
+        <label>名字:</label>
+        <input type="text" id="name" required>
+
+        <label>动词1:</label>
+        <input type="text" id="verb1" required>
+        <div class="example" id="verb1-example"></div>
+
+        <label>动词2:</label>
+        <input type="text" id="verb2" required>
+        <div class="example" id="verb2-example"></div>
+
+        <label>形容词1:</label>
+        <input type="text" id="adverb1" required>
+        <div class="example" id="adverb1-example"></div>
+
+        <label>形容词2:</label>
+        <input type="text" id="adverb2" required>
+        <div class="example" id="adverb2-example"></div>
+
+        <label>备注:</label>
+        <input type="text" id="remark">
+
+        <button type="submit">提交</button>
+      </form>
+
+      <div id="submissionList">
+        <h3>已提交信息</h3>
+      </div>
+    </section>
+
+    <!-- 主持人操作 -->
+    <section id="admin-section">
+      <h2>主持人操作</h2>
+      <label>密码:</label>
+      <input type="password" id="adminPassword">
+      <button id="loginBtn">登录</button>
+
+      <div id="admin-controls" style="display:none; margin-top:10px;">
+        <button id="generateBtn">生成组合（每人一组）</button>
+        <button id="matchBtn">匹配名字（随机送礼）</button>
+      </div>
+    </section>
+
+    <!-- 抽签结果 -->
+    <section id="results-section">
+      <h2>抽签结果</h2>
+      <ul id="resultsList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Cheaper Brothers 🎄 2025</p>
+  </footer>
+
+  <!-- JS 示例词语显示（搞怪形容词+动词） -->
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // 超搞怪动词
+  const verbExamples = [
+    "挖鼻孔","打滚撒欢","偷吃圣诞糖","装死","飘起来","拍屁屁",
+    "假装唱歌","假笑晃脑袋","掏耳朵给猫听","翻白眼吐舌头","舔手指",
+    "和空气握手","撒娇翻滚","当乌龟爬行","假装飘走","摔个四脚朝天",
+    "咬自己的脚趾","对墙壁挥拳","模仿外星人","假装隐身","倒立挠头",
+    "疯狂甩头发","一边跳舞一边吃冰淇淋","背着猫溜达","假装弹钢琴",
+    "吃空气","把袜子当帽子戴","边哭边唱歌","疯狂敲键盘","用脚画圈",
+    "打嗝跳跃","假装变身超级英雄","向天吼叫","拿枕头打自己","像鸭子走路",
+    "蹦蹦跳跳撞墙","在地上打滚","模仿机器人","假装飞行","舔冰箱门",
+    "用头顶西瓜","像青蛙一样蹲跳","吹口哨旋转360度","对镜子讲话","装作不会说话",
+    "做鬼脸","拿勺子敲桌子","假装踩到香蕉皮","背着书跑","一边吃糖一边哭"
+  ];
+
+  // 超搞怪形容词
+  const adjectiveExamples = [
+    "高冷","骚动的","疯癫的","无厘头的","臭美的","猖狂的",
+    "神经质的","疯狂的","古怪的","怪异的","奇葩的","邪恶的",
+    "浮夸的","暴躁的","糊涂的","大胆的","蠢萌的","魔性的",
+    "阴险的","妖娆的","呆萌的","傻气的","猥琐的","疯狂发光的",
+    "跳跃的","吓人的","发疯的","诡异的","萌炸的","虚弱的",
+    "炫酷的","跳舞的","滑稽的","无节操的","嗨翻的","迷幻的",
+    "恐怖的","傲娇的","疯狂变色的","憨憨的","奇怪的","离谱的",
+    "醉醺醺的","狂野的","恐慌的","怪力乱神的","瘆人的","神奇的",
+    "搞笑的","邪魅的","魔幻的","吼叫的","乱蹦乱跳的","阴阳怪气的"
+  ];
+
+  function pickRandom(arr, count){
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count).join(", ");
+  }
+
+  document.getElementById("verb1-example").textContent = "示例: " + pickRandom(verbExamples,4);
+  document.getElementById("verb2-example").textContent = "示例: " + pickRandom(verbExamples,4);
+  document.getElementById("adverb1-example").textContent = "示例: " + pickRandom(adjectiveExamples,4);
+  document.getElementById("adverb2-example").textContent = "示例: " + pickRandom(adjectiveExamples,4);
+
+  const inputs = document.querySelectorAll("input[type='text']");
+  inputs.forEach(input => {
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("placeholder","");
+  });
+});
+  </script>
+
+  <!-- 引入主 JS -->
+  <script src="script.js"></script>
+</body>
+</html>
