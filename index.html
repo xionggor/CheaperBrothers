@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cheaper Brothers - Neon Glow Slow</title>
+<title>Cheaper Brothers - Christmas Lights Random</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 
 <style>
 :root {
-  --neon-color: #f5deb3;
+  --colors: #f5deb3, #ff6347, #32cd32, #1e90ff, #ff69b4; /* 米黄、红、绿、蓝、粉 */
 }
 
 body {
@@ -28,7 +28,6 @@ body {
   background-color: #000;
   font-family: "BBH Sans Hegarty", sans-serif;
   text-align: center;
-  color: var(--neon-color);
 }
 
 h1 {
@@ -37,7 +36,6 @@ h1 {
   letter-spacing: 3px;
   text-transform: uppercase;
   margin: 0;
-  animation: neonPulse 4s ease-in-out infinite alternate;
 }
 
 .line {
@@ -46,42 +44,29 @@ h1 {
 
 .line span {
   display: inline-block;
+  animation: neonRandomColor 4s ease-in-out infinite alternate;
   opacity: 1;
-  text-shadow: 0 0 6px var(--neon-color), 0 0 12px var(--neon-color);
-  animation: neonFlicker 4s infinite;
+  text-shadow: 0 0 6px #f5deb3, 0 0 12px #f5deb3;
 }
 
-/* 随机延迟，让闪烁更自然 */
-.line span:nth-child(odd) { animation-delay: 0s; }
-.line span:nth-child(even) { animation-delay: 0.2s; }
+/* 每个字母随机延迟，让颜色变化错开 */
+.line span:nth-child(1) { animation-delay: 0s; }
+.line span:nth-child(2) { animation-delay: 0.3s; }
+.line span:nth-child(3) { animation-delay: 0.6s; }
+.line span:nth-child(4) { animation-delay: 0.9s; }
+.line span:nth-child(5) { animation-delay: 1.2s; }
+.line span:nth-child(6) { animation-delay: 1.5s; }
+.line span:nth-child(7) { animation-delay: 1.8s; }
+.line span:nth-child(8) { animation-delay: 2.1s; }
 
-/* 闪烁动画 */
-@keyframes neonFlicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    opacity: 1;
-    text-shadow: 0 0 6px var(--neon-color), 0 0 12px var(--neon-color);
-  }
-  20%, 24%, 55% {
-    opacity: 0.7;
-    text-shadow: 0 0 3px var(--neon-color), 0 0 6px var(--neon-color);
-  }
-  22% {
-    opacity: 0.4;
-    text-shadow: none;
-  }
-}
-
-/* 光晕呼吸动画 */
-@keyframes neonPulse {
-  0% {
-    text-shadow: 0 0 4px var(--neon-color), 0 0 8px var(--neon-color);
-  }
-  50% {
-    text-shadow: 0 0 8px var(--neon-color), 0 0 16px var(--neon-color);
-  }
-  100% {
-    text-shadow: 0 0 6px var(--neon-color), 0 0 12px var(--neon-color);
-  }
+/* 随机彩灯动画 */
+@keyframes neonRandomColor {
+  0%   { color: #f5deb3; text-shadow: 0 0 6px #f5deb3, 0 0 12px #f5deb3; }
+  20%  { color: #ff6347; text-shadow: 0 0 6px #ff6347, 0 0 12px #ff6347; }
+  40%  { color: #32cd32; text-shadow: 0 0 6px #32cd32, 0 0 12px #32cd32; }
+  60%  { color: #1e90ff; text-shadow: 0 0 6px #1e90ff, 0 0 12px #1e90ff; }
+  80%  { color: #ff69b4; text-shadow: 0 0 6px #ff69b4, 0 0 12px #ff69b4; }
+  100% { color: #f5deb3; text-shadow: 0 0 6px #f5deb3, 0 0 12px #f5deb3; }
 }
 
 footer {
@@ -95,7 +80,7 @@ footer {
 }
 
 footer a {
-  color: var(--neon-color);
+  color: #f5deb3;
   text-decoration: none;
 }
 </style>
