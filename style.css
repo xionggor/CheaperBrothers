@@ -1,27 +1,78 @@
-/* 全局 */
+/* 背景渐变动画 */
 body {
   font-family: 'Inter', sans-serif;
-  /* 圣诞节渐变背景：红绿金渐变 */
-  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b);
+  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
   background-size: 600% 600%;
   animation: gradientShift 15s ease infinite;
   color: #333;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
-/* 背景渐变动画 */
 @keyframes gradientShift {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
+/* 彩灯 */
+#christmas-lights {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  gap: 12px;
+}
+
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  animation: blink 1.5s infinite;
+}
+
+.light.red { background-color: #f44336; }
+.light.green { background-color: #4caf50; }
+.light.yellow { background-color: #ffeb3b; }
+.light.blue { background-color: #2196f3; }
+.light.pink { background-color: #e91e63; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* 雪花 */
+#snow-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.snowflake {
+  position: absolute;
+  top: -50px;
+  color: white;
+  user-select: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+}
+
+/* Header */
 header {
   text-align: center;
   padding: 20px;
   color: white;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
 }
 
 header h1 {
@@ -30,18 +81,12 @@ header h1 {
   font-size: 2rem;
 }
 
-header p {
-  margin: 0;
-  font-weight: 400;
-}
+header p { margin:0; font-weight: 400; }
 
-main {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
+/* 主体 */
+main { padding: 20px; max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
 
-/* 卡片样式，仅表单和主持人操作、结果卡片有阴影 */
+/* 卡片样式 */
 .card {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 20px;
@@ -50,31 +95,20 @@ main {
   box-shadow: 0 8px 15px rgba(0,0,0,0.1);
   transition: transform 0.2s;
 }
-.card:hover {
-  transform: translateY(-3px);
-}
+.card:hover { transform: translateY(-3px); }
 
-/* 已提交信息去掉阴影和背景 */
-#submissionList {
-  background: transparent;
-  box-shadow: none;
-}
-
+/* 已提交信息栏去掉阴影 */
+#submissionList { background: transparent; box-shadow: none; }
 #submissionList div {
   border: 1px solid #eee;
   margin: 5px 0;
   padding: 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.6); /* 半透明，去掉阴影 */
+  background: rgba(255,255,255,0.6);
 }
 
-/* 表单标签和输入框 */
-label {
-  display: block;
-  margin: 10px 0 5px 0;
-  font-weight: 600;
-}
-
+/* 表单样式 */
+label { display: block; margin: 10px 0 5px 0; font-weight: 600; }
 input[type="text"], input[type="password"] {
   width: 100%;
   padding: 10px;
@@ -83,11 +117,54 @@ input[type="text"], input[type="password"] {
   margin-top: 2px;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
-input[type="text"]:focus, input[type="password"]:focus {
+input:focus {
   border-color: #4caf50;
   box-shadow: 0 0 5px rgba(76,175,80,0.5);
   outline: none;
 }
 
+/* 按钮 */
 button {
-  background: linear-gradient(45deg, #4caf50
+  background: linear-gradient(45deg, #4caf50, #c62828);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: linear-gradient(45deg, #388e3c, #b71c1c);
+  transform: translateY(-2px);
+}
+
+/* 示例文字 */
+.example {
+  font-size: 0.85em;
+  color: #333;
+  margin: 0 0 10px 5px;
+}
+
+/* 管理区和结果 */
+#admin-section { margin-top: 30px; }
+#admin-controls { display: none; margin-top: 10px; }
+#results-section { margin-top: 30px; }
+#resultsList li {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
