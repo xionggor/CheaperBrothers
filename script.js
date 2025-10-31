@@ -1,84 +1,70 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbx.../exec"; // 部署 Apps Script 后替换
-
-let isAdmin=false;
-
-// 提交表单
-document.getElementById('giftForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const data={type:"form",
-    name: document.getElementById('name').value,
-    verb1: document.getElementById('verb1').value,
-    verb2: document.getElementById('verb2').value,
-    adverb1: document.getElementById('adverb1').value,
-    adverb2: document.getElementById('adverb2').value,
-    remark: document.getElementById('remark').value
-  };
-  try{ await fetch(sheetUrl,{method:'POST',body:JSON.stringify(data)}); alert("提交成功！"); document.getElementById('giftForm').reset(); loadSubmissions(); } 
-  catch(err){alert("提交失败");console.error(err);}
-});
-
-// 主持人登录
-document.getElementById('loginBtn').addEventListener('click', ()=>{
-  const pw = document.getElementById('adminPassword').value;
-  if(pw==="zxc123456"){ isAdmin=true; document.getElementById('admin-controls').style.display="block"; alert("登录成功"); }
-  else alert("密码错误");
-});
-
-// 加载数据
-async function loadData(){ 
-  try{ const res = await fetch(sheetUrl); return await res.json(); } 
-  catch(err){ console.error(err); return {form:[], combo:[], gift:[]}; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
+  background-size: 600% 600%;
+  animation: gradientShift 15s ease infinite;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-// 加载已提交信息
-async function loadSubmissions(){
-  const data = await loadData();
-  const container = document.getElementById('submissionList');
-  container.innerHTML="<h3>已提交信息</h3>";
-  data.form.forEach(e=>{
-    const div = document.createElement('div');
-    div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
-    container.appendChild(div);
-  });
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-// 工具
-function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+header {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
 
-// 显示结果
-function displayCombinations(list){ const ul=document.getElementById('comboList'); ul.innerHTML=""; list.forEach(c=>{ const li=document.createElement('li'); li.innerText=`${c.name} → ${c.combo}`; ul.appendChild(li); }); }
-function displayGifts(list){ const ul=document.getElementById('giftList'); ul.innerHTML=""; list.forEach(c=>{ const li=document.createElement('li'); li.innerText=`${c.sender} 🎁 送给 → ${c.receiver}`; ul.appendChild(li); }); }
+header h1 { margin:0 0 10px 0; font-weight:700; font-size:2rem; }
+header p { margin:0; font-weight:400; }
 
-// 按钮操作
-document.getElementById('generateBtn').addEventListener('click', async ()=>{
-  if(!isAdmin){ alert("请先登录"); return; }
-  const data = await loadData(); const entries = data.form;
-  let verbs=[], adverbs=[];
-  entries.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
-  verbs=shuffle(verbs); adverbs=shuffle(adverbs);
-  const combinations=[];
-  entries.forEach(e=>{ const v=verbs.pop()||""; const a=adverbs.pop()||""; combinations.push({name:e.name, combo:`${a} ${v}`}); });
-  displayCombinations(combinations);
-  await fetch(sheetUrl,{method:'POST',body:JSON.stringify({type:'combo', list:combinations})});
-});
+main { padding:20px; max-width:900px; margin:0 auto; }
 
-document.getElementById('matchBtn').addEventListener('click', async ()=>{
-  if(!isAdmin){ alert("请先登录"); return; }
-  const data = await loadData(); const entries = data.form;
-  const names = entries.map(e=>e.name);
-  if(names.length<2){ alert("至少需要两位参与者"); return; }
-  let receivers=shuffle([...names]);
-  for(let i=0;i<names.length;i++){ if(names[i]===receivers[i]){ const j=(i+1)%names.length; [receivers[i],receivers[j]]=[receivers[j],receivers[i]]; } }
-  const pairs = names.map((sender,i)=>({sender, receiver:receivers[i]}));
-  displayGifts(pairs);
-  await fetch(sheetUrl,{method:'POST',body:JSON.stringify({type:'gift', list:pairs})});
-});
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
 
-document.getElementById('clearBtn').addEventListener('click', async ()=>{
-  displayCombinations([]); displayGifts([]);
-  await fetch(sheetUrl,{method:'POST',body:JSON.stringify({type:'combo', list:[]})});
-  await fetch(sheetUrl,{method:'POST',body:JSON.stringify({type:'gift', list:[]})});
-});
+#submissionList { background: transparent; box-shadow: none; }
+#submissionList div {
+  border:1px solid #eee;
+  margin:5px 0;
+  padding:10px;
+  border-radius:8px;
+  background: rgba(255,255,255,0.6);
+}
 
-// 页面加载
-window.onload=()=>{ loadSubmissions(); loadData().then(data=>{ displayCombinations(data.combo); displayGifts(data.gift); }); };
+label { display:block; margin:10px 0 5px 0; font-weight:600; }
+input[type="text"], input[type="password"] {
+  width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:2px;
+}
+input:focus { border-color:#4caf50; box-shadow:0 0 5px rgba(76,175,80,0.5); outline:none; }
+
+button {
+  background: linear-gradient(45deg, #4caf50, #c62828);
+  color:white; padding:10px 20px; border:none; border-radius:8px;
+  cursor:pointer; margin-top:10px; font-weight:600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover { background: linear-gradient(45deg,#388e3c,#b71c1c); transform:translateY(-2px); }
+
+#results-section ul li {
+  margin:5px 0; padding:8px; border-radius:8px; background-color: rgba(255,255,255,0.8);
+}
+
+footer {
+  text-align:center; margin-top:40px; padding:15px; color:#fff;
+  text-shadow:1px 1px 2px rgba(0,0,0,0.3);
+}
