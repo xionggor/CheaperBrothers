@@ -19,9 +19,6 @@
     <div class="light yellow"></div>
   </div>
 
-  <!-- 雪花容器 -->
-  <div id="snow-container"></div>
-
   <header>
     <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
     <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
@@ -75,7 +72,16 @@
 
     <section id="results-section" class="card">
       <h2>抽签结果</h2>
-      <ul id="resultsList"></ul>
+      <div id="results-container">
+        <div id="comboResults" class="results-box">
+          <h3>生成组合（每人一组）</h3>
+          <ul id="comboList"></ul>
+        </div>
+        <div id="giftResults" class="results-box">
+          <h3>匹配名字（随机送礼）</h3>
+          <ul id="giftList"></ul>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -85,7 +91,7 @@
 
   <script src="script.js"></script>
 
-  <!-- 彩灯闪烁 + 雪花飘落 -->
+  <!-- 彩灯闪烁 -->
   <script>
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
@@ -97,18 +103,6 @@
       });
     }
     setInterval(randomBlink, 500);
-
-    const snowContainer = document.getElementById('snow-container');
-    const snowCount = 40;
-    for(let i=0;i<snowCount;i++){
-      const snow = document.createElement('div');
-      snow.classList.add('snowflake');
-      snow.style.left = Math.random() * 100 + 'vw';
-      snow.style.animationDelay = Math.random() * 10 + 's';
-      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
-      snow.innerText = '❄';
-      snowContainer.appendChild(snow);
-    }
   </script>
 </body>
 </html>
