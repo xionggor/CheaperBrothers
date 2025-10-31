@@ -137,4 +137,7 @@ function displayResults(list,type){
 window.onload = ()=>{
   loadSubmissions();
   const savedCombo = JSON.parse(localStorage.getItem('comboResults')||'[]');
-  const savedGift = JSON.parse(localStorage.getItem
+  const savedGift = JSON.parse(localStorage.getItem('giftResults')||'[]');
+  if(savedCombo.length) displayResults(savedCombo,'combo');
+  if(savedGift.length) displayResults(savedGift,'gift');
+};
