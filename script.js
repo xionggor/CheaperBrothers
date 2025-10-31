@@ -1,123 +1,158 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- 圣诞彩灯 -->
-  <div id="christmas-lights">
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-    <div class="light blue"></div>
-    <div class="light pink"></div>
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-  </div>
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
-  <!-- 雪花容器 -->
-  <div id="snow-container"></div>
+let isAdmin = false;
 
-  <header>
-    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
-    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
-  </header>
+// ------------------------
+// 表单提交
+// ------------------------
+document.getElementById('giftForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = {
+    name: document.getElementById('name').value,
+    verb1: document.getElementById('verb1').value,
+    verb2: document.getElementById('verb2').value,
+    adverb1: document.getElementById('adverb1').value,
+    adverb2: document.getElementById('adverb2').value,
+    remark: document.getElementById('remark').value
+  };
 
-  <main>
-    <section id="form-section" class="card">
-      <h2>报名表</h2>
-      <form id="giftForm" autocomplete="off">
-        <label>名字:</label>
-        <input type="text" id="name" required>
+  try{
+    await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
+    alert("提交成功！🎉");
+    document.getElementById('giftForm').reset();
+    loadSubmissions();
+  }catch(err){
+    alert("提交失败，请稍后再试");
+    console.error(err);
+  }
+});
 
-        <label>动词1:</label>
-        <input type="text" id="verb1" required>
-        <div class="example" id="verb1-example"></div>
+// ------------------------
+// 主持人登录
+// ------------------------
+document.getElementById('loginBtn').addEventListener('click', ()=>{
+  const pw = document.getElementById('adminPassword').value;
+  if(pw==="zxc123456"){
+    isAdmin=true;
+    document.getElementById('admin-controls').style.display="block";
+    alert("登录成功！你现在可以操作主持人功能。");
+  }else{
+    alert("密码错误！");
+  }
+});
 
-        <label>动词2:</label>
-        <input type="text" id="verb2" required>
-        <div class="example" id="verb2-example"></div>
+// ------------------------
+// 生成组合（每人一组）
+document.getElementById('generateBtn').addEventListener('click', async ()=>{
+  if(!isAdmin) return alert("请先登录主持人账号");
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
 
-        <label>形容词1:</label>
-        <input type="text" id="adverb1" required>
-        <div class="example" id="adverb1-example"></div>
+  let verbs=[], adverbs=[];
+  entries.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
+  verbs=shuffle(verbs); adverbs=shuffle(adverbs);
 
-        <label>形容词2:</label>
-        <input type="text" id="adverb2" required>
-        <div class="example" id="adverb2-example"></div>
+  const combinations=[];
+  entries.forEach(e=>{
+    const v = verbs.pop()||"";
+    const a = adverbs.pop()||"";
+    combinations.push({ name:e.name, combo:`${a} ${v}` });
+  });
 
-        <label>备注:</label>
-        <input type="text" id="remark">
+  displayComboResults(combinations);
+  localStorage.setItem('comboResults', JSON.stringify(combinations));
+});
 
-        <button type="submit">提交</button>
-      </form>
+// ------------------------
+// 匹配名字（随机送礼）
+document.getElementById('matchBtn').addEventListener('click', async ()=>{
+  if(!isAdmin) return alert("请先登录主持人账号");
 
-      <div id="submissionList">
-        <h3>已提交信息</h3>
-      </div>
-    </section>
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
 
-    <section id="admin-section" class="card">
-      <h2>主持人操作</h2>
-      <label>密码:</label>
-      <input type="password" id="adminPassword">
-      <button id="loginBtn">登录</button>
-      <div id="admin-controls" style="display:none; margin-top:10px;">
-        <button id="generateBtn">生成组合（每人一组）</button>
-        <button id="matchBtn">匹配名字（随机送礼）</button>
-        <button id="clearResultsBtn" class="clear-btn">清空结果</button>
-      </div>
-    </section>
+  const names = entries.map(e=>e.name);
+  if(names.length<2){ alert("至少需要两位参与者"); return; }
 
-    <section id="results-section" class="card">
-      <h2>抽签结果</h2>
-      <div id="results-container" class="results-container">
-        <div id="comboResults" class="results-column">
-          <h3>生成组合（每人一组）</h3>
-          <ul id="comboList"></ul>
-        </div>
-        <div id="giftResults" class="results-column">
-          <h3>匹配名字（随机送礼）</h3>
-          <ul id="giftList"></ul>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <a href="index.html">Cheaper Brothers 🎄 2025</a>
-  </footer>
-
-  <script src="script.js"></script>
-
-  <!-- 彩灯闪烁 + 雪花飘落 -->
-  <script>
-    const lights = document.querySelectorAll('#christmas-lights .light');
-    function randomBlink() {
-      lights.forEach(light => {
-        const delay = Math.random() * 2000;
-        setTimeout(() => {
-          light.style.opacity = Math.random() > 0.5 ? 1 : 0.3;
-        }, delay);
-      });
+  let receivers = shuffle([...names]);
+  for(let i=0;i<names.length;i++){
+    if(names[i]===receivers[i]){
+      const j=(i+1)%names.length;
+      [receivers[i],receivers[j]]=[receivers[j],receivers[i]];
     }
-    setInterval(randomBlink, 500);
+  }
 
-    const snowContainer = document.getElementById('snow-container');
-    const snowCount = 40;
-    for(let i=0;i<snowCount;i++){
-      const snow = document.createElement('div');
-      snow.classList.add('snowflake');
-      snow.style.left = Math.random() * 100 + 'vw';
-      snow.style.animationDelay = Math.random() * 10 + 's';
-      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
-      snow.innerText = '❄';
-      snowContainer.appendChild(snow);
-    }
-  </script>
-</body>
-</html>
+  const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
+  displayGiftResults(pairs);
+  localStorage.setItem('giftResults', JSON.stringify(pairs));
+});
+
+// ------------------------
+// 清空结果
+document.getElementById('clearResultsBtn').addEventListener('click', ()=>{
+  localStorage.removeItem('comboResults');
+  localStorage.removeItem('giftResults');
+  document.getElementById('comboList').innerHTML='';
+  document.getElementById('giftList').innerHTML='';
+  alert("抽签结果已清空！");
+});
+
+// ------------------------
+// 加载报名信息
+async function loadSubmissions(){
+  try{
+    const res = await fetch(sheetUrl);
+    const entries = await res.json();
+    const container = document.getElementById('submissionList');
+    container.innerHTML="<h3>已提交信息</h3>";
+    entries.forEach(e=>{
+      const div=document.createElement('div');
+      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      container.appendChild(div);
+    });
+  }catch(err){ console.error("加载提交信息失败:",err);}
+}
+
+// ------------------------
+// 工具函数
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
+
+// ------------------------
+// 显示左右两栏结果
+function displayComboResults(list){
+  const ul = document.getElementById('comboList');
+  ul.innerHTML='';
+  list.forEach(c=>{
+    const li = document.createElement('li');
+    li.innerText=`${c.name} → ${c.combo}`;
+    ul.appendChild(li);
+  });
+}
+
+function displayGiftResults(list){
+  const ul = document.getElementById('giftList');
+  ul.innerHTML='';
+  list.forEach(c=>{
+    const li = document.createElement('li');
+    li.innerText=`${c.sender} 🎁 送给 → ${c.receiver}`;
+    ul.appendChild(li);
+  });
+}
+
+// ------------------------
+// 页面加载
+window.onload=()=>{
+  loadSubmissions();
+
+  const savedCombo = localStorage.getItem('comboResults');
+  if(savedCombo) displayComboResults(JSON.parse(savedCombo));
+
+  const savedGift = localStorage.getItem('giftResults');
+  if(savedGift) displayGiftResults(JSON.parse(savedGift));
+};
