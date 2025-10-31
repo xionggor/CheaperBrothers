@@ -1,108 +1,110 @@
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
 let isAdmin = false;
+let currentResults = []; // 🔹 保存当前显示的抽签结果
 
-// 提交表单
+// ------------------------
+// 表单提交
 document.getElementById('giftForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  if (!name) return alert("请输入名字");
-  await fetch(sheetUrl, {
-    method: 'POST',
-    body: JSON.stringify({ type: 'submission', list: [{ name }] })
-  });
-  document.getElementById('name').value = "";
-  loadSubmissions();
-});
+  const data = {
+    name: document.getElementById('name').value,
+    verb1: document.getElementById('verb1').value,
+    verb2: document.getElementById('verb2').value,
+    adverb1: document.getElementById('adverb1').value,
+    adverb2: document.getElementById('adverb2').value,
+    remark: document.getElementById('remark').value
+  };
 
-// 主持人登录
-document.getElementById('adminLoginBtn').addEventListener('click', () => {
-  const pwd = document.getElementById('adminPassword').value;
-  if (pwd === "1234") {
-    isAdmin = true;
-    document.getElementById('adminControls').style.display = "block";
-    alert("主持人登录成功");
-  } else {
-    alert("密码错误");
+  try {
+    await fetch(sheetUrl, { method: 'POST', body: JSON.stringify(data) });
+    alert("提交成功！🎉");
+    document.getElementById('giftForm').reset();
+    loadSubmissions();
+  } catch (err) {
+    alert("提交失败，请稍后再试");
+    console.error(err);
   }
 });
 
-// 生成组合
-document.getElementById('generateComboBtn').addEventListener('click', async () => {
-  if (!isAdmin) return alert("请先登录主持人");
-  const response = await fetch(sheetUrl);
-  const data = await response.json();
-  const names = data.submissions.map(s => s.name);
-  if (names.length < 2) return alert("人数不足，无法生成组合");
-
-  const shuffled = shuffle([...names]);
-  const combos = shuffled.map((name, i) => ({
-    name,
-    combo: shuffled[(i + 1) % shuffled.length]
-  }));
-
-  displayResults(combos, 'comboList', false);
-  await saveResultsToSheet('combo', combos);
-  loadSubmissions();
+// ------------------------
+// 主持人登录
+document.getElementById('loginBtn').addEventListener('click', () => {
+  const pw = document.getElementById('adminPassword').value;
+  if (pw === "zxc123456") {
+    isAdmin = true;
+    document.getElementById('admin-controls').style.display = "block";
+    alert("登录成功！你现在可以操作主持人功能。");
+  } else {
+    alert("密码错误！");
+  }
 });
 
-// 随机送礼
-document.getElementById('matchNamesBtn').addEventListener('click', async () => {
-  if (!isAdmin) return alert("请先登录主持人");
-  const response = await fetch(sheetUrl);
-  const data = await response.json();
-  const names = data.submissions.map(s => s.name);
-  if (names.length < 2) return alert("人数不足");
+// ------------------------
+// 生成组合（每人一组）
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  if (!isAdmin) return alert("请先登录主持人账号");
 
-  const shuffled = shuffle([...names]);
-  const gifts = shuffled.map((sender, i) => ({
-    sender,
-    receiver: shuffled[(i + 1) % shuffled.length]
-  }));
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
 
-  displayResults(gifts, 'matchList', true);
-  await saveResultsToSheet('gift', gifts);
-  loadSubmissions();
-});
+  let verbs = [], adverbs = [];
+  entries.forEach(e => { verbs.push(e.verb1, e.verb2); adverbs.push(e.adverb1, e.adverb2); });
+  verbs = shuffle(verbs); adverbs = shuffle(adverbs);
 
-// 清空结果
-document.getElementById('clearBtn').addEventListener('click', async () => {
-  if (!isAdmin) return alert("请先登录主持人");
-  if (!confirm("确定要清空所有结果吗？")) return;
-  await fetch(sheetUrl, {
-    method: 'POST',
-    body: JSON.stringify({ type: 'clear' })
+  const combinations = [];
+  entries.forEach(e => {
+    const v = verbs.pop() || "";
+    const a = adverbs.pop() || "";
+    combinations.push({ name: e.name, combo: `${a} ${v}` });
   });
-  document.getElementById('comboList').innerHTML = "";
-  document.getElementById('matchList').innerHTML = "";
-  loadSubmissions();
+
+  displayResults(combinations, "生成组合（每人一组）结果");
 });
 
-// 加载提交信息
+// ------------------------
+// 匹配名字（随机送礼）
+document.getElementById('matchBtn').addEventListener('click', async () => {
+  if (!isAdmin) return alert("请先登录主持人账号");
+
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
+
+  const names = entries.map(e => e.name);
+  if (names.length < 2) { alert("至少需要两位参与者"); return; }
+
+  let receivers = shuffle([...names]);
+
+  // 确保没人送自己
+  for (let i = 0; i < names.length; i++) {
+    if (names[i] === receivers[i]) {
+      const j = (i + 1) % names.length;
+      [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
+    }
+  }
+
+  const pairs = names.map((sender, i) => ({ sender, receiver: receivers[i] }));
+  displayResults(pairs, "匹配名字（随机送礼）结果", true);
+});
+
+// ------------------------
+// 加载报名信息
 async function loadSubmissions() {
   try {
     const res = await fetch(sheetUrl);
-    const data = await res.json();
-    const ul = document.getElementById('submittedList');
-    ul.innerHTML = "";
-
-    if (data.submissions.length) {
-      data.submissions.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item.name;
-        ul.appendChild(li);
-      });
-    }
-
-    // 显示保存的结果
-    displayResults(data.combos, 'comboList', false);
-    displayResults(data.gifts, 'matchList', true);
-
-  } catch (err) {
-    console.error("加载失败", err);
-  }
+    const entries = await res.json();
+    const container = document.getElementById('submissionList');
+    container.innerHTML = "<h3>已提交信息</h3>";
+    entries.forEach(e => {
+      const div = document.createElement('div');
+      div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      container.appendChild(div);
+    });
+  } catch (err) { console.error("加载提交信息失败:", err); }
 }
 
+// ------------------------
+// 工具函数：洗牌
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -111,23 +113,51 @@ function shuffle(array) {
   return array;
 }
 
-function displayResults(list, ulId, isGift = false) {
-  const ul = document.getElementById(ulId);
-  ul.innerHTML = "";
+// ------------------------
+// 显示结果并保存到页面 + localStorage
+function displayResults(list, title, isGift = false) {
+  const ul = document.getElementById('resultsList');
+  ul.innerHTML = `<h3>${title}</h3>`;
   list.forEach(c => {
     const li = document.createElement('li');
-    li.innerText = isGift ? `${c.sender} 🎁 → ${c.receiver}` : `${c.name} → ${c.combo}`;
+    li.innerText = isGift ? `${c.sender} 🎁 送给 → ${c.receiver}` : `${c.name} → ${c.combo}`;
     ul.appendChild(li);
   });
+
+  // 保存结果到全局变量
+  currentResults = list.map(c => ({ ...c, isGift }));
+
+  // 保存到 localStorage
+  localStorage.setItem('cheaperResults', JSON.stringify({
+    title,
+    list: currentResults
+  }));
 }
 
-async function saveResultsToSheet(type, list) {
-  await fetch(sheetUrl, {
-    method: 'POST',
-    body: JSON.stringify({ type, list })
-  });
+// ------------------------
+// 清空结果
+function clearResults() {
+  localStorage.removeItem('cheaperResults');
+  currentResults = [];
+  document.getElementById('resultsList').innerHTML = '<h3>抽签结果</h3>';
 }
 
+// ------------------------
+// 页面加载
 window.onload = () => {
   loadSubmissions();
+
+  // 如果 localStorage 有保存的结果，重新显示
+  const saved = localStorage.getItem('cheaperResults');
+  if (saved) {
+    const { title, list } = JSON.parse(saved);
+    const ul = document.getElementById('resultsList');
+    ul.innerHTML = `<h3>${title}</h3>`;
+    list.forEach(c => {
+      const li = document.createElement('li');
+      li.innerText = c.isGift ? `${c.sender} 🎁 送给 → ${c.receiver}` : `${c.name} → ${c.combo}`;
+      ul.appendChild(li);
+    });
+    currentResults = list; // 恢复全局变量
+  }
 };
