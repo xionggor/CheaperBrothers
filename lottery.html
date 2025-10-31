@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -54,22 +54,26 @@
     <label>密码:</label>
     <input type="password" id="adminPassword">
     <button id="loginBtn">登录</button>
-    <div id="admin-controls" style="margin-top:10px; display:none;">
+
+    <div id="admin-controls" style="display:none; margin-top:10px;">
       <button id="generateBtn">生成组合（每人一组）</button>
       <button id="matchBtn">匹配名字（随机送礼）</button>
-      <button id="clearBtn">清空结果</button>
+      <button id="clearResultsBtn">清空结果</button>
     </div>
   </section>
 
   <!-- 抽签结果 -->
-  <section id="results-section" class="card" style="display:flex; gap:20px;">
-    <div style="flex:1;">
-      <h3>生成组合结果</h3>
-      <ul id="comboList"></ul>
-    </div>
-    <div style="flex:1;">
-      <h3>随机送礼结果</h3>
-      <ul id="giftList"></ul>
+  <section id="results-section" class="card">
+    <h2>抽签结果</h2>
+    <div style="display:flex; gap:20px; justify-content:space-between;">
+      <div style="flex:1">
+        <h3>生成组合</h3>
+        <ul id="generateResultsList"></ul>
+      </div>
+      <div style="flex:1">
+        <h3>随机送礼</h3>
+        <ul id="matchResultsList"></ul>
+      </div>
     </div>
   </section>
 </main>
