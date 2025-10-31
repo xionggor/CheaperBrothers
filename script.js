@@ -1,7 +1,6 @@
-const sheetUrl = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec"; 
 let isAdmin = false;
 
-// ------------------------
 // 表单提交
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
@@ -21,7 +20,6 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   }catch(err){ alert("提交失败，请稍后再试"); console.error(err); }
 });
 
-// ------------------------
 // 主持人登录
 document.getElementById('loginBtn').addEventListener('click', ()=>{
   const pw = document.getElementById('adminPassword').value;
@@ -32,17 +30,14 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
   }else{ alert("密码错误！"); }
 });
 
-// ------------------------
 // 生成组合
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
   const res = await fetch(sheetUrl);
   const entries = await res.json();
-
   let verbs=[], adverbs=[];
   entries.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
   verbs=shuffle(verbs); adverbs=shuffle(adverbs);
-
   const combinations=[];
   entries.forEach(e=>{
     const v = verbs.pop()||"";
@@ -52,7 +47,6 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
   displayResults(combinations,"combo");
 });
 
-// ------------------------
 // 随机送礼
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
@@ -72,7 +66,6 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
   displayResults(pairs,"gift");
 });
 
-// ------------------------
 // 清空结果
 document.getElementById('clearBtn').addEventListener('click', ()=>{
   document.getElementById('comboList').innerHTML="";
@@ -81,7 +74,6 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
   localStorage.removeItem("giftResults");
 });
 
-// ------------------------
 // 显示结果
 function displayResults(list,type){
   const ul = type==="combo"?document.getElementById('comboList'):document.getElementById('giftList');
@@ -92,7 +84,6 @@ function displayResults(list,type){
     ul.appendChild(li);
   });
 
-  // 保存本地
   if(type==="combo"){
     localStorage.setItem("comboResults", JSON.stringify(Array.from(ul.children).map(li=>li.innerText)));
   }else{
@@ -100,7 +91,6 @@ function displayResults(list,type){
   }
 }
 
-// ------------------------
 // 加载报名信息 + 本地结果
 async function loadSubmissions(){
   try{
@@ -109,7 +99,7 @@ async function loadSubmissions(){
     const container = document.getElementById('submissionList');
     container.innerHTML="<h3>已提交信息</h3>";
     entries.forEach(e=>{
-      if(e.name){ // 只显示报名信息
+      if(e.name){
         const div=document.createElement('div');
         div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
         container.appendChild(div);
@@ -118,7 +108,6 @@ async function loadSubmissions(){
   }catch(err){ console.error("加载提交信息失败:",err);}
 }
 
-// ------------------------
 // 工具函数
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
@@ -128,7 +117,6 @@ function shuffle(array){
   return array;
 }
 
-// ------------------------
 // 页面加载恢复本地结果
 window.onload=()=>{
   loadSubmissions();
