@@ -40,14 +40,14 @@
       <h2>主持人操作</h2>
       <label>密码:</label><input type="password" id="adminPassword">
       <button id="loginBtn">登录</button>
-      <div id="admin-controls">
+      <div id="admin-controls" style="display:none;">
         <button id="generateBtn">生成组合（每人一组）</button>
         <button id="matchBtn">匹配名字（随机送礼）</button>
         <button id="clearBtn">清空结果</button>
       </div>
     </section>
 
-    <section id="results-section" class="card">
+    <section id="results-section" class="card" style="display:flex; gap:20px;">
       <div style="flex:1;">
         <h3>生成组合</h3>
         <ul id="comboList"></ul>
