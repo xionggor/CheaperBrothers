@@ -69,7 +69,7 @@
       <div id="admin-controls" style="display:none; margin-top:10px;">
         <button id="generateBtn">生成组合（每人一组）</button>
         <button id="matchBtn">匹配名字（随机送礼）</button>
-        <button id="clearBtn" onclick="clearResults()" class="clear-btn">清空抽签结果</button>
+        <button id="clearResultsBtn" class="clear-btn">清空结果</button>
       </div>
     </section>
 
@@ -83,12 +83,10 @@
     <a href="index.html">Cheaper Brothers 🎄 2025</a>
   </footer>
 
-  <!-- 主 JS -->
   <script src="script.js"></script>
 
   <!-- 彩灯闪烁 + 雪花飘落 -->
   <script>
-    // 彩灯随机闪烁
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
       lights.forEach(light => {
@@ -100,9 +98,8 @@
     }
     setInterval(randomBlink, 500);
 
-    // 雪花生成
     const snowContainer = document.getElementById('snow-container');
-    const snowCount = 40; // 雪花数量
+    const snowCount = 40;
     for(let i=0;i<snowCount;i++){
       const snow = document.createElement('div');
       snow.classList.add('snowflake');
