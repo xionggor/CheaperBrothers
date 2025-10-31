@@ -193,3 +193,15 @@ footer {
   background: #555;
   transform: translateY(-2px);
 }
+.results-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.results-column {
+  flex: 1;
+  min-width: 250px;
+}
+
+
