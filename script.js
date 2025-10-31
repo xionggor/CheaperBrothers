@@ -1,70 +1,210 @@
-body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
-  background-size: 600% 600%;
-  animation: gradientShift 15s ease infinite;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
+
+let isAdmin = false;
+
+// ------------------------
+// 表单提交
+// ------------------------
+document.getElementById('giftForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById('name').value,
+    verb1: document.getElementById('verb1').value,
+    verb2: document.getElementById('verb2').value,
+    adverb1: document.getElementById('adverb1').value,
+    adverb2: document.getElementById('adverb2').value,
+    remark: document.getElementById('remark').value
+  };
+
+  try {
+    await fetch(sheetUrl, { method: 'POST', body: JSON.stringify(data) });
+    alert("提交成功！🎉");
+    document.getElementById('giftForm').reset();
+    loadSubmissions();
+  } catch (err) {
+    alert("提交失败，请稍后再试");
+    console.error(err);
+  }
+});
+
+// ------------------------
+// 主持人登录
+// ------------------------
+document.getElementById('loginBtn').addEventListener('click', () => {
+  const pw = document.getElementById('adminPassword').value;
+  console.log("点击登录按钮"); // 测试
+  if (pw === "zxc123456") {
+    isAdmin = true;
+    document.getElementById('admin-controls').style.display = "block";
+    alert("登录成功！你现在可以操作主持人功能。");
+  } else {
+    alert("密码错误！");
+  }
+});
+
+// ------------------------
+// 生成组合
+// ------------------------
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  if (!isAdmin) return alert("请先登录主持人账号");
+
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
+
+  let verbs = [], adverbs = [];
+  entries.forEach(e => { verbs.push(e.verb1, e.verb2); adverbs.push(e.adverb1, e.adverb2); });
+  verbs = shuffle(verbs); adverbs = shuffle(adverbs);
+
+  const combinations = [];
+  entries.forEach(e => {
+    const v = verbs.pop() || "";
+    const a = adverbs.pop() || "";
+    combinations.push({ name: e.name, combo: `${a} ${v}` });
+  });
+
+  displayResults(combinations, "generateResultsList", false);
+  saveResultsToSheet("组合结果", combinations.map(c => `${c.name} → ${c.combo}`));
+});
+
+// ------------------------
+// 随机送礼
+// ------------------------
+document.getElementById('matchBtn').addEventListener('click', async () => {
+  if (!isAdmin) return alert("请先登录主持人账号");
+
+  const res = await fetch(sheetUrl);
+  const entries = await res.json();
+  const names = entries.map(e => e.name);
+
+  if (names.length < 2) { alert("至少需要两位参与者"); return; }
+
+  let receivers = shuffle([...names]);
+
+  // 确保没人送自己
+  for (let i = 0; i < names.length; i++) {
+    if (names[i] === receivers[i]) {
+      const j = (i + 1) % names.length;
+      [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
+    }
+  }
+
+  const pairs = names.map((sender, i) => ({ sender, receiver: receivers[i] }));
+  displayResults(pairs, "matchResultsList", true);
+  saveResultsToSheet("送礼结果", pairs.map(c => `${c.sender} 🎁 → ${c.receiver}`));
+});
+
+// ------------------------
+// 清空结果
+// ------------------------
+document.getElementById('clearResultsBtn').addEventListener('click', () => {
+  if (!isAdmin) return alert("请先登录主持人账号");
+
+  document.getElementById('generateResultsList').innerHTML = "";
+  document.getElementById('matchResultsList').innerHTML = "";
+  clearResultsFromSheet();
+  alert("抽签结果已清空！");
+});
+
+// ------------------------
+// 加载已提交信息
+// ------------------------
+async function loadSubmissions() {
+  try {
+    const res = await fetch(sheetUrl);
+    const entries = await res.json();
+    const container = document.getElementById('submissionList');
+    container.innerHTML = "<h3>已提交信息</h3>";
+    entries.forEach(e => {
+      const div = document.createElement('div');
+      div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      container.appendChild(div);
+    });
+    loadResultsFromSheet();
+  } catch (err) {
+    console.error("加载提交信息失败:", err);
+  }
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+// ------------------------
+// 工具函数
+// ------------------------
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
-header {
-  text-align: center;
-  padding: 20px;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+// ------------------------
+// 显示结果
+// ------------------------
+function displayResults(list, containerId, isGift = false) {
+  const ul = document.getElementById(containerId);
+  ul.innerHTML = "";
+  list.forEach(c => {
+    const li = document.createElement('li');
+    li.innerText = isGift ? `${c.sender} 🎁 → ${c.receiver}` : `${c.name} → ${c.combo}`;
+    ul.appendChild(li);
+  });
 }
 
-header h1 { margin:0 0 10px 0; font-weight:700; font-size:2rem; }
-header p { margin:0; font-weight:400; }
-
-main { padding:20px; max-width:900px; margin:0 auto; }
-
-.card {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-.card:hover { transform: translateY(-3px); }
-
-#submissionList { background: transparent; box-shadow: none; }
-#submissionList div {
-  border:1px solid #eee;
-  margin:5px 0;
-  padding:10px;
-  border-radius:8px;
-  background: rgba(255,255,255,0.6);
+// ------------------------
+// 保存结果到 Google Sheet
+// ------------------------
+async function saveResultsToSheet(type, list) {
+  try {
+    await fetch(sheetUrl, { method: 'POST', body: JSON.stringify({ type, list }) });
+  } catch (err) {
+    console.error("保存结果失败:", err);
+  }
 }
 
-label { display:block; margin:10px 0 5px 0; font-weight:600; }
-input[type="text"], input[type="password"] {
-  width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:2px;
-}
-input:focus { border-color:#4caf50; box-shadow:0 0 5px rgba(76,175,80,0.5); outline:none; }
-
-button {
-  background: linear-gradient(45deg, #4caf50, #c62828);
-  color:white; padding:10px 20px; border:none; border-radius:8px;
-  cursor:pointer; margin-top:10px; font-weight:600;
-  transition: background 0.3s, transform 0.2s;
-}
-button:hover { background: linear-gradient(45deg,#388e3c,#b71c1c); transform:translateY(-2px); }
-
-#results-section ul li {
-  margin:5px 0; padding:8px; border-radius:8px; background-color: rgba(255,255,255,0.8);
+// ------------------------
+// 清空 Google Sheet 中的结果
+// ------------------------
+async function clearResultsFromSheet() {
+  try {
+    await fetch(sheetUrl, { method: 'POST', body: JSON.stringify({ type: "clearResults" }) });
+  } catch (err) {
+    console.error("清空结果失败:", err);
+  }
 }
 
-footer {
-  text-align:center; margin-top:40px; padding:15px; color:#fff;
-  text-shadow:1px 1px 2px rgba(0,0,0,0.3);
+// ------------------------
+// 加载保存的结果
+// ------------------------
+async function loadResultsFromSheet() {
+  try {
+    const res = await fetch(sheetUrl);
+    const entries = await res.json();
+    const generate = entries.filter(e => e.type === "组合结果");
+    const match = entries.filter(e => e.type === "送礼结果");
+
+    const generateContainer = document.getElementById("generateResultsList");
+    const matchContainer = document.getElementById("matchResultsList");
+
+    if (generate.length) {
+      generateContainer.innerHTML = "";
+      generate.forEach(g => {
+        const li = document.createElement('li');
+        li.innerText = g.list;
+        generateContainer.appendChild(li);
+      });
+    }
+
+    if (match.length) {
+      matchContainer.innerHTML = "";
+      match.forEach(m => {
+        const li = document.createElement('li');
+        li.innerText = m.list;
+        matchContainer.appendChild(li);
+      });
+    }
+  } catch (err) {
+    console.error("加载抽签结果失败:", err);
+  }
 }
+
+// 页面加载
+window.onload = () => { loadSubmissions(); };
