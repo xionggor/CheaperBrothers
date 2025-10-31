@@ -1,10 +1,11 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec"; 
+const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 let isAdmin = false;
 
 // 表单提交
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
+    type:"form",
     name: document.getElementById('name').value,
     verb1: document.getElementById('verb1').value,
     verb2: document.getElementById('verb2').value,
@@ -13,10 +14,10 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     remark: document.getElementById('remark').value
   };
   try{
-    await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
+    await fetch(sheetUrl,{method:'POST', body:JSON.stringify(data)});
     alert("提交成功！🎉");
     document.getElementById('giftForm').reset();
-    loadSubmissions();
+    loadData();
   }catch(err){ alert("提交失败，请稍后再试"); console.error(err); }
 });
 
@@ -34,25 +35,28 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
   const res = await fetch(sheetUrl);
-  const entries = await res.json();
+  const data = await res.json();
   let verbs=[], adverbs=[];
-  entries.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
+  data.form.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
   verbs=shuffle(verbs); adverbs=shuffle(adverbs);
+
   const combinations=[];
-  entries.forEach(e=>{
+  data.form.forEach(e=>{
     const v = verbs.pop()||"";
     const a = adverbs.pop()||"";
     combinations.push({ name:e.name, combo:`${a} ${v}` });
   });
+
   displayResults(combinations,"combo");
+  await fetch(sheetUrl,{method:'POST', body:JSON.stringify({type:"combo", list:combinations})});
 });
 
 // 随机送礼
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
   const res = await fetch(sheetUrl);
-  const entries = await res.json();
-  const names = entries.map(e=>e.name).filter(n=>n);
+  const data = await res.json();
+  const names = data.form.map(e=>e.name).filter(n=>n);
   if(names.length<2){ alert("至少需要两位参与者"); return; }
 
   let receivers = shuffle([...names]);
@@ -62,16 +66,19 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
       [receivers[i],receivers[j]]=[receivers[j],receivers[i]];
     }
   }
+
   const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
   displayResults(pairs,"gift");
+  await fetch(sheetUrl,{method:'POST', body:JSON.stringify({type:"gift", list:pairs})});
 });
 
 // 清空结果
 document.getElementById('clearBtn').addEventListener('click', ()=>{
   document.getElementById('comboList').innerHTML="";
   document.getElementById('giftList').innerHTML="";
-  localStorage.removeItem("comboResults");
-  localStorage.removeItem("giftResults");
+  // 清空 Google Sheet 结果
+  fetch(sheetUrl,{method:'POST', body:JSON.stringify({type:"combo", list:[]})});
+  fetch(sheetUrl,{method:'POST', body:JSON.stringify({type:"gift", list:[]})});
 });
 
 // 显示结果
@@ -83,29 +90,31 @@ function displayResults(list,type){
     li.innerText=type==="combo"?`${c.name} → ${c.combo}`:`${c.sender} 🎁 送给 → ${c.receiver}`;
     ul.appendChild(li);
   });
-
-  if(type==="combo"){
-    localStorage.setItem("comboResults", JSON.stringify(Array.from(ul.children).map(li=>li.innerText)));
-  }else{
-    localStorage.setItem("giftResults", JSON.stringify(Array.from(ul.children).map(li=>li.innerText)));
-  }
 }
 
-// 加载报名信息 + 本地结果
-async function loadSubmissions(){
+// 加载报名信息 + 结果
+async function loadData(){
   try{
     const res = await fetch(sheetUrl);
-    const entries = await res.json();
+    const data = await res.json();
+
+    // 报名信息
     const container = document.getElementById('submissionList');
     container.innerHTML="<h3>已提交信息</h3>";
-    entries.forEach(e=>{
+    data.form.forEach(e=>{
       if(e.name){
         const div=document.createElement('div');
         div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
         container.appendChild(div);
       }
     });
-  }catch(err){ console.error("加载提交信息失败:",err);}
+
+    // 显示组合
+    displayResults(data.combo,"combo");
+    // 显示送礼
+    displayResults(data.gift,"gift");
+
+  }catch(err){ console.error(err); }
 }
 
 // 工具函数
@@ -117,11 +126,5 @@ function shuffle(array){
   return array;
 }
 
-// 页面加载恢复本地结果
-window.onload=()=>{
-  loadSubmissions();
-  const comboResults = JSON.parse(localStorage.getItem("comboResults")||"[]");
-  const giftResults = JSON.parse(localStorage.getItem("giftResults")||"[]");
-  comboResults.forEach(text=>{ const li=document.createElement("li"); li.innerText=text; document.getElementById("comboList").appendChild(li); });
-  giftResults.forEach(text=>{ const li=document.createElement("li"); li.innerText=text; document.getElementById("giftList").appendChild(li); });
-};
+// 页面加载
+window.onload = ()=>{ loadData(); };
