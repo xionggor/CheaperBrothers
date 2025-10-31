@@ -1,3 +1,4 @@
+/* 背景渐变动画 */
 body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
@@ -8,6 +9,7 @@ body {
   padding: 0;
   overflow-x: hidden;
 }
+
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -15,52 +17,84 @@ body {
 }
 
 /* 彩灯 */
-#christmas-lights { display: flex; justify-content: center; padding: 10px 0; gap: 12px; }
-.light { width: 20px; height: 20px; border-radius: 50%; box-shadow: 0 0 8px rgba(0,0,0,0.5); animation: blink 1.5s infinite; }
+#christmas-lights {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  gap: 12px;
+}
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  animation: blink 1.5s infinite;
+}
 .light.red { background-color: #f44336; }
 .light.green { background-color: #4caf50; }
 .light.yellow { background-color: #ffeb3b; }
 .light.blue { background-color: #2196f3; }
 .light.pink { background-color: #e91e63; }
-@keyframes blink { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);} }
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
 
 /* Header */
 header { text-align: center; padding: 20px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-header h1 { margin:0 0 10px; font-weight:700; font-size:2rem; }
-header p { margin:0; }
+header h1 { margin:0 0 10px 0; font-weight:700; font-size:2rem; }
+header p { margin:0; font-weight:400; }
 
 /* 主体 */
-main { padding:20px; max-width:900px; margin:0 auto; }
+main { padding: 20px; max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
 
 /* 卡片样式 */
-.card { background-color: rgba(255,255,255,0.95); padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 8px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
 .card:hover { transform: translateY(-3px); }
 
-/* 已提交信息 */
-#submissionList { background:transparent; box-shadow:none; }
-#submissionList div { border:1px solid #eee; margin:5px 0; padding:10px; border-radius:8px; background:rgba(255,255,255,0.6); }
+/* 已提交信息栏 */
+#submissionList { background: transparent; box-shadow: none; }
+#submissionList div { border: 1px solid #eee; margin: 5px 0; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.6); }
 
-/* 表单输入 */
-label{display:block;margin:10px 0 5px;font-weight:600;}
-input[type="text"],input[type="password"]{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:2px;transition:box-shadow 0.2s,border-color 0.2s;}
-input:focus{border-color:#4caf50;box-shadow:0 0 5px rgba(76,175,80,0.5);outline:none;}
+/* 表单样式 */
+label { display:block; margin:10px 0 5px 0; font-weight:600; }
+input[type="text"], input[type="password"] {
+  width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:2px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+input:focus { border-color:#4caf50; box-shadow:0 0 5px rgba(76,175,80,0.5); outline:none; }
 
 /* 按钮 */
-button{background:linear-gradient(45deg,#4caf50,#c62828);color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-weight:600;transition:background 0.3s,transform 0.2s;}
-button:hover{background:linear-gradient(45deg,#388e3c,#b71c1c);transform:translateY(-2px);}
+button {
+  background: linear-gradient(45deg, #4caf50, #c62828);
+  color:white; padding:10px 20px; border:none; border-radius:8px;
+  cursor:pointer; margin-top:10px; font-weight:600; transition: background 0.3s, transform 0.2s;
+}
+button:hover { background: linear-gradient(45deg, #388e3c, #b71c1c); transform: translateY(-2px); }
+
+/* 示例文字 */
+.example { font-size:0.85em; color:#333; margin:0 0 10px 5px; }
 
 /* 管理区 */
-#admin-controls{display:none;margin-top:10px;}
+#admin-section { margin-top:30px; }
+#admin-controls { display:none; margin-top:10px; }
 
 /* 抽签结果 */
-#results-container { display:flex; gap:20px; flex-wrap:wrap; }
-.results-box { flex:1; min-width:300px; background-color: rgba(255,255,255,0.8); padding:15px; border-radius:12px; max-height:400px; overflow-y:auto; }
-.results-box h3 { margin-top:0; text-align:center; }
-.results-box ul { padding-left:20px; }
+#results-section { margin-top:30px; }
+#results-container { display:flex; gap:20px; }
+#results-container ul { background-color: rgba(255,255,255,0.8); padding:10px; border-radius:8px; list-style:none; }
+#results-container li { margin:5px 0; padding:5px; border-radius:6px; }
 
 /* Footer */
-footer{text-align:center;margin-top:40px;padding:15px;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,0.3);}
+footer { text-align:center; margin-top:40px; padding:15px; color:#fff; text-shadow:1px 1px 2px rgba(0,0,0,0.3); position:relative; z-index:2; }
 
 /* 清空按钮 */
-.clear-btn{background:#888;color:#fff;padding:8px 16px;border-radius:8px;margin-left:10px;cursor:pointer;font-weight:600;transition:background 0.3s,transform 0.2s;}
-.clear-btn:hover{background:#555;transform:translateY(-2px);}
+.clear-btn { background:#888; color:#fff; padding:8px 16px; border-radius:8px; margin-left:10px; cursor:pointer; font-weight:600; transition: background 0.3s, transform 0.2s; }
+.clear-btn:hover { background:#555; transform: translateY(-2px); }
