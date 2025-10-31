@@ -14,9 +14,6 @@
     <div class="light yellow"></div>
     <div class="light blue"></div>
     <div class="light pink"></div>
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
   </div>
 
   <header>
@@ -28,55 +25,35 @@
     <section id="form-section" class="card">
       <h2>报名表</h2>
       <form id="giftForm" autocomplete="off">
-        <label>名字:</label>
-        <input type="text" id="name" required>
-
-        <label>动词1:</label>
-        <input type="text" id="verb1" required>
-        <div class="example" id="verb1-example"></div>
-
-        <label>动词2:</label>
-        <input type="text" id="verb2" required>
-        <div class="example" id="verb2-example"></div>
-
-        <label>形容词1:</label>
-        <input type="text" id="adverb1" required>
-        <div class="example" id="adverb1-example"></div>
-
-        <label>形容词2:</label>
-        <input type="text" id="adverb2" required>
-        <div class="example" id="adverb2-example"></div>
-
-        <label>备注:</label>
-        <input type="text" id="remark">
-
+        <label>名字:</label><input type="text" id="name" required>
+        <label>动词1:</label><input type="text" id="verb1" required>
+        <label>动词2:</label><input type="text" id="verb2" required>
+        <label>形容词1:</label><input type="text" id="adverb1" required>
+        <label>形容词2:</label><input type="text" id="adverb2" required>
+        <label>备注:</label><input type="text" id="remark">
         <button type="submit">提交</button>
       </form>
-
-      <div id="submissionList">
-        <h3>已提交信息</h3>
-      </div>
+      <div id="submissionList"><h3>已提交信息</h3></div>
     </section>
 
     <section id="admin-section" class="card">
       <h2>主持人操作</h2>
-      <label>密码:</label>
-      <input type="password" id="adminPassword">
+      <label>密码:</label><input type="password" id="adminPassword">
       <button id="loginBtn">登录</button>
-      <div id="admin-controls" style="display:none; margin-top:10px;">
+      <div id="admin-controls">
         <button id="generateBtn">生成组合（每人一组）</button>
         <button id="matchBtn">匹配名字（随机送礼）</button>
         <button id="clearBtn">清空结果</button>
       </div>
     </section>
 
-    <section id="results-section" class="card" style="display:flex; gap:20px;">
+    <section id="results-section" class="card">
       <div style="flex:1;">
-        <h3>生成组合结果</h3>
+        <h3>生成组合</h3>
         <ul id="comboList"></ul>
       </div>
       <div style="flex:1;">
-        <h3>随机送礼结果</h3>
+        <h3>随机送礼</h3>
         <ul id="giftList"></ul>
       </div>
     </section>
@@ -86,11 +63,9 @@
     <a href="index.html">Cheaper Brothers 🎄 2025</a>
   </footer>
 
-  <!-- 主 JS -->
   <script src="script.js"></script>
-
-  <!-- 彩灯闪烁 -->
   <script>
+    // 彩灯随机闪烁
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
       lights.forEach(light => {
@@ -101,61 +76,6 @@
       });
     }
     setInterval(randomBlink, 500);
-  </script>
-
-  <script>
-    // 保存结果到本地
-    function saveResults() {
-      const comboData = Array.from(document.querySelectorAll("#comboList li")).map(li=>li.innerText);
-      const giftData = Array.from(document.querySelectorAll("#giftList li")).map(li=>li.innerText);
-      localStorage.setItem("comboResults", JSON.stringify(comboData));
-      localStorage.setItem("giftResults", JSON.stringify(giftData));
-    }
-
-    function loadResults() {
-      const comboData = JSON.parse(localStorage.getItem("comboResults")||"[]");
-      const giftData = JSON.parse(localStorage.getItem("giftResults")||"[]");
-      const comboList = document.getElementById("comboList");
-      const giftList = document.getElementById("giftList");
-      comboList.innerHTML="";
-      giftList.innerHTML="";
-      comboData.forEach(item=>{
-        const li=document.createElement("li");
-        li.innerText=item;
-        comboList.appendChild(li);
-      });
-      giftData.forEach(item=>{
-        const li=document.createElement("li");
-        li.innerText=item;
-        giftList.appendChild(li);
-      });
-    }
-
-    // 页面加载时恢复结果
-    window.onload = ()=> {
-      loadResults();
-      loadSubmissions();
-    }
-
-    // 清空按钮
-    document.getElementById("clearBtn").addEventListener("click",()=>{
-      document.getElementById("comboList").innerHTML="";
-      document.getElementById("giftList").innerHTML="";
-      localStorage.removeItem("comboResults");
-      localStorage.removeItem("giftResults");
-    });
-
-    // 修改显示结果函数，自动保存
-    function displayResults(list, title, isGift=false){
-      const ul = isGift ? document.getElementById("giftList") : document.getElementById("comboList");
-      ul.innerHTML="";
-      list.forEach(c=>{
-        const li=document.createElement('li');
-        li.innerText=isGift?`${c.sender} 🎁 送给 → ${c.receiver}`:`${c.name} → ${c.combo}`;
-        ul.appendChild(li);
-      });
-      saveResults();
-    }
   </script>
 </body>
 </html>
