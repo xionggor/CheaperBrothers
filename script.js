@@ -1,7 +1,7 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbwsyca4jdDmZzJ_wls6L4dG16O0ljxFXROeqbkAC6Vu-Y_T4ax9KkuZ293zLtHqxDY/exec";
+const sheetUrl = "https://script.google.com/macros/s/AKfycbxX4K3W1XHCYObnllhqC50Pf6jFAMud3-bellLqYw/dev";
 let isAdmin = false;
 
-// 表单提交
+// ------------------ 表单提交 ------------------
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
@@ -13,7 +13,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     remark: document.getElementById('remark').value
   };
   try{
-    await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
+    await fetch(sheetUrl,{method:'POST',body:JSON.stringify(data)});
     alert("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
@@ -23,7 +23,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   }
 });
 
-// 主持人登录
+// ------------------ 主持人登录 ------------------
 document.getElementById('loginBtn').addEventListener('click', ()=>{
   const pw = document.getElementById('adminPassword').value;
   if(pw==="zxc123456"){
@@ -35,7 +35,7 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
   }
 });
 
-// 生成组合
+// ------------------ 生成组合 ------------------
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
   const res = await fetch(sheetUrl);
@@ -56,10 +56,9 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
   localStorage.setItem('comboResults', JSON.stringify(combinations));
 });
 
-// 匹配名字（随机送礼）
+// ------------------ 匹配名字 ------------------
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return alert("请先登录主持人账号");
-
   const res = await fetch(sheetUrl);
   const entries = await res.json();
 
@@ -79,7 +78,7 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
   localStorage.setItem('giftResults', JSON.stringify(pairs));
 });
 
-// 清空结果
+// ------------------ 清空结果 ------------------
 document.getElementById('clearResultsBtn').addEventListener('click', ()=>{
   localStorage.removeItem('comboResults');
   localStorage.removeItem('giftResults');
@@ -88,7 +87,7 @@ document.getElementById('clearResultsBtn').addEventListener('click', ()=>{
   alert("抽签结果已清空！");
 });
 
-// 加载报名信息
+// ------------------ 加载报名信息 ------------------
 async function loadSubmissions(){
   try{
     const res = await fetch(sheetUrl);
@@ -103,7 +102,7 @@ async function loadSubmissions(){
   }catch(err){ console.error("加载提交信息失败:",err);}
 }
 
-// 工具函数
+// ------------------ 工具函数 ------------------
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -112,7 +111,7 @@ function shuffle(array){
   return array;
 }
 
-// 显示结果
+// ------------------ 显示结果 ------------------
 function displayResults(list,type){
   if(type==="combo"){
     const ul = document.getElementById('comboList');
@@ -133,7 +132,7 @@ function displayResults(list,type){
   }
 }
 
-// 页面加载恢复结果
+// ------------------ 页面加载恢复结果 ------------------
 window.onload = ()=>{
   loadSubmissions();
   const savedCombo = JSON.parse(localStorage.getItem('comboResults')||'[]');
