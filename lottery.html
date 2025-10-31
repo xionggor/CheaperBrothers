@@ -1,53 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>圣诞节交换礼物抽签</title>
+  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>🎄 圣诞节交换礼物抽签 🎁</h1>
-
-  <div class="container">
-    <form id="giftForm">
-      <input type="text" id="name" placeholder="请输入你的名字" required>
-      <button type="submit">提交</button>
-    </form>
-
-    <div id="submittedSection">
-      <h2>已提交信息</h2>
-      <ul id="submittedList"></ul>
-    </div>
-
-    <div id="resultSection">
-      <h2>抽签结果</h2>
-      <div class="result-columns">
-        <div class="column">
-          <h3>生成组合</h3>
-          <ul id="comboList"></ul>
-        </div>
-        <div class="column">
-          <h3>匹配名字</h3>
-          <ul id="matchList"></ul>
-        </div>
-      </div>
-    </div>
-
-    <div id="adminSection">
-      <h2>主持人操作</h2>
-      <input type="password" id="adminPassword" placeholder="输入主持人密码">
-      <button id="adminLoginBtn">登录</button>
-
-      <div id="adminControls" style="display:none;">
-        <button id="generateComboBtn">生成组合</button>
-        <button id="matchNamesBtn">随机送礼</button>
-        <button id="clearBtn">清空结果</button>
-      </div>
-    </div>
+  <!-- 圣诞彩灯 -->
+  <div id="christmas-lights">
+    <div class="light red"></div>
+    <div class="light green"></div>
+    <div class="light yellow"></div>
+    <div class="light blue"></div>
+    <div class="light pink"></div>
+    <div class="light red"></div>
+    <div class="light green"></div>
+    <div class="light yellow"></div>
   </div>
 
-  <footer>Cheaper Brothers © 2025</footer>
+  <!-- 雪花容器 -->
+  <div id="snow-container"></div>
+
+  <header>
+    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
+    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
+
+  <main>
+    <section id="form-section" class="card">
+      <h2>报名表</h2>
+      <form id="giftForm" autocomplete="off">
+        <label>名字:</label>
+        <input type="text" id="name" required>
+
+        <label>动词1:</label>
+        <input type="text" id="verb1" required>
+        <div class="example" id="verb1-example"></div>
+
+        <label>动词2:</label>
+        <input type="text" id="verb2" required>
+        <div class="example" id="verb2-example"></div>
+
+        <label>形容词1:</label>
+        <input type="text" id="adverb1" required>
+        <div class="example" id="adverb1-example"></div>
+
+        <label>形容词2:</label>
+        <input type="text" id="adverb2" required>
+        <div class="example" id="adverb2-example"></div>
+
+        <label>备注:</label>
+        <input type="text" id="remark">
+
+        <button type="submit">提交</button>
+      </form>
+
+      <div id="submissionList">
+        <h3>已提交信息</h3>
+      </div>
+    </section>
+
+    <section id="admin-section" class="card">
+      <h2>主持人操作</h2>
+      <label>密码:</label>
+      <input type="password" id="adminPassword">
+      <button id="loginBtn">登录</button>
+      <div id="admin-controls" style="display:none; margin-top:10px;">
+        <button id="generateBtn">生成组合（每人一组）</button>
+        <button id="matchBtn">匹配名字（随机送礼）</button>
+        <button id="clearBtn" onclick="clearResults()" class="clear-btn">清空抽签结果</button>
+      </div>
+    </section>
+
+    <section id="results-section" class="card">
+      <h2>抽签结果</h2>
+      <ul id="resultsList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <a href="index.html">Cheaper Brothers 🎄 2025</a>
+  </footer>
+
+  <!-- 主 JS -->
   <script src="script.js"></script>
+
+  <!-- 彩灯闪烁 + 雪花飘落 -->
+  <script>
+    // 彩灯随机闪烁
+    const lights = document.querySelectorAll('#christmas-lights .light');
+    function randomBlink() {
+      lights.forEach(light => {
+        const delay = Math.random() * 2000;
+        setTimeout(() => {
+          light.style.opacity = Math.random() > 0.5 ? 1 : 0.3;
+        }, delay);
+      });
+    }
+    setInterval(randomBlink, 500);
+
+    // 雪花生成
+    const snowContainer = document.getElementById('snow-container');
+    const snowCount = 40; // 雪花数量
+    for(let i=0;i<snowCount;i++){
+      const snow = document.createElement('div');
+      snow.classList.add('snowflake');
+      snow.style.left = Math.random() * 100 + 'vw';
+      snow.style.animationDelay = Math.random() * 10 + 's';
+      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
+      snow.innerText = '❄';
+      snowContainer.appendChild(snow);
+    }
+  </script>
 </body>
 </html>
