@@ -75,14 +75,14 @@
     <!-- 抽签结果 -->
     <section id="results-section" class="card">
       <h2>抽签结果</h2>
-      <div id="results-container">
-        <div id="comboResults" class="results-box">
-          <h3>生成组合（每人一组）</h3>
+      <div id="results-container" style="display:flex; gap:20px;">
+        <div id="comboResults" style="flex:1;">
+          <h3>生成组合</h3>
           <ul id="comboList"></ul>
         </div>
-        <div id="giftResults" class="results-box">
-          <h3>匹配名字（随机送礼）</h3>
-          <ul id="giftList"></ul>
+        <div id="matchResults" style="flex:1;">
+          <h3>名字配对</h3>
+          <ul id="matchList"></ul>
         </div>
       </div>
     </section>
