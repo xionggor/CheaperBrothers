@@ -1,111 +1,195 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
-
-let isAdmin = false;
-let currentResults = []; // 保存当前显示的抽签结果
-
-// 表单提交
-document.getElementById('giftForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const data = {
-    name: document.getElementById('name').value,
-    verb1: document.getElementById('verb1').value,
-    verb2: document.getElementById('verb2').value,
-    adverb1: document.getElementById('adverb1').value,
-    adverb2: document.getElementById('adverb2').value,
-    remark: document.getElementById('remark').value
-  };
-
-  try {
-    await fetch(sheetUrl, { method: 'POST', body: JSON.stringify(data) });
-    alert("提交成功！🎉");
-    document.getElementById('giftForm').reset();
-    loadSubmissions();
-  } catch (err) {
-    alert("提交失败，请稍后再试");
-    console.error(err);
-  }
-});
-
-// 主持人登录
-document.getElementById('loginBtn').addEventListener('click', () => {
-  const pw = document.getElementById('adminPassword').value;
-  if (pw === "zxc123456") {
-    isAdmin = true;
-    document.getElementById('admin-controls').style.display = "block";
-    alert("登录成功！你现在可以操作主持人功能。");
-  } else {
-    alert("密码错误！");
-  }
-});
-
-// 生成组合
-document.getElementById('generateBtn').addEventListener('click', async () => {
-  if (!isAdmin) return alert("请先登录主持人账号");
-
-  const res = await fetch(sheetUrl);
-  const entries = await res.json();
-
-  let verbs = [], adverbs = [];
-  entries.forEach(e => { verbs.push(e.verb1, e.verb2); adverbs.push(e.adverb1, e.adverb2); });
-  verbs = shuffle(verbs); adverbs = shuffle(adverbs);
-
-  const combinations = [];
-  entries.forEach(e => {
-    const v = verbs.pop() || "";
-    const a = adverbs.pop() || "";
-    combinations.push({ name: e.name, combo: `${a} ${v}` });
-  });
-
-  displayResults(combinations, "生成组合（每人一组）结果");
-});
-
-// 匹配名字（随机送礼）
-document.getElementById('matchBtn').addEventListener('click', async () => {
-  if (!isAdmin) return alert("请先登录主持人账号");
-
-  const res = await fetch(sheetUrl);
-  const entries = await res.json();
-
-  const names = entries.map(e => e.name);
-  if (names.length < 2) { alert("至少需要两位参与者"); return; }
-
-  let receivers = shuffle([...names]);
-
-  for (let i = 0; i < names.length; i++) {
-    if (names[i] === receivers[i]) {
-      const j = (i + 1) % names.length;
-      [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
-    }
-  }
-
-  const pairs = names.map((sender, i) => ({ sender, receiver: receivers[i] }));
-  displayResults(pairs, "匹配名字（随机送礼）结果", true);
-});
-
-// 加载报名信息
-async function loadSubmissions() {
-  try {
-    const res = await fetch(sheetUrl);
-    const entries = await res.json();
-    const container = document.getElementById('submissionList');
-    container.innerHTML = "<h3>已提交信息</h3>";
-    entries.forEach(e => {
-      const div = document.createElement('div');
-      div.innerText = `名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
-      container.appendChild(div);
-    });
-  } catch (err) { console.error("加载提交信息失败:", err); }
+/* 背景渐变动画 */
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
+  background-size: 600% 600%;
+  animation: gradientShift 15s ease infinite;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-// 工具函数：洗牌
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-// 显示结果并保存到页面 + localStorage
-function displayResults(list, title, isGift = false) {
-  const ul = document.getElementById('r
+/* 彩灯 */
+#christmas-lights {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  gap: 12px;
+}
+
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  animation: blink 1.5s infinite;
+}
+
+.light.red { background-color: #f44336; }
+.light.green { background-color: #4caf50; }
+.light.yellow { background-color: #ffeb3b; }
+.light.blue { background-color: #2196f3; }
+.light.pink { background-color: #e91e63; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* 雪花 */
+#snow-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.snowflake {
+  position: absolute;
+  top: -50px;
+  color: white;
+  user-select: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
+
+header h1 {
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 0;
+  font-weight: 400;
+}
+
+/* 主体 */
+main {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
+
+/* 已提交信息栏去掉阴影 */
+#submissionList { background: transparent; box-shadow: none; }
+#submissionList div {
+  border: 1px solid #eee;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.6);
+}
+
+/* 表单样式 */
+label { display: block; margin: 10px 0 5px 0; font-weight: 600; }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 2px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+  outline: none;
+}
+
+/* 按钮 */
+button {
+  background: linear-gradient(45deg, #4caf50, #c62828);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: linear-gradient(45deg, #388e3c, #b71c1c);
+  transform: translateY(-2px);
+}
+
+/* 示例文字 */
+.example {
+  font-size: 0.85em;
+  color: #333;
+  margin: 0 0 10px 5px;
+}
+
+/* 管理区和结果 */
+#admin-section { margin-top: 30px; }
+#admin-controls { display: none; margin-top: 10px; }
+#results-section { margin-top: 30px; }
+#resultsList li {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
+
+/* 清空按钮样式 */
+.clear-btn {
+  background: #888;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+.clear-btn:hover {
+  background: #555;
+  transform: translateY(-2px);
+}
