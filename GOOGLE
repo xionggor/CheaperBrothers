@@ -1,0 +1,61 @@
+const SHEET_ID = "1dRrUW5mneFbRW6ik-mEGmwU6atlbi2pM7k7sTLUJgGo"; // 替换为你的 Sheet ID
+const SHEET_NAME = "Sheet1"; // 替换为你的工作表名称
+
+function doGet(e) {
+  return getData();
+}
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+
+    // 如果是提交表单
+    if(data.name) {
+      const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
+      sheet.appendRow([
+        new Date(),
+        data.name || "",
+        data.verb1 || "",
+        data.verb2 || "",
+        data.adverb1 || "",
+        data.adverb2 || "",
+        data.remark || ""
+      ]);
+      return ContentService.createTextOutput(JSON.stringify({status:"ok"}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    return getData();
+  } catch(err){
+    return ContentService.createTextOutput(JSON.stringify({status:"error", message:err.message}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// 🔹 获取已提交数据
+function getData() {
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
+  const rows = sheet.getDataRange().getValues();
+  const result = [];
+  for(let i=1; i<rows.length; i++){ // 跳过表头
+    result.push({
+      name: rows[i][1],
+      verb1: rows[i][2],
+      verb2: rows[i][3],
+      adverb1: rows[i][4],
+      adverb2: rows[i][5],
+      remark: rows[i][6]
+    });
+  }
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// 🔹 工具：Fisher–Yates 洗牌
+function shuffleArray(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
