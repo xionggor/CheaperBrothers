@@ -2,54 +2,75 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 报名抽签</title>
+  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
 <header>
   <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
-  <p>每人贡献2个形容词+2个动词，看看命运会给你什么惊喜 😂</p>
+  <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
 </header>
 
 <main>
+  <!-- 报名表 -->
   <section id="form-section" class="card">
     <h2>报名表</h2>
     <form id="giftForm" autocomplete="off">
-      <label>名字:</label><input type="text" id="name" required>
-      <label>动词1:</label><input type="text" id="verb1" required>
-      <label>动词2:</label><input type="text" id="verb2" required>
-      <label>形容词1:</label><input type="text" id="adverb1" required>
-      <label>形容词2:</label><input type="text" id="adverb2" required>
-      <label>备注:</label><input type="text" id="remark">
+      <label>名字:</label>
+      <input type="text" id="name" required>
+
+      <label>动词1:</label>
+      <input type="text" id="verb1" required>
+      <div class="example" id="verb1-example"></div>
+
+      <label>动词2:</label>
+      <input type="text" id="verb2" required>
+      <div class="example" id="verb2-example"></div>
+
+      <label>形容词1:</label>
+      <input type="text" id="adverb1" required>
+      <div class="example" id="adverb1-example"></div>
+
+      <label>形容词2:</label>
+      <input type="text" id="adverb2" required>
+      <div class="example" id="adverb2-example"></div>
+
+      <label>备注:</label>
+      <input type="text" id="remark">
+
       <button type="submit">提交</button>
     </form>
-    <div id="submissionList"><h3>已提交信息</h3></div>
+
+    <div id="submissionList">
+      <h3>已提交信息</h3>
+    </div>
   </section>
 
+  <!-- 主持人操作 -->
   <section id="admin-section" class="card">
     <h2>主持人操作</h2>
-    <label>密码:</label><input type="password" id="adminPassword">
+    <label>密码:</label>
+    <input type="password" id="adminPassword">
     <button id="loginBtn">登录</button>
     <div id="admin-controls" style="margin-top:10px; display:none;">
       <button id="generateBtn">生成组合（每人一组）</button>
       <button id="matchBtn">匹配名字（随机送礼）</button>
+      <button id="clearBtn">清空结果</button>
     </div>
   </section>
 
-  <section id="results-section" class="card">
-    <h2>抽签结果</h2>
-    <div>
-      <div style="flex:1;">
-        <h3>生成组合</h3>
-        <ul id="comboList"></ul>
-      </div>
-      <div style="flex:1;">
-        <h3>随机送礼</h3>
-        <ul id="giftList"></ul>
-      </div>
+  <!-- 抽签结果 -->
+  <section id="results-section" class="card" style="display:flex; gap:20px;">
+    <div style="flex:1;">
+      <h3>生成组合结果</h3>
+      <ul id="comboList"></ul>
     </div>
-    <button id="clearBtn">清空结果</button>
+    <div style="flex:1;">
+      <h3>随机送礼结果</h3>
+      <ul id="giftList"></ul>
+    </div>
   </section>
 </main>
 
