@@ -1,102 +1,202 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圣诞礼物交换 - 报名</title>
+    <style>
+        /* 这里是一些简单的 CSS 样式，让页面更好看 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f8f0; /* 淡绿色背景 */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 2px solid #c8e6c9;
+            padding: 30px;
+        }
+        h1 {
+            color: #d32f2f; /* 圣诞红 */
+            text-align: center;
+            font-size: 2em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #004d40; /* 深绿色 */
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box; /* 确保 padding 不会撑大宽度 */
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #2e7d32; /* 圣诞绿 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #1b5e20;
+        }
+        .submit-btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        /* 提交后的提示信息 */
+        #responseMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .success {
+            color: #2e7d32;
+        }
+        .error {
+            color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-  <!-- 圣诞彩灯 -->
-  <div id="christmas-lights">
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-    <div class="light blue"></div>
-    <div class="light pink"></div>
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-  </div>
 
-  <header>
-    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
-    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
-  </header>
+    <div class="container">
+        <h1>🎄 圣诞礼物交换 🎄</h1>
+        <p style="text-align: center; margin-bottom: 25px;">请填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
 
-  <main>
-    <!-- 报名表 -->
-    <section id="form-section" class="card">
-      <h2>报名表</h2>
-      <form id="giftForm" autocomplete="off">
-        <label>名字:</label>
-        <input type="text" id="name" required>
+        <form id="giftForm">
+            <div class="form-group">
+                <label for="name">你的名字:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="verb1">动词 1 (例如: 跑步, 闪耀):</label>
+                <input type="text" id="verb1" name="verb1" required>
+            </div>
 
-        <label>动词1:</label>
-        <input type="text" id="verb1" required>
-        <div class="example" id="verb1-example"></div>
+            <div class="form-group">
+                <label for="verb2">动词 2:</label>
+                <input type="text" id="verb2" name="verb2" required>
+            </div>
 
-        <label>动词2:</label>
-        <input type="text" id="verb2" required>
-        <div class="example" id="verb2-example"></div>
+            <div class="form-group">
+                <label for="adjective1">形容词 1 (例如: 快乐的, 巨大的):</label>
+                <input type="text" id="adjective1" name="adjective1" required>
+            </div>
 
-        <label>形容词1:</label>
-        <input type="text" id="adverb1" required>
-        <div class="example" id="adverb1-example"></div>
+            <div class="form-group">
+                <label for="adjective2">形容词 2:</label>
+                <input type="text" id="adjective2" name="adjective2" required>
+            </div>
 
-        <label>形容词2:</label>
-        <input type="text" id="adverb2" required>
-        <div class="example" id="adverb2-example"></div>
+            <div class="form-group">
+                <label for="remarks">备注 (可选):</label>
+                <textarea id="remarks" name="remarks"></textarea>
+            </div>
 
-        <label>备注:</label>
-        <input type="text" id="remark">
+            <button type="submit" id="submitButton" class="submit-btn">提交报名</button>
 
-        <button type="submit">提交</button>
-      </form>
+            <div id="responseMessage"></div>
+        </form>
+    </div>
 
-      <div id="submissionList">
-        <h3>已提交信息</h3>
-      </div>
-    </section>
+    <script>
+        // -----------------------------------------------------------------
+        // JavaScript 部分
+        // -----------------------------------------------------------------
 
-    <!-- 主持人操作 -->
-    <section id="admin-section" class="card">
-      <h2>主持人操作</h2>
-      <label>密码:</label>
-      <input type="password" id="adminPassword">
-      <button id="loginBtn">登录</button>
-      <div id="admin-controls" style="display:none; margin-top:10px;">
-        <button id="generateBtn">生成组合（每人一组）</button>
-        <button id="matchBtn">匹配名字（随机送礼）</button>
-        <button id="clearResultsBtn" class="clear-btn">清空结果</button>
-      </div>
-    </section>
+        // !! 关键步骤 !!
+        // 我已经帮您填入了您的 Google App Script URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxW1cmQCudUJsWg04xZmswMN4ym2Bmqw0xFU1K3B6BculBZKEK23s8z4UYuYs85w/exec";
 
-    <!-- 抽签结果 -->
-    <section id="results-section" class="card">
-      <h2>抽签结果</h2>
-      <ul id="resultsList"></ul>
-    </section>
-  </main>
+        // 获取表单、按钮和提示信息的元素
+        const form = document.getElementById('giftForm');
+        const submitButton = document.getElementById('submitButton');
+        const messageDiv = document.getElementById('responseMessage');
 
-  <footer>
-    <a href="index.html">Cheaper Brothers 🎄 2025</a>
-  </footer>
+        // 监听表单的 "submit" (提交) 事件
+        form.addEventListener('submit', function(e) {
+            
+            // 1. 阻止表单的默认提交行为 (防止页面刷新)
+            e.preventDefault();
 
-  <script src="script.js"></script>
+            // 2. 禁用按钮，显示"提交中..."，防止重复点击
+            submitButton.disabled = true;
+            submitButton.textContent = "提交中...";
+            messageDiv.textContent = ""; // 清空上次的提示
 
-  <!-- 彩灯闪烁 -->
-  <script>
-    const lights = document.querySelectorAll('#christmas-lights .light');
-    function randomBlink() {
-      lights.forEach(light => {
-        const delay = Math.random() * 2000;
-        setTimeout(() => {
-          light.style.opacity = Math.random() > 0.5 ? 1 : 0.3;
-        }, delay);
-      });
-    }
-    setInterval(randomBlink, 500);
-  </script>
+            // 3. 准备要发送的数据 (从表单字段中获取)
+            const formData = {
+                name: form.name.value,
+                verb1: form.verb1.value,
+                verb2: form.verb2.value,
+                adjective1: form.adjective1.value,
+                adjective2: form.adjective2.value,
+                remarks: form.remarks.value
+            };
+
+            // 4. 使用 fetch API 发送数据到 Google 脚本
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData), // 将 JS 对象转换为 JSON 字符串
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json()) // 解析 Google 脚本返回的 JSON 响应
+            .then(data => {
+                if (data.result === 'success') {
+                    // 5a. 提交成功
+                    messageDiv.textContent = "报名成功！感谢参与！🎉";
+                    messageDiv.className = "success";
+                    form.reset(); // 清空表单
+                } else {
+                    // 5b. 提交失败 (由 Apps Script 报告)
+                    throw new Error(data.error || '提交失败，但未返回明确错误。');
+                }
+            })
+            .catch(error => {
+                // 5c. 提交出错 (例如网络问题)
+                console.error('Fetch Error:', error);
+                messageDiv.textContent = '提交出错：' + error.message;
+                messageDiv.className = "error";
+            })
+            .finally(() => {
+                // 6. 无论成功还是失败，都重新启用按钮
+                submitButton.disabled = false;
+                submitButton.textContent = "提交报名";
+            });
+        });
+    </script>
+
 </body>
 </html>
