@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圣诞礼物111交换 - 报名</title>
+    <title>圣诞礼物交换 - 报名</title>
     <style>
         /* 这里是一些简单的 CSS 样式，让页面更好看 */
         body {
@@ -46,7 +46,7 @@
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            box-sizing: border-box; /* 确保 padding 不会撑大宽度 */
+            box-sizing: border-box;
         }
         .form-group textarea {
             min-height: 80px;
@@ -134,9 +134,8 @@
         // JavaScript 部分
         // -----------------------------------------------------------------
 
-        // !! 关键步骤 !!
-        // 我已经帮您填入了您的 Google App Script URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuBKNZD1auF8XbrAXz1suo7NoO-78KeH3MnL8xnQ/dev";
+        // !! 关键修复：使用 /exec URL ！！
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuBKNZD1auF8XbrAXz1suo7NoO-78KeH3MnL8xnQ/exec";
 
         // 获取表单、按钮和提示信息的元素
         const form = document.getElementById('giftForm');
@@ -174,6 +173,7 @@
             })
             .then(response => response.json()) // 解析 Google 脚本返回的 JSON 响应
             .then(data => {
+                // 关键修复：检查 data.result 是否为 'success'
                 if (data.result === 'success') {
                     // 5a. 提交成功
                     messageDiv.textContent = "报名成功！感谢参与！🎉";
@@ -181,11 +181,11 @@
                     form.reset(); // 清空表单
                 } else {
                     // 5b. 提交失败 (由 Apps Script 报告)
-                    throw new Error(data.error || '提交失败，但未返回明确错误。');
+                    throw new Error(data.message || '提交失败，但未返回明确错误。');
                 }
             })
             .catch(error => {
-                // 5c. 提交出错 (例如网络问题)
+                // 5c. 提交出错 (例如网络问题或 Apps Script 错误)
                 console.error('Fetch Error:', error);
                 messageDiv.textContent = '提交出错：' + error.message;
                 messageDiv.className = "error";
