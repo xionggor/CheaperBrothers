@@ -71,27 +71,21 @@
             background-color: #aaa;
             cursor: not-allowed;
         }
-        #responseMessage {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        .success {
-            color: #2e7d32;
-        }
-        .error {
-            color: #d32f2f;
-        }
+        /* 移除提示信息区域，因为提交后会跳转到 Apps Script 的结果页面 */
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🎄 圣诞礼2222物交换 🎄</h1>
+        <h1>🎄 123圣诞礼物交换 🎄</h1>
         <p style="text-align: center; margin-bottom: 25px;">请填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
 
-        <form id="giftForm">
+        <form 
+            id="giftForm" 
+            action="https://script.google.com/macros/s/AKfycbzVWgRccgGBkNDnRx8JC1bXHfCCJ-cfXazJb3qpEgS7Q9G3UEfr1pPbd8ZAS3jJuBY/exec" 
+            method="GET"
+            target="_self"
+        >
             <div class="form-group">
                 <label for="name">你的名字:</label>
                 <input type="text" id="name" name="name" required>
@@ -123,79 +117,7 @@
             </div>
 
             <button type="submit" id="submitButton" class="submit-btn">提交报名</button>
-
-            <div id="responseMessage"></div>
         </form>
-    </div>
-
-    <script>
-        // -----------------------------------------------------------------
-        // JavaScript 逻辑：使用 fetch API (GitHub 托管专用)
-        // -----------------------------------------------------------------
-
-        // !! 确保这是您最新的 /exec URL !!
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVWgRccgGBkNDnRx8JC1bXHfCCJ-cfXazJb3qpEgS7Q9G3UEfr1pPbd8ZAS3jJuBY/exec";
-
-        const form = document.getElementById('giftForm');
-        const submitButton = document.getElementById('submitButton');
-        const messageDiv = document.getElementById('responseMessage');
-
-        form.addEventListener('submit', function(e) {
-            
-            e.preventDefault();
-
-            submitButton.disabled = true;
-            submitButton.textContent = "提交中...";
-            messageDiv.textContent = ""; 
-
-            const formData = {
-                name: form.name.value,
-                verb1: form.verb1.value,
-                verb2: form.verb2.value,
-                adjective1: form.adjective1.value,
-                adjective2: form.adjective2.value,
-                remarks: form.remarks.value
-            };
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                // 关键：将数据作为 JSON 字符串发送
-                body: JSON.stringify(formData), 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                // 确保使用 CORS 模式
-                mode: 'cors'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // 如果状态码不是 200-299 范围，抛出错误
-                    throw new Error(`HTTP 错误，状态码: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // 检查 Apps Script 返回的 result 字段
-                if (data.result === 'success') {
-                    messageDiv.textContent = "报名成功！感谢参与！🎉";
-                    messageDiv.className = "success";
-                    form.reset(); 
-                } else {
-                    // 如果 Apps Script 内部出错
-                    throw new Error(data.message || '提交失败，但未返回明确错误。');
-                }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
-                messageDiv.textContent = '提交出错：' + error.message;
-                messageDiv.className = "error";
-            })
-            .finally(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = "提交报名";
-            });
-        });
-    </script>
-
+        </div>
 </body>
 </html>
