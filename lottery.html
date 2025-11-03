@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>圣诞礼物交换 - 报名</title>
     <style>
-        /* 这里是一些简单的 CSS 样式，让页面更好看 */
+        /* 样式代码与之前保持一致，不再重复 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f0f8f0; /* 淡绿色背景 */
+            background-color: #f0f8f0; 
             color: #333;
             display: flex;
             justify-content: center;
@@ -27,7 +27,7 @@
             padding: 30px;
         }
         h1 {
-            color: #d32f2f; /* 圣诞红 */
+            color: #d32f2f; 
             text-align: center;
             font-size: 2em;
         }
@@ -38,7 +38,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #004d40; /* 深绿色 */
+            color: #004d40; 
         }
         .form-group input,
         .form-group textarea {
@@ -46,7 +46,7 @@
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            box-sizing: border-box;
+            box-sizing: border-box; 
         }
         .form-group textarea {
             min-height: 80px;
@@ -55,7 +55,7 @@
         .submit-btn {
             width: 100%;
             padding: 15px;
-            background-color: #2e7d32; /* 圣诞绿 */
+            background-color: #2e7d32; 
             color: white;
             border: none;
             border-radius: 6px;
@@ -71,7 +71,6 @@
             background-color: #aaa;
             cursor: not-allowed;
         }
-        /* 提交后的提示信息 */
         #responseMessage {
             text-align: center;
             margin-top: 20px;
@@ -134,26 +133,21 @@
         // JavaScript 部分
         // -----------------------------------------------------------------
 
-        // !! 关键修复：使用 /exec URL ！！
+        // !! 确保使用 /exec URL !!
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuBKNZD1auF8XbrAXz1suo7NoO-78KeH3MnL8xnQ/exec";
 
-        // 获取表单、按钮和提示信息的元素
         const form = document.getElementById('giftForm');
         const submitButton = document.getElementById('submitButton');
         const messageDiv = document.getElementById('responseMessage');
 
-        // 监听表单的 "submit" (提交) 事件
         form.addEventListener('submit', function(e) {
             
-            // 1. 阻止表单的默认提交行为 (防止页面刷新)
             e.preventDefault();
 
-            // 2. 禁用按钮，显示"提交中..."，防止重复点击
             submitButton.disabled = true;
             submitButton.textContent = "提交中...";
-            messageDiv.textContent = ""; // 清空上次的提示
+            messageDiv.textContent = ""; 
 
-            // 3. 准备要发送的数据 (从表单字段中获取)
             const formData = {
                 name: form.name.value,
                 verb1: form.verb1.value,
@@ -163,35 +157,36 @@
                 remarks: form.remarks.value
             };
 
-            // 4. 使用 fetch API 发送数据到 Google 脚本
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(formData), // 将 JS 对象转换为 JSON 字符串
+                body: JSON.stringify(formData), 
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json()) // 解析 Google 脚本返回的 JSON 响应
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`网络请求失败，状态码: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                // 关键修复：检查 data.result 是否为 'success'
+                // 检查 result 字段
                 if (data.result === 'success') {
-                    // 5a. 提交成功
                     messageDiv.textContent = "报名成功！感谢参与！🎉";
                     messageDiv.className = "success";
-                    form.reset(); // 清空表单
+                    form.reset(); 
                 } else {
-                    // 5b. 提交失败 (由 Apps Script 报告)
+                    // 如果 Apps Script 返回了 {result: "error", message: "..."}
                     throw new Error(data.message || '提交失败，但未返回明确错误。');
                 }
             })
             .catch(error => {
-                // 5c. 提交出错 (例如网络问题或 Apps Script 错误)
                 console.error('Fetch Error:', error);
                 messageDiv.textContent = '提交出错：' + error.message;
                 messageDiv.className = "error";
             })
             .finally(() => {
-                // 6. 无论成功还是失败，都重新启用按钮
                 submitButton.disabled = false;
                 submitButton.textContent = "提交报名";
             });
