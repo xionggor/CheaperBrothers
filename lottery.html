@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>圣诞礼物交换 - 报名</title>
     <style>
-        /* 样式代码与之前保持一致，不再重复 */
+        /* 样式部分 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: #f0f8f0; 
@@ -89,7 +89,7 @@
 
     <div class="container">
         <h1>🎄 圣诞礼物交换 🎄</h1>
-        <p style="text-align: center; margin-bottom: 25px;">请222填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
+        <p style="text-align: center; margin-bottom: 25px;">请填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
 
         <form id="giftForm">
             <div class="form-group">
@@ -130,10 +130,10 @@
 
     <script>
         // -----------------------------------------------------------------
-        // JavaScript 部分
+        // JavaScript 逻辑
         // -----------------------------------------------------------------
 
-        // !! 确保使用 /exec URL !!
+        // !! 使用您最新且正确的 /exec URL !!
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVWgRccgGBkNDnRx8JC1bXHfCCJ-cfXazJb3qpEgS7Q9G3UEfr1pPbd8ZAS3jJuBY/exec";
 
         const form = document.getElementById('giftForm');
@@ -166,18 +166,19 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`网络请求失败，状态码: ${response.status}`);
+                    // 如果不是 200-299 状态码，捕获它
+                    throw new Error(`HTTP 错误，状态码: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                // 检查 result 字段
+                // 检查 Apps Script 返回的 result 字段
                 if (data.result === 'success') {
                     messageDiv.textContent = "报名成功！感谢参与！🎉";
                     messageDiv.className = "success";
                     form.reset(); 
                 } else {
-                    // 如果 Apps Script 返回了 {result: "error", message: "..."}
+                    // 如果 Apps Script 内部出错
                     throw new Error(data.message || '提交失败，但未返回明确错误。');
                 }
             })
