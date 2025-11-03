@@ -71,20 +71,37 @@
             background-color: #aaa;
             cursor: not-allowed;
         }
-        /* 移除提示信息区域，因为提交后会跳转到 Apps Script 的结果页面 */
+        /* 提交后的提示信息样式 */
+        #responseMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            /* 确保这个区域始终显示 */
+        }
+        .success {
+            color: #2e7d32;
+        }
+        .error {
+            color: #d32f2f;
+        }
+        /* 隐藏 iframe */
+        #hiddenIframe {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🎄 123圣诞礼物交换 🎄</h1>
+        <h1>🎄 圣诞礼物交换 🎄</h1>
         <p style="text-align: center; margin-bottom: 25px;">请填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
 
         <form 
             id="giftForm" 
             action="https://script.google.com/macros/s/AKfycbzVWgRccgGBkNDnRx8JC1bXHfCCJ-cfXazJb3qpEgS7Q9G3UEfr1pPbd8ZAS3jJuBY/exec" 
-            method="GET"
-            target="_self"
+            method="POST"
+            target="hiddenIframe"
         >
             <div class="form-group">
                 <label for="name">你的名字:</label>
@@ -118,6 +135,38 @@
 
             <button type="submit" id="submitButton" class="submit-btn">提交报名</button>
         </form>
-        </div>
+
+        <div id="responseMessage"></div>
+    </div>
+
+    <iframe name="hiddenIframe" id="hiddenIframe" onload="iframeLoaded()"></iframe>
+
+    <script>
+        const form = document.getElementById('giftForm');
+        const submitButton = document.getElementById('submitButton');
+        const messageDiv = document.getElementById('responseMessage');
+
+        // 提交按钮点击时，清空表单和消息
+        form.addEventListener('submit', function() {
+            submitButton.disabled = true;
+            submitButton.textContent = "提交中...";
+            messageDiv.textContent = ""; 
+        });
+
+        // 监听 iframe 加载事件，Apps Script 提交完成后会触发此事件
+        function iframeLoaded() {
+            // 首次页面加载时 iframe 也会触发 onload，需要忽略
+            if (submitButton.disabled === false) return; 
+
+            submitButton.disabled = false;
+            submitButton.textContent = "提交报名";
+            form.reset(); // 清空表单字段
+
+            // 由于 Apps Script 返回的是 HTML，我们假设提交到这里就是成功，除非出现错误页面
+            messageDiv.textContent = "报名成功！感谢参与！🎉";
+            messageDiv.className = "success";
+        }
+    </script>
+
 </body>
 </html>
