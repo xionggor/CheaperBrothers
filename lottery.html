@@ -1,172 +1,116 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圣诞礼物交换 - 报名</title>
-    <style>
-        /* 样式部分保持不变 */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f0f8f0; 
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 2px solid #c8e6c9;
-            padding: 30px;
-        }
-        h1 {
-            color: #d32f2f; 
-            text-align: center;
-            font-size: 2em;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #004d40; 
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box; 
-        }
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #2e7d32; 
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .submit-btn:hover {
-            background-color: #1b5e20;
-        }
-        .submit-btn:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
-        /* 提交后的提示信息样式 */
-        #responseMessage {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-            /* 确保这个区域始终显示 */
-        }
-        .success {
-            color: #2e7d32;
-        }
-        .error {
-            color: #d32f2f;
-        }
-        /* 隐藏 iframe */
-        #hiddenIframe {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- 圣诞彩灯 -->
+  <div id="christmas-lights">
+    <div class="light red"></div>
+    <div class="light green"></div>
+    <div class="light yellow"></div>
+    <div class="light blue"></div>
+    <div class="light pink"></div>
+    <div class="light red"></div>
+    <div class="light green"></div>
+    <div class="light yellow"></div>
+  </div>
 
-    <div class="container">
-        <h1>🎄 圣诞礼物交换 🎄</h1>
-        <p style="text-align: center; margin-bottom: 25px;">请填写你的名字和一些词语，我们将用它来创造独特（又搞笑）的礼物主题！</p>
+  <!-- 雪花容器 -->
+  <div id="snow-container"></div>
 
-        <form 
-            id="giftForm" 
-            action="https://script.google.com/macros/s/AKfycbzVWgRccgGBkNDnRx8JC1bXHfCCJ-cfXazJb3qpEgS7Q9G3UEfr1pPbd8ZAS3jJuBY/exec" 
-            method="POST"
-            target="hiddenIframe"
-        >
-            <div class="form-group">
-                <label for="name">你的名字:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="verb1">动词 1 (例如: 跑步, 闪耀):</label>
-                <input type="text" id="verb1" name="verb1" required>
-            </div>
+  <header>
+    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
+    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
+  </header>
 
-            <div class="form-group">
-                <label for="verb2">动词 2:</label>
-                <input type="text" id="verb2" name="verb2" required>
-            </div>
+  <main>
+    <section id="form-section" class="card">
+      <h2>报名表</h2>
+      <form id="giftForm" autocomplete="off">
+        <label>名字:</label>
+        <input type="text" id="name" required>
 
-            <div class="form-group">
-                <label for="adjective1">形容词 1 (例如: 快乐的, 巨大的):</label>
-                <input type="text" id="adjective1" name="adjective1" required>
-            </div>
+        <label>动词1:</label>
+        <input type="text" id="verb1" required>
+        <div class="example" id="verb1-example"></div>
 
-            <div class="form-group">
-                <label for="adjective2">形容词 2:</label>
-                <input type="text" id="adjective2" name="adjective2" required>
-            </div>
+        <label>动词2:</label>
+        <input type="text" id="verb2" required>
+        <div class="example" id="verb2-example"></div>
 
-            <div class="form-group">
-                <label for="remarks">备注 (可选):</label>
-                <textarea id="remarks" name="remarks"></textarea>
-            </div>
+        <label>形容词1:</label>
+        <input type="text" id="adverb1" required>
+        <div class="example" id="adverb1-example"></div>
 
-            <button type="submit" id="submitButton" class="submit-btn">提交报名</button>
-        </form>
+        <label>形容词2:</label>
+        <input type="text" id="adverb2" required>
+        <div class="example" id="adverb2-example"></div>
 
-        <div id="responseMessage"></div>
-    </div>
+        <label>备注:</label>
+        <input type="text" id="remark">
 
-    <iframe name="hiddenIframe" id="hiddenIframe" onload="iframeLoaded()"></iframe>
+        <button type="submit">提交</button>
+      </form>
 
-    <script>
-        const form = document.getElementById('giftForm');
-        const submitButton = document.getElementById('submitButton');
-        const messageDiv = document.getElementById('responseMessage');
+      <div id="submissionList">
+        <h3>已提交信息</h3>
+      </div>
+    </section>
 
-        // 提交按钮点击时，清空表单和消息
-        form.addEventListener('submit', function() {
-            submitButton.disabled = true;
-            submitButton.textContent = "提交中...";
-            messageDiv.textContent = ""; 
-        });
+    <section id="admin-section" class="card">
+      <h2>主持人操作</h2>
+      <label>密码:</label>
+      <input type="password" id="adminPassword">
+      <button id="loginBtn">登录</button>
+      <div id="admin-controls" style="display:none; margin-top:10px;">
+        <button id="generateBtn">生成组合（每人一组）</button>
+        <button id="matchBtn">匹配名字（随机送礼）</button>
+      </div>
+    </section>
 
-        // 监听 iframe 加载事件，Apps Script 提交完成后会触发此事件
-        function iframeLoaded() {
-            // 首次页面加载时 iframe 也会触发 onload，需要忽略
-            if (submitButton.disabled === false) return; 
+    <section id="results-section" class="card">
+      <h2>抽签结果</h2>
+      <ul id="resultsList"></ul>
+    </section>
+  </main>
 
-            submitButton.disabled = false;
-            submitButton.textContent = "提交报名";
-            form.reset(); // 清空表单字段
+  <footer>
+    <a href="index.html">Cheaper Brothers 🎄 2025</a>
+  </footer>
 
-            // 由于 Apps Script 返回的是 HTML，我们假设提交到这里就是成功，除非出现错误页面
-            messageDiv.textContent = "报名成功！感谢参与！🎉";
-            messageDiv.className = "success";
-        }
-    </script>
+  <!-- 主 JS -->
+  <script src="script.js"></script>
 
+  <!-- 彩灯闪烁 + 雪花飘落 -->
+  <script>
+    // 彩灯随机闪烁
+    const lights = document.querySelectorAll('#christmas-lights .light');
+    function randomBlink() {
+      lights.forEach(light => {
+        const delay = Math.random() * 2000;
+        setTimeout(() => {
+          light.style.opacity = Math.random() > 0.5 ? 1 : 0.3;
+        }, delay);
+      });
+    }
+    setInterval(randomBlink, 500);
+
+    // 雪花生成
+    const snowContainer = document.getElementById('snow-container');
+    const snowCount = 40; // 雪花数量
+    for(let i=0;i<snowCount;i++){
+      const snow = document.createElement('div');
+      snow.classList.add('snowflake');
+      snow.style.left = Math.random() * 100 + 'vw';
+      snow.style.animationDelay = Math.random() * 10 + 's';
+      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
+      snow.innerText = '❄';
+      snowContainer.appendChild(snow);
+    }
+  </script>
 </body>
 </html>
