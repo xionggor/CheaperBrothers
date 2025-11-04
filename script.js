@@ -1,4 +1,4 @@
-// 修改说明：移除了雪花生成代码；其余逻辑保持不变，并保留更稳健的匹配与渲染函数。
+// 修改说明：在原有功能基础上加入 accordion 控制逻辑（折叠面板）并把界面中的“形容词”文本改为“副词”，其它功能不变。
 
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
@@ -179,6 +179,51 @@ function showToast(message, isError=false, timeout=3000){
   toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
 
+// ------------------------
+// Accordion（折叠面板）逻辑
+(function initAccordion(){
+  const toggles = document.querySelectorAll('.accordion-toggle');
+  toggles.forEach(btn=>{
+    const panelId = btn.getAttribute('aria-controls');
+    const panel = document.getElementById(panelId);
+    // Ensure initial state
+    btn.setAttribute('aria-expanded', 'false');
+    if(panel) panel.hidden = true;
+
+    btn.addEventListener('click', ()=>{
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      if(!expanded){
+        // open
+        btn.setAttribute('aria-expanded','true');
+        panel.hidden = false;
+        // animate height
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      } else {
+        // close
+        btn.setAttribute('aria-expanded','false');
+        panel.style.maxHeight = panel.scrollHeight + 'px'; // set to current to trigger transition
+        // force repaint then collapse
+        requestAnimationFrame(()=> {
+          panel.style.maxHeight = '0px';
+        });
+        // after transition, set hidden
+        panel.addEventListener('transitionend', function te(){
+          panel.hidden = true;
+          panel.style.maxHeight = null;
+          panel.removeEventListener('transitionend', te);
+        });
+      }
+    });
+
+    // accessibility: allow Enter / Space to toggle
+    btn.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+})();
+
 // 页面加载
 window.onload=()=>{ loadSubmissions(); };
-
