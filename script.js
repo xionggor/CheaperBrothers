@@ -114,7 +114,7 @@ async function loadSubmissions(){
     entries.slice().reverse().forEach(e=>{
       const div=document.createElement('div');
       div.className = 'submission-item';
-      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
+      div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 副词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
       container.appendChild(div);
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
@@ -181,3 +181,4 @@ function showToast(message, isError=false, timeout=3000){
 
 // 页面加载
 window.onload=()=>{ loadSubmissions(); };
+
