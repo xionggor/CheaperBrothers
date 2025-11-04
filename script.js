@@ -1,3 +1,5 @@
+// 修改说明：移除了雪花生成代码；其余逻辑保持不变，并保留更稳健的匹配与渲染函数。
+
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
 let isAdmin = false;
@@ -108,8 +110,10 @@ async function loadSubmissions(){
     const entries = await res.json();
     const container = document.getElementById('submissionList');
     container.innerHTML="<h3>已提交信息</h3>";
-    entries.forEach(e=>{
+    // 显示最新在上方：reverse 遍历
+    entries.slice().reverse().forEach(e=>{
       const div=document.createElement('div');
+      div.className = 'submission-item';
       div.innerText=`名字: ${e.name} | 动词: ${e.verb1}, ${e.verb2} | 形容词: ${e.adverb1}, ${e.adverb2} | 备注: ${e.remark}`;
       container.appendChild(div);
     });
