@@ -32,31 +32,27 @@
       <h2>报名表</h2>
       <form id="giftForm" autocomplete="off" novalidate>
         <label for="name">名字:</label>
-        <input type="text" id="name" required>
+        <input type="text" id="name" required placeholder="例如：小明 / 昵称">
 
         <label for="verb1">动词1:</label>
         <input type="text" id="verb1" required>
-        <div class="example" id="verb1-example"></div>
 
         <label for="verb2">动词2:</label>
         <input type="text" id="verb2" required>
-        <div class="example" id="verb2-example"></div>
 
         <label for="adverb1">副词1:</label>
         <input type="text" id="adverb1" required>
-        <div class="example" id="adverb1-example"></div>
 
         <label for="adverb2">副词2:</label>
         <input type="text" id="adverb2" required>
-        <div class="example" id="adverb2-example"></div>
 
         <label for="remark">备注:</label>
-        <input type="text" id="remark">
+        <input type="text" id="remark" placeholder="可选：例如对特殊要求说明">
 
         <button type="submit">提交</button>
       </form>
 
-      <!-- 折叠面板：游戏规则简介（已替换为用户提供内容） -->
+      <!-- 折叠面板：游戏规则简介 -->
       <div class="rules-accordion" aria-hidden="false">
         <button class="accordion-toggle" aria-expanded="false" aria-controls="rulesPanel">
           🎁 副词 + 动词交换礼物活动规则
