@@ -31,26 +31,26 @@
     <section id="form-section" class="card">
       <h2>报名表</h2>
       <form id="giftForm" autocomplete="off">
-        <label>名字:</label>
+        <label for="name">名字:</label>
         <input type="text" id="name" required>
 
-        <label>动词1:</label>
+        <label for="verb1">动词1:</label>
         <input type="text" id="verb1" required>
         <div class="example" id="verb1-example"></div>
 
-        <label>动词2:</label>
+        <label for="verb2">动词2:</label>
         <input type="text" id="verb2" required>
         <div class="example" id="verb2-example"></div>
 
-        <label>形容词1:</label>
+        <label for="adverb1">形容词1:</label>
         <input type="text" id="adverb1" required>
         <div class="example" id="adverb1-example"></div>
 
-        <label>形容词2:</label>
+        <label for="adverb2">形容词2:</label>
         <input type="text" id="adverb2" required>
         <div class="example" id="adverb2-example"></div>
 
-        <label>备注:</label>
+        <label for="remark">备注:</label>
         <input type="text" id="remark">
 
         <button type="submit">提交</button>
@@ -63,7 +63,7 @@
 
     <section id="admin-section" class="card">
       <h2>主持人操作</h2>
-      <label>密码:</label>
+      <label for="adminPassword">密码:</label>
       <input type="password" id="adminPassword">
       <button id="loginBtn">登录</button>
       <div id="admin-controls" style="display:none; margin-top:10px;">
@@ -74,7 +74,23 @@
 
     <section id="results-section" class="card">
       <h2>抽签结果</h2>
-      <ul id="resultsList"></ul>
+      <div id="results-columns">
+        <!-- 左侧：生成组合 -->
+        <div class="result-column" id="combinationColumn">
+          <h3>生成组合（每人一组）</h3>
+          <div id="combinationList" class="result-list">
+            <div class="empty">尚无生成结果</div>
+          </div>
+        </div>
+
+        <!-- 右侧：匹配名字 -->
+        <div class="result-column" id="matchColumn">
+          <h3>匹配名字（随机送礼）</h3>
+          <div id="matchList" class="result-list">
+            <div class="empty">尚无匹配结果</div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -87,7 +103,7 @@
 
   <!-- 彩灯闪烁 + 雪花飘落 -->
   <script>
-    // 彩灯随机闪烁
+    // 彩灯随机闪烁（保持原先逻辑）
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
       lights.forEach(light => {
