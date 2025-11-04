@@ -8,21 +8,21 @@ let isAdmin = false;
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
-    name: document.getElementById('name').value,
-    verb1: document.getElementById('verb1').value,
-    verb2: document.getElementById('verb2').value,
-    adverb1: document.getElementById('adverb1').value,
-    adverb2: document.getElementById('adverb2').value,
-    remark: document.getElementById('remark').value
+    name: document.getElementById('name').value.trim(),
+    verb1: document.getElementById('verb1').value.trim(),
+    verb2: document.getElementById('verb2').value.trim(),
+    adverb1: document.getElementById('adverb1').value.trim(),
+    adverb2: document.getElementById('adverb2').value.trim(),
+    remark: document.getElementById('remark').value.trim()
   };
 
   try{
     await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
-    alert("提交成功！🎉");
+    showToast("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
   }catch(err){
-    alert("提交失败，请稍后再试");
+    showToast("提交失败，请稍后再试", true);
     console.error(err);
   }
 });
@@ -35,16 +35,16 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
   if(pw==="zxc123456"){
     isAdmin=true;
     document.getElementById('admin-controls').style.display="block";
-    alert("登录成功！你现在可以操作主持人功能。");
+    showToast("登录成功！你现在可以操作主持人功能。");
   }else{
-    alert("密码错误！");
+    showToast("密码错误！", true);
   }
 });
 
 // ------------------------
 // 生成组合（每人一组）
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
-  if(!isAdmin) return alert("请先登录主持人账号");
+  if(!isAdmin) return showToast("请先登录主持人账号", true);
 
   const res = await fetch(sheetUrl);
   const entries = await res.json();
@@ -60,32 +60,44 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
     combinations.push({ name:e.name, combo:`${a} ${v}` });
   });
 
-  displayResults(combinations,"生成组合（每人一组）结果");
+  // render to left column
+  renderCombinations(combinations);
 });
 
 // ------------------------
 // 匹配名字（随机送礼）
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
-  if(!isAdmin) return alert("请先登录主持人账号");
+  if(!isAdmin) return showToast("请先登录主持人账号", true);
 
   const res = await fetch(sheetUrl);
   const entries = await res.json();
 
   const names = entries.map(e=>e.name);
-  if(names.length<2){ alert("至少需要两位参与者"); return; }
+  if(names.length<2){ showToast("至少需要两位参与者", true); return; }
 
-  let receivers = shuffle([...names]);
+  // 更稳健的方案：多次洗牌直到没有人送自己（或达到尝试次数）
+  let receivers;
+  const maxTries = 20;
+  let tries = 0;
+  do {
+    receivers = shuffle([...names]);
+    tries++;
+    if(tries>maxTries) break;
+  } while(receivers.some((r,i)=>r===names[i]));
 
-  // 确保没人送自己
-  for(let i=0;i<names.length;i++){
-    if(names[i]===receivers[i]){
-      const j=(i+1)%names.length;
-      [receivers[i],receivers[j]]=[receivers[j],receivers[i]];
+  // 如果仍然有 self-assign，作为最后手段进行局部交换
+  if(receivers.some((r,i)=>r===names[i])){
+    for(let i=0;i<names.length;i++){
+      if(names[i]===receivers[i]){
+        const j = (i+1)%names.length;
+        [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
+      }
     }
   }
 
   const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
-  displayResults(pairs,"匹配名字（随机送礼）结果",true);
+  // render to right column
+  renderMatches(pairs);
 });
 
 // ------------------------
@@ -115,15 +127,52 @@ function shuffle(array){
 }
 
 // ------------------------
-// 显示结果
-function displayResults(list,title,isGift=false){
-  const ul=document.getElementById('resultsList');
-  ul.innerHTML=`<h3>${title}</h3>`;
-  list.forEach(c=>{
-    const li=document.createElement('li');
-    li.innerText=isGift?`${c.sender} 🎁 送给 → ${c.receiver}`:`${c.name} → ${c.combo}`;
-    ul.appendChild(li);
+// 渲染：生成组合（左列）
+function renderCombinations(list){
+  const container = document.getElementById('combinationList');
+  container.innerHTML = '';
+  if(!list || list.length===0){
+    container.innerHTML = '<div class="empty">尚无生成结果</div>';
+    return;
+  }
+  list.forEach(item=>{
+    const row = document.createElement('div');
+    row.className = 'result-item';
+    row.innerText = `${item.name} → ${item.combo}`;
+    container.appendChild(row);
   });
+}
+
+// 渲染：匹配名字（右列）
+function renderMatches(list){
+  const container = document.getElementById('matchList');
+  container.innerHTML = '';
+  if(!list || list.length===0){
+    container.innerHTML = '<div class="empty">尚无匹配结果</div>';
+    return;
+  }
+  list.forEach(item=>{
+    const row = document.createElement('div');
+    row.className = 'result-item';
+    row.innerText = `${item.sender} 🎁 送给 → ${item.receiver}`;
+    container.appendChild(row);
+  });
+}
+
+// ------------------------
+// 页面提示：简易 toast（右上角）
+function showToast(message, isError=false, timeout=3000){
+  let toast = document.getElementById('site-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'site-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.className = isError ? 'toast error' : 'toast';
+  toast.style.opacity = '1';
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
 
 // 页面加载
