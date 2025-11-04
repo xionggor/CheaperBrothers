@@ -1,8 +1,60 @@
-// 修改说明：在原有功能基础上加入 accordion 控制逻辑（折叠面板）并把界面中的“形容词”文本改为“副词”，其它功能不变。
+// script.js - 模板1 更新版
+// 修改说明：placeholder 示例已实现 —— 每个输入框（verb1/verb2/adverb1/adverb2）
+// 在页面加载时随机获得 2 个示例（同类别内不重复）。下方 .example 显示已移除，
+// 所以只在 placeholder 中展示提示。其它逻辑保持不变。
 
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 
 let isAdmin = false;
+
+// ====== 示例词库（可按需扩充） ======
+const VERB_LIBRARY = [
+  "跑","吃","唱","睡","跳","画","写","看","听","喝",
+  "抱","送","拍","游","爬","扔","搬","整理","剪","熬"
+];
+
+const ADVERB_LIBRARY = [
+  "开心地","缓慢地","神秘地","优雅地","疯狂地","悄悄地","认真地",
+  "大声地","温柔地","兴奋地","安静地","随意地","小心地","愉快地",
+  "快速地","坚定地","羞怯地","甜美地","慵懒地","稳重地"
+];
+
+// ====== 工具：Fisher–Yates 洗牌 ======
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
+
+// ====== 随机填充 placeholder 到每个输入框 ======
+// 每个输入框显示 2 个示例（"示例：X，Y"），同类别（动词/副词）内不重复。
+// 逻辑：从库中取 4 个不重复词，分成两组（2 + 2），分别放到两个输入框。
+function populatePlaceholders(){
+  // verbs
+  const verbsShuffled = shuffle(VERB_LIBRARY.slice());
+  const verbPick = verbsShuffled.slice(0, 4); // 4 unique verbs
+  const verb1Examples = verbPick.slice(0,2);
+  const verb2Examples = verbPick.slice(2,4);
+
+  // adverbs
+  const advShuffled = shuffle(ADVERB_LIBRARY.slice());
+  const advPick = advShuffled.slice(0, 4); // 4 unique adverbs
+  const adv1Examples = advPick.slice(0,2);
+  const adv2Examples = advPick.slice(2,4);
+
+  // Assign placeholders
+  const verb1Input = document.getElementById('verb1');
+  const verb2Input = document.getElementById('verb2');
+  const adv1Input = document.getElementById('adverb1');
+  const adv2Input = document.getElementById('adverb2');
+
+  if(verb1Input) verb1Input.placeholder = `示例：${verb1Examples.join('，')}`;
+  if(verb2Input) verb2Input.placeholder = `示例：${verb2Examples.join('，')}`;
+  if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
+  if(adv2Input) adv2Input.placeholder = `示例：${adv2Examples.join('，')}`;
+}
 
 // ------------------------
 // 表单提交
@@ -23,6 +75,8 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     showToast("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
+    // 刷新 placeholders（用户再次填写时看到新的示例）
+    populatePlaceholders();
   }catch(err){
     showToast("提交失败，请稍后再试", true);
     console.error(err);
@@ -75,7 +129,7 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
   const entries = await res.json();
 
   const names = entries.map(e=>e.name);
-  if(names.length<2){ showToast("至少需要两位参与者", true); return; }
+  if(names.length<2){ showToast("至少需要两位参与者"); return; }
 
   // 更稳健的方案：多次洗牌直到没有人送自己（或达到尝试次数）
   let receivers;
@@ -118,16 +172,6 @@ async function loadSubmissions(){
       container.appendChild(div);
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
-}
-
-// ------------------------
-// 工具函数
-function shuffle(array){
-  for(let i=array.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
-  }
-  return array;
 }
 
 // ------------------------
@@ -226,4 +270,7 @@ function showToast(message, isError=false, timeout=3000){
 })();
 
 // 页面加载
-window.onload=()=>{ loadSubmissions(); };
+window.onload=()=>{
+  populatePlaceholders(); // 随机填充每个输入框的 placeholder
+  loadSubmissions();
+};
