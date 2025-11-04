@@ -1,4 +1,15 @@
-/* 背景渐变动画 */
+/* 修改说明：修正表单与已提交区域的布局问题（box-sizing、overflow、边距调整），并移除雪花相关样式以关闭雪花特效。 */
+
+/* Reset / base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* 关键：避免宽度/padding 导致溢出 */
+}
+
+html,body { height: 100%; }
+
+/* 背景渐变动画（保留） */
 body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
@@ -22,6 +33,8 @@ body {
   justify-content: center;
   padding: 10px 0;
   gap: 12px;
+  position: relative;
+  z-index: 3;
 }
 
 .light {
@@ -43,27 +56,7 @@ body {
   50% { opacity: 0.3; transform: scale(0.8); }
 }
 
-/* 雪花 */
-#snow-container {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.snowflake {
-  position: absolute;
-  top: -50px;
-  color: white;
-  user-select: none;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
-}
+/* NOTE: 雪花相关样式与动画已移除（雪花特效关闭） */
 
 /* Header */
 header {
@@ -94,29 +87,31 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
   border-radius: 12px;
   box-shadow: 0 8px 15px rgba(0,0,0,0.1);
   transition: transform 0.2s;
+  overflow: hidden; /* 防止子元素视觉溢出 */
 }
 .card:hover { transform: translateY(-3px); }
 
-/* 已提交信息栏：限制高度并启用滚动 */
+/* 已提交信息栏：限制高度并启用滚动（改为 card 内的视觉模块） */
 #submissionList {
-  background: transparent;
+  background: rgba(255,255,255,0.6);
   box-shadow: none;
   max-height: 220px;        /* 控制区域高度，按需调整 */
   overflow: auto;           /* 超出时显示滚动条 */
-  padding: 8px;             /* 内边距，避免紧贴卡片边缘 */
+  padding: 10px;            /* 内边距，避免紧贴卡片边缘 */
   border-radius: 8px;
   border: 1px solid rgba(0,0,0,0.04);
-  background: rgba(255,255,255,0.6);
+  margin-top: 12px;
 }
 
 /* 已提交项更紧凑显示 */
-#submissionList div {
+#submissionList .submission-item {
   border: 1px solid #eee;
   margin: 6px 0;           /* 略微减小间距 */
   padding: 8px;            /* 略微减小内距以节省空间 */
   border-radius: 8px;
   background: rgba(255,255,255,0.85);
   font-size: 0.95rem;
+  word-break: break-word;
 }
 
 /* 自定义滚动条（WebKit 浏览器） */
@@ -133,19 +128,23 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
   border: 2px solid rgba(255,255,255,0.6);
 }
 
-/* 表单样式 */
-label { display: block; margin: 10px 0 5px 0; font-weight: 600; }
+/* 表单与输入样式修正：确保不透出背景且在卡片内对齐 */
+label { display: block; margin: 10px 0 6px 0; font-weight: 600; color: #222; }
 input[type="text"], input[type="password"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin-top: 2px;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  background: #fff;
+  color: #111;
+  display: block;
 }
+input::placeholder { color: #999; }
 input:focus {
   border-color: #4caf50;
-  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+  box-shadow: 0 0 6px rgba(76,175,80,0.18);
   outline: none;
 }
 
@@ -159,7 +158,7 @@ button {
   cursor: pointer;
   margin-top: 10px;
   font-weight: 600;
-  transition: background 0.3s, transform 0.2s;
+  transition: background 0.25s, transform 0.15s;
 }
 button:hover {
   background: linear-gradient(45deg, #388e3c, #b71c1c);
@@ -170,7 +169,7 @@ button:hover {
 .example {
   font-size: 0.85em;
   color: #333;
-  margin: 0 0 10px 5px;
+  margin: 6px 0 10px 2px;
 }
 
 /* 结果两栏布局 */
@@ -258,11 +257,11 @@ footer {
 /* 在窄屏进一步减小提交区域高度 */
 @media (max-width: 600px) {
   #submissionList { max-height: 160px; }
-  #submissionList div { padding: 6px; margin: 5px 0; font-size: 0.92rem; }
+  #submissionList .submission-item { padding: 6px; margin: 5px 0; font-size: 0.92rem; }
 }
 
 /* 如果用户偏好减少动画，降低动画强度 */
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
-  .light, .snowflake { animation: none; opacity: 1 !important; }
+  .light { animation: none; opacity: 1 !important; }
 }
