@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- 圣诞彩灯 -->
+  <!-- 彩灯（保留） -->
   <div id="christmas-lights">
     <div class="light red"></div>
     <div class="light green"></div>
@@ -19,8 +19,8 @@
     <div class="light yellow"></div>
   </div>
 
-  <!-- 雪花容器 -->
-  <div id="snow-container"></div>
+  <!-- 雪花容器（已移除相关生成脚本与样式，保留占位 if needed） -->
+  <div id="snow-container" aria-hidden="true"></div>
 
   <header>
     <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
@@ -30,7 +30,7 @@
   <main>
     <section id="form-section" class="card">
       <h2>报名表</h2>
-      <form id="giftForm" autocomplete="off">
+      <form id="giftForm" autocomplete="off" novalidate>
         <label for="name">名字:</label>
         <input type="text" id="name" required>
 
@@ -56,7 +56,8 @@
         <button type="submit">提交</button>
       </form>
 
-      <div id="submissionList" class="card-submission">
+      <!-- 已提交信息：受限高度并启用滚动（样式在 style.css） -->
+      <div id="submissionList" class="card-submission" aria-live="polite">
         <h3>已提交信息</h3>
       </div>
     </section>
@@ -101,9 +102,9 @@
   <!-- 主 JS -->
   <script src="script.js"></script>
 
-  <!-- 彩灯闪烁 + 雪花飘落 -->
+  <!-- 彩灯闪烁 -->
   <script>
-    // 彩灯随机闪烁（保持原先逻辑）
+    // 保留彩灯闪烁逻辑（未改）
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
       lights.forEach(light => {
@@ -114,19 +115,6 @@
       });
     }
     setInterval(randomBlink, 500);
-
-    // 雪花生成
-    const snowContainer = document.getElementById('snow-container');
-    const snowCount = 40; // 雪花数量
-    for(let i=0;i<snowCount;i++){
-      const snow = document.createElement('div');
-      snow.classList.add('snowflake');
-      snow.style.left = Math.random() * 100 + 'vw';
-      snow.style.animationDelay = Math.random() * 10 + 's';
-      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
-      snow.innerText = '❄';
-      snowContainer.appendChild(snow);
-    }
   </script>
 </body>
 </html>
