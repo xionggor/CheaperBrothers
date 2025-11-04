@@ -1,132 +1,268 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <title>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- 圣诞彩灯 -->
-  <div id="christmas-lights">
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-    <div class="light blue"></div>
-    <div class="light pink"></div>
-    <div class="light red"></div>
-    <div class="light green"></div>
-    <div class="light yellow"></div>
-  </div>
+/* 背景渐变动画 */
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
+  background-size: 600% 600%;
+  animation: gradientShift 15s ease infinite;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
-  <!-- 雪花容器 -->
-  <div id="snow-container"></div>
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-  <header>
-    <h1>Cheaper Brothers 2025 第一届形容词动词交换礼物 🎅🎄</h1>
-    <p>每个人贡献 2 个形容词 + 2 个动词，看看命运会给你什么惊喜吧 😂</p>
-  </header>
+/* 彩灯 */
+#christmas-lights {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  gap: 12px;
+}
 
-  <main>
-    <section id="form-section" class="card">
-      <h2>报名表</h2>
-      <form id="giftForm" autocomplete="off">
-        <label for="name">名字:</label>
-        <input type="text" id="name" required>
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  animation: blink 1.5s infinite;
+}
 
-        <label for="verb1">动词1:</label>
-        <input type="text" id="verb1" required>
-        <div class="example" id="verb1-example"></div>
+.light.red { background-color: #f44336; }
+.light.green { background-color: #4caf50; }
+.light.yellow { background-color: #ffeb3b; }
+.light.blue { background-color: #2196f3; }
+.light.pink { background-color: #e91e63; }
 
-        <label for="verb2">动词2:</label>
-        <input type="text" id="verb2" required>
-        <div class="example" id="verb2-example"></div>
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
 
-        <label for="adverb1">形容词1:</label>
-        <input type="text" id="adverb1" required>
-        <div class="example" id="adverb1-example"></div>
+/* 雪花 */
+#snow-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
 
-        <label for="adverb2">形容词2:</label>
-        <input type="text" id="adverb2" required>
-        <div class="example" id="adverb2-example"></div>
+.snowflake {
+  position: absolute;
+  top: -50px;
+  color: white;
+  user-select: none;
+  animation: fall linear infinite;
+}
 
-        <label for="remark">备注:</label>
-        <input type="text" id="remark">
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+}
 
-        <button type="submit">提交</button>
-      </form>
+/* Header */
+header {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
 
-      <div id="submissionList" class="card-submission">
-        <h3>已提交信息</h3>
-      </div>
-    </section>
+header h1 {
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  font-size: 2rem;
+}
 
-    <section id="admin-section" class="card">
-      <h2>主持人操作</h2>
-      <label for="adminPassword">密码:</label>
-      <input type="password" id="adminPassword">
-      <button id="loginBtn">登录</button>
-      <div id="admin-controls" style="display:none; margin-top:10px;">
-        <button id="generateBtn">生成组合（每人一组）</button>
-        <button id="matchBtn">匹配名字（随机送礼）</button>
-      </div>
-    </section>
+header p { margin:0; font-weight: 400; }
 
-    <section id="results-section" class="card">
-      <h2>抽签结果</h2>
-      <div id="results-columns">
-        <!-- 左侧：生成组合 -->
-        <div class="result-column" id="combinationColumn">
-          <h3>生成组合（每人一组）</h3>
-          <div id="combinationList" class="result-list">
-            <div class="empty">尚无生成结果</div>
-          </div>
-        </div>
+/* 主体 */
+main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; display: block; }
 
-        <!-- 右侧：匹配名字 -->
-        <div class="result-column" id="matchColumn">
-          <h3>匹配名字（随机送礼）</h3>
-          <div id="matchList" class="result-list">
-            <div class="empty">尚无匹配结果</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+/* 卡片样式 */
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
 
-  <footer>
-    <a href="index.html">Cheaper Brothers 🎄 2025</a>
-  </footer>
+/* 已提交信息栏：限制高度并启用滚动 */
+#submissionList {
+  background: transparent;
+  box-shadow: none;
+  max-height: 220px;        /* 控制区域高度，按需调整 */
+  overflow: auto;           /* 超出时显示滚动条 */
+  padding: 8px;             /* 内边距，避免紧贴卡片边缘 */
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.04);
+  background: rgba(255,255,255,0.6);
+}
 
-  <!-- 主 JS -->
-  <script src="script.js"></script>
+/* 已提交项更紧凑显示 */
+#submissionList div {
+  border: 1px solid #eee;
+  margin: 6px 0;           /* 略微减小间距 */
+  padding: 8px;            /* 略微减小内距以节省空间 */
+  border-radius: 8px;
+  background: rgba(255,255,255,0.85);
+  font-size: 0.95rem;
+}
 
-  <!-- 彩灯闪烁 + 雪花飘落 -->
-  <script>
-    // 彩灯随机闪烁（保持原先逻辑）
-    const lights = document.querySelectorAll('#christmas-lights .light');
-    function randomBlink() {
-      lights.forEach(light => {
-        const delay = Math.random() * 2000;
-        setTimeout(() => {
-          light.style.opacity = Math.random() > 0.5 ? 1 : 0.3;
-        }, delay);
-      });
-    }
-    setInterval(randomBlink, 500);
+/* 自定义滚动条（WebKit 浏览器） */
+#submissionList::-webkit-scrollbar {
+  width: 10px;
+}
+#submissionList::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+#submissionList::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.6);
+}
 
-    // 雪花生成
-    const snowContainer = document.getElementById('snow-container');
-    const snowCount = 40; // 雪花数量
-    for(let i=0;i<snowCount;i++){
-      const snow = document.createElement('div');
-      snow.classList.add('snowflake');
-      snow.style.left = Math.random() * 100 + 'vw';
-      snow.style.animationDelay = Math.random() * 10 + 's';
-      snow.style.fontSize = 10 + Math.random() * 15 + 'px';
-      snow.innerText = '❄';
-      snowContainer.appendChild(snow);
-    }
-  </script>
-</body>
-</html>
+/* 表单样式 */
+label { display: block; margin: 10px 0 5px 0; font-weight: 600; }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 2px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+  outline: none;
+}
+
+/* 按钮 */
+button {
+  background: linear-gradient(45deg, #4caf50, #c62828);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: linear-gradient(45deg, #388e3c, #b71c1c);
+  transform: translateY(-2px);
+}
+
+/* 示例文字 */
+.example {
+  font-size: 0.85em;
+  color: #333;
+  margin: 0 0 10px 5px;
+}
+
+/* 结果两栏布局 */
+#results-columns {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.result-column {
+  flex: 1 1 48%;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-column h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.05rem;
+}
+
+/* 结果列表样式，可滚动 */
+.result-list {
+  background: rgba(250,250,250,0.9);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
+  max-height: 300px;
+  overflow: auto;
+}
+
+.result-item {
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid #eee;
+}
+
+/* 空状态 */
+.result-list .empty {
+  color: #666;
+  padding: 10px;
+  text-align: center;
+}
+
+/* 管理区和结果 */
+#admin-section { margin-top: 30px; }
+#admin-controls { display: none; margin-top: 10px; }
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
+
+/* 简易 toast */
+#site-toast {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 9999;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+#site-toast.error { background: rgba(190,20,20,0.95); }
+
+/* 响应式：窄屏单列显示 */
+@media (max-width: 800px) {
+  #results-columns { flex-direction: column; }
+  .result-column { flex: none; width: 100%; }
+  main { padding: 12px; }
+}
+
+/* 在窄屏进一步减小提交区域高度 */
+@media (max-width: 600px) {
+  #submissionList { max-height: 160px; }
+  #submissionList div { padding: 6px; margin: 5px 0; font-size: 0.92rem; }
+}
+
+/* 如果用户偏好减少动画，降低动画强度 */
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+  .light, .snowflake { animation: none; opacity: 1 !important; }
+}
