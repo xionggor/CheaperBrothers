@@ -1,4 +1,5 @@
-/* 修改说明：修正表单与已提交区域的布局问题（box-sizing、overflow、边距调整），并移除雪花相关样式以关闭雪花特效。 */
+/* style.css - 模板1 完整样式（包含折叠面板、结果两栏、已提交滚动区、去除雪花）
+   修改点：UI 文案中“形容词”已替换为“副词”。 */
 
 /* Reset / base */
 *,
@@ -7,7 +8,7 @@
   box-sizing: border-box; /* 关键：避免宽度/padding 导致溢出 */
 }
 
-html,body { height: 100%; }
+html, body { height: 100%; }
 
 /* 背景渐变动画（保留） */
 body {
@@ -74,10 +75,17 @@ header h1 {
   font-size: 2rem;
 }
 
-header p { margin:0; font-weight: 400; }
+header p { margin: 0; font-weight: 400; }
 
 /* 主体 */
-main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; display: block; }
+main {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: block;
+}
 
 /* 卡片样式 */
 .card {
@@ -148,21 +156,37 @@ input:focus {
   outline: none;
 }
 
-/* 按钮 */
+/* 按钮：确保默认就显示正确的背景和文字颜色 */
 button {
-  background: linear-gradient(45deg, #4caf50, #c62828);
-  color: white;
+  background: linear-gradient(45deg, #4caf50 0%, #c62828 100%);
+  color: #ffffff;                 /* 默认白字 */
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 10px;
   font-weight: 600;
-  transition: background 0.25s, transform 0.15s;
+  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: inline-block;
+  text-align: center;
 }
-button:hover {
-  background: linear-gradient(45deg, #388e3c, #b71c1c);
+
+/* 悬停和聚焦样式（增强交互反馈） */
+button:hover,
+button:focus {
+  background: linear-gradient(45deg, #3a8b3a 0%, #a71b1b 100%);
   transform: translateY(-2px);
+  outline: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* 如果按钮被禁用，视觉表现 */
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* 示例文字 */
@@ -170,6 +194,47 @@ button:hover {
   font-size: 0.85em;
   color: #333;
   margin: 6px 0 10px 2px;
+}
+
+/* Accordion 折叠面板样式 */
+.rules-accordion { margin-top: 12px; }
+.accordion-toggle {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(250,250,250,0.98), rgba(245,245,245,0.95));
+  color: #222;                    /* 默认深色文字，保证可读性 */
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.accordion-toggle:focus {
+  outline: 3px solid rgba(76,175,80,0.18);
+  background: linear-gradient(180deg, rgba(250,250,250,1), rgba(245,245,245,0.98));
+}
+.accordion-arrow {
+  transition: transform 0.18s ease;
+  font-size: 0.95rem;
+}
+/* 当展开时旋转箭头 */
+.accordion-toggle[aria-expanded="true"] .accordion-arrow {
+  transform: rotate(-180deg);
+}
+
+.accordion-panel {
+  margin-top: 8px;
+  padding: 10px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.04);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 220ms ease;
 }
 
 /* 结果两栏布局 */
@@ -264,4 +329,5 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
   .light { animation: none; opacity: 1 !important; }
+  .accordion-panel { transition: none; }
 }
