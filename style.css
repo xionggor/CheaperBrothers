@@ -1,5 +1,5 @@
 /* style.css - 模板1 完整样式（包含折叠面板、结果两栏、已提交滚动区、去除雪花）
-   修改点：UI 文案中“形容词”已替换为“副词”。 */
+   修改说明：调整 placeholder 颜色与示例样式，使例子呈现为灰色不可选中。 */
 
 /* Reset / base */
 *,
@@ -57,7 +57,7 @@ body {
   50% { opacity: 0.3; transform: scale(0.8); }
 }
 
-/* NOTE: 雪花相关样式与动画已移除（雪花特效关闭） */
+/* NOTE: 雪花相关样式与 animation 已移除（雪花特效关闭） */
 
 /* Header */
 header {
@@ -149,11 +149,25 @@ input[type="text"], input[type="password"] {
   color: #111;
   display: block;
 }
-input::placeholder { color: #999; }
+/* placeholder 样式（灰色、不可选中） */
+input::placeholder {
+  color: #8b8b8b;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
 input:focus {
   border-color: #4caf50;
   box-shadow: 0 0 6px rgba(76,175,80,0.18);
   outline: none;
+}
+
+/* 示例文字（额外显示位置，如果你保留 .example 元素） */
+.example {
+  font-size: 0.9em;
+  color: #6c6c6c;
+  margin: 6px 0 10px 2px;
+  user-select: none;
 }
 
 /* 按钮：确保默认就显示正确的背景和文字颜色 */
@@ -187,13 +201,6 @@ button:disabled {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-/* 示例文字 */
-.example {
-  font-size: 0.85em;
-  color: #333;
-  margin: 6px 0 10px 2px;
 }
 
 /* Accordion 折叠面板样式 */
