@@ -1,4 +1,3 @@
-/* style.css - 折叠效果和所有样式（基于前述版本综合完善） */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -46,6 +45,7 @@ body {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.3; transform: scale(0.8); }
 }
+
 header {
   text-align: center;
   padding: 20px;
@@ -60,7 +60,15 @@ header h1 {
   font-size: 2rem;
 }
 header p { margin: 0; font-weight: 400; }
-main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; display: block; }
+
+main {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: block;
+}
 .card {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 20px;
@@ -70,10 +78,8 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
   transition: transform 0.2s;
   overflow: hidden;
 }
-.card:hover { transform: translateY(-3px); }
-
-/* 折叠面板（规则） */
-.rules-accordion { margin-top: 12px; }
+.card:hover{ transform: translateY(-3px);}
+.rules-accordion, .submission-accordion { margin-top: 12px; }
 .accordion-toggle {
   width: 100%;
   text-align: left;
@@ -102,7 +108,7 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
 }
 .accordion-panel {
   margin-top: 8px;
-  padding: 10px;
+  padding: 0 0 10px 0;
   background: rgba(255,255,255,0.95);
   border-radius: 8px;
   border: 1px solid rgba(0,0,0,0.04);
@@ -110,51 +116,10 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
   max-height: 0;
   transition: max-height 220ms ease;
 }
-/* ====== 已提交信息 折叠区相关 ====== */
-.submission-accordion {
-  margin-top: 20px;
-}
-.submission-toggle {
-  width: 100%;
-  text-align: left;
-  padding: 10px 12px;
-  background: linear-gradient(180deg, rgba(250,250,250,0.98), rgba(245,245,245,0.95));
-  color: #222;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.08em;
-}
-.submission-toggle .arrow {
-  display: inline-block;
-  transition: transform 0.18s ease;
-  font-size: 1.1em;
-  margin-right: 8px;
-}
-.submission-toggle[aria-expanded="true"] .arrow {
-  transform: rotate(-180deg);
-}
-.submission-panel {
-  transition: max-height 240ms cubic-bezier(.4,0,.2,1);
-  overflow: hidden;
-  max-height: 0;
-  padding-top: 0;
-}
-.submission-panel[opened],
-.submission-panel:not([hidden]) {
-  max-height: 420px;
-  padding-top: 10px;
-}
-
-/* 已提交信息内容 */
 #submissionList {
   background: rgba(255,255,255,0.6);
   box-shadow: none;
-  max-height: 220px;
+  max-height: 340px;
   overflow: auto;
   padding: 10px;
   border-radius: 8px;
@@ -172,133 +137,43 @@ main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-i
 #submissionList::-webkit-scrollbar { width: 10px; }
 #submissionList::-webkit-scrollbar-track { background: transparent; border-radius: 8px;}
 #submissionList::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; border: 2px solid rgba(255,255,255,0.6); }
-
-/* 表单样式 */
-label { display: block; margin: 10px 0 6px 0; font-weight: 600; color: #222; }
+label { display: block; margin:10px 0 6px 0; font-weight:600; color:#222;}
 input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 2px;
-  transition: box-shadow 0.15s, border-color 0.15s;
-  background: #fff;
-  color: #111;
-  display: block;
+  width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:2px;transition:box-shadow .15s,border-color .15s;
+  background:#fff;color:#111;display:block;
 }
-input::placeholder {
-  color: #8b8b8b;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-input:focus {
-  border-color: #4caf50;
-  box-shadow: 0 0 6px rgba(76,175,80,0.18);
-  outline: none;
-}
-
-/* 按钮（正常） */
+input::placeholder { color:#8b8b8b; user-select:none;-webkit-user-select:none;-moz-user-select:none;}
+input:focus { border-color: #4caf50; box-shadow:0 0 6px rgba(76,175,80,0.18); outline:none;}
 button {
-  background: linear-gradient(45deg, #4caf50 0%, #c62828 100%);
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: 600;
-  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.12s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  display: inline-block;
-  text-align: center;
+  background:linear-gradient(45deg,#4caf50 0%,#c62828 100%);color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;
+  margin-top:10px;font-weight:600;transition:background .18s,transform .12s,box-shadow .12s;box-shadow:0 2px 6px rgba(0,0,0,0.08);display:inline-block;text-align:center;}
+button:hover,button:focus{background:linear-gradient(45deg,#3a8b3a 0%,#a71b1b 100%);transform:translateY(-2px);outline:none;box-shadow:0 6px 18px rgba(0,0,0,0.12);}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none;}
+#results-columns { display:flex; gap:20px; align-items:flex-start; justify-content:space-between;}
+.result-column{flex:1 1 48%; min-height:160px; display:flex; flex-direction:column;}
+.result-column h3 {margin:0 0 10px 0; font-size:1.05rem;}
+.result-list{background:rgba(250,250,250,0.9); border-radius:8px; padding:10px; box-shadow:inset 0 1px 0 rgba(0,0,0,0.02); max-height:300px; overflow:auto;}
+.result-item { padding:8px;margin:6px 0;border-radius:8px;background:rgba(255,255,255,0.85);border:1px solid #eee;}
+.result-list .empty{color:#666;padding:10px;text-align:center;}
+#admin-section{margin-top:30px;}
+#admin-controls{display:none;margin-top:10px;}
+footer{text-align:center;margin-top:40px;padding:15px;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,0.3);position:relative;z-index:2;}
+#site-toast{
+  position: fixed; right: 20px; top: 20px; background: rgba(0,0,0,0.8); color: white; padding: 8px 12px;
+  border-radius: 6px;z-index: 9999;transition: opacity 0.3s;opacity: 0;
 }
-button:hover, button:focus {
-  background: linear-gradient(45deg, #3a8b3a 0%, #a71b1b 100%);
-  transform: translateY(-2px);
-  outline: none;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+#site-toast.error {background:rgba(190,20,20,0.95);}
+@media (max-width:800px){
+  #results-columns{flex-direction:column;}
+  .result-column{flex:none;width:100%;}
+  main{padding:12px;}
 }
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+@media (max-width:600px){
+  #submissionList{max-height:160px;}
+  #submissionList .submission-item{padding:6px;margin:5px 0;font-size:.92rem;}
 }
-
-/* 结果两栏布局 */
-#results-columns {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.result-column {
-  flex: 1 1 48%;
-  min-height: 160px;
-  display: flex;
-  flex-direction: column;
-}
-.result-column h3 { margin: 0 0 10px 0; font-size: 1.05rem; }
-.result-list {
-  background: rgba(250,250,250,0.9);
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
-  max-height: 300px;
-  overflow: auto;
-}
-.result-item {
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.85);
-  border: 1px solid #eee;
-}
-.result-list .empty {
-  color: #666;
-  padding: 10px;
-  text-align: center;
-}
-#admin-section { margin-top: 30px; }
-#admin-controls { display: none; margin-top: 10px; }
-
-footer {
-  text-align: center;
-  margin-top: 40px;
-  padding: 15px;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  position: relative;
-  z-index: 2;
-}
-
-/* toast */
-#site-toast {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  z-index: 9999;
-  transition: opacity 0.3s;
-  opacity: 0;
-}
-#site-toast.error { background: rgba(190,20,20,0.95); }
-
-@media (max-width: 800px) {
-  #results-columns { flex-direction: column; }
-  .result-column { flex: none; width: 100%; }
-  main { padding: 12px; }
-}
-@media (max-width: 600px) {
-  #submissionList { max-height: 160px; }
-  #submissionList .submission-item { padding: 6px; margin: 5px 0; font-size: 0.92rem; }
-}
-@media (prefers-reduced-motion: reduce) {
-  body { animation: none; }
-  .light { animation: none; opacity: 1 !important; }
-  .accordion-panel, .submission-panel { transition: none; }
+@media (prefers-reduced-motion: reduce){
+  body{animation:none;}
+  .light{animation:none;opacity:1 !important;}
+  .accordion-panel{transition:none;}
 }
