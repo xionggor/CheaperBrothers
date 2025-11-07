@@ -98,9 +98,21 @@
         </div>
       </div>
 
-      <!-- 已提交信息：受限高度并启用滚动（样式在 style.css） -->
-      <div id="submissionList" class="card-submission" aria-live="polite">
-        <h3>已提交信息</h3>
+      <!-- 已提交信息 折叠区 -->
+      <div class="submission-accordion">
+        <button
+          class="submission-toggle"
+          id="submissionToggleBtn"
+          aria-expanded="false"
+          aria-controls="submissionList"
+          type="button"
+        >
+          <span class="arrow" aria-hidden="true">▼</span>
+          已提交信息
+        </button>
+        <div id="submissionList" class="card-submission submission-panel" aria-live="polite" hidden>
+          <h3>已提交信息</h3>
+        </div>
       </div>
     </section>
 
@@ -146,7 +158,6 @@
 
   <!-- 彩灯闪烁 -->
   <script>
-    // 保留彩灯闪烁逻辑（未改）
     const lights = document.querySelectorAll('#christmas-lights .light');
     function randomBlink() {
       lights.forEach(light => {
