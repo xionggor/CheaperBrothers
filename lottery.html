@@ -26,25 +26,10 @@
   <main>
     <section id="form-section" class="card">
       <h2>报名表</h2>
-      <form id="giftForm" autocomplete="off" novalidate>
-        <label for="name">名字:</label>
-        <input type="text" id="name" required placeholder="例如：小明 / 昵称">
-        <label for="verb1">动词1:</label>
-        <input type="text" id="verb1" required>
-        <label for="verb2">动词2:</label>
-        <input type="text" id="verb2" required>
-        <label for="adverb1">副词1:</label>
-        <input type="text" id="adverb1" required>
-        <label for="adverb2">副词2:</label>
-        <input type="text" id="adverb2" required>
-        <label for="remark">备注:</label>
-        <input type="text" id="remark" placeholder="可选：例如对特殊要求说明">
-        <button type="submit">提交</button>
-      </form>
 
-      <!-- 规则简介折叠面板 -->
+      <!-- 规则简介折叠面板（已移到报名表标题下，按钮宽度自适应） -->
       <div class="rules-accordion" aria-hidden="false">
-        <button class="accordion-toggle" aria-expanded="false" aria-controls="rulesPanel">
+        <button class="accordion-toggle inline-toggle" aria-expanded="false" aria-controls="rulesPanel">
           🎁 副词 + 动词交换礼物活动规则
           <span class="accordion-arrow" aria-hidden="true">▾</span>
         </button>
@@ -82,7 +67,22 @@
         </div>
       </div>
 
-      <!-- 已提交信息折叠面板，无h3标题 -->
+      <form id="giftForm" autocomplete="off" novalidate>
+        <label for="name">名字:</label>
+        <input type="text" id="name" required placeholder="例如：小明 / 昵称">
+        <label for="verb1">动词1:</label>
+        <input type="text" id="verb1" required>
+        <label for="verb2">动词2:</label>
+        <input type="text" id="verb2" required>
+        <label for="adverb1">副词1:</label>
+        <input type="text" id="adverb1" required>
+        <label for="adverb2">副词2:</label>
+        <input type="text" id="adverb2" required>
+        <label for="remark">备注:</label>
+        <input type="text" id="remark" placeholder="可选：例如对特殊要求说明">
+        <button type="submit">提交</button>
+      </form>
+
       <div class="submission-accordion" aria-hidden="false">
         <button class="accordion-toggle" aria-expanded="false" aria-controls="submissionPanel">
           📝 已提交信息
