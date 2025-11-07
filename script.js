@@ -1,4 +1,3 @@
-// script.js - 折叠“已提交信息”+ placeholder展示示例
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
 let isAdmin = false;
 const VERB_LIBRARY = [
@@ -109,7 +108,7 @@ async function loadSubmissions(){
     const res = await fetch(sheetUrl);
     const entries = await res.json();
     const container = document.getElementById('submissionList');
-    container.innerHTML="<h3>已提交信息</h3>";
+    container.innerHTML="";
     entries.slice().reverse().forEach(e=>{
       const div=document.createElement('div');
       div.className = 'submission-item';
@@ -159,36 +158,7 @@ function showToast(message, isError=false, timeout=3000){
   clearTimeout(toast._hideTimer);
   toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
-// 折叠“已提交信息”功能
-(function initSubmissionAccordion(){
-  const btn = document.getElementById('submissionToggleBtn');
-  const panel = document.getElementById('submissionList');
-  if(!btn || !panel) return;
-  function setState(open) {
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if(open) {
-      panel.hidden = false;
-      panel.setAttribute('opened', '');
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-      requestAnimationFrame(() => {
-        panel.style.maxHeight = '0px';
-      });
-      panel.removeAttribute('opened');
-      panel.addEventListener('transitionend', function te() {
-        panel.hidden = true;
-        panel.removeEventListener('transitionend', te);
-      });
-    }
-  }
-  setState(false);
-  btn.addEventListener('click', ()=>{
-    const open = btn.getAttribute('aria-expanded') === 'true';
-    setState(!open);
-  });
-})();
-// 折叠规则
+// 通用accordion：支持规则简介和已提交信息都可折叠
 (function initAccordion(){
   const toggles = document.querySelectorAll('.accordion-toggle');
   toggles.forEach(btn=>{
