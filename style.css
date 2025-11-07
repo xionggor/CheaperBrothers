@@ -1,6 +1,6 @@
 *,
 *::before,
-*::after { box-sizing: border-box; }
+*::after { box-sizing: border-box;}
 html, body { height: 100%; }
 
 body {
@@ -13,7 +13,6 @@ body {
   padding: 0;
   overflow-x: hidden;
 }
-
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -79,20 +78,37 @@ main {
 }
 .card:hover{ transform: translateY(-3px);}
 .rules-accordion, .submission-accordion { margin-top: 12px; }
+
 .accordion-toggle {
-  width: 100%;
+  /* 基本样式 */
+  width: max-content;
+  min-width: 180px; /* 按钮最小宽度，防止单行太短，可自行调整 */
   text-align: left;
-  padding: 10px 12px;
+  padding: 8px 16px;
   background: linear-gradient(180deg, rgba(250,250,250,0.98), rgba(245,245,245,0.95));
   color: #222;
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  display: flex;
+  display: inline-flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  margin-bottom: 8px;
+}
+.accordion-toggle.inline-toggle {
+  /* 保证规则简介按钮和文本宽度自适应，只在报名表下那个按钮上生效 */
+  width: max-content;
+  display: inline-flex;
+  margin-bottom: 10px;
+}
+@media (max-width: 500px) {
+  .accordion-toggle, .accordion-toggle.inline-toggle {
+    min-width: 110px;
+    font-size: 1em;
+    padding: 7px 10px;
+  }
 }
 .accordion-toggle:focus {
   outline: 3px solid rgba(76,175,80,0.18);
@@ -115,11 +131,11 @@ main {
   max-height: 0;
   transition: max-height 220ms ease;
 }
+
 #submissionList {
   background: rgba(255,255,255,0.6);
   box-shadow: none;
   max-height: 560px;
-  /* ↑ 此处增大 max-height，你可以根据需要继续加大或缩小 */
   overflow: auto;
   padding: 10px;
   border-radius: 8px;
