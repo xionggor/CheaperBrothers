@@ -1,16 +1,9 @@
-/* style.css - 模板1 完整样式（包含折叠面板、结果两栏、已提交滚动区、去除雪花）
-   修改说明：调整 placeholder 颜色与示例样式，使例子呈现为灰色不可选中。 */
-
-/* Reset / base */
+/* style.css - 折叠效果和所有样式（基于前述版本综合完善） */
 *,
 *::before,
-*::after {
-  box-sizing: border-box; /* 关键：避免宽度/padding 导致溢出 */
-}
-
+*::after { box-sizing: border-box; }
 html, body { height: 100%; }
 
-/* 背景渐变动画（保留） */
 body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #c62828, #4caf50, #ffeb3b, #ffffff);
@@ -28,7 +21,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* 彩灯 */
 #christmas-lights {
   display: flex;
   justify-content: center;
@@ -45,21 +37,15 @@ body {
   box-shadow: 0 0 8px rgba(0,0,0,0.5);
   animation: blink 1.5s infinite;
 }
-
 .light.red { background-color: #f44336; }
 .light.green { background-color: #4caf50; }
 .light.yellow { background-color: #ffeb3b; }
 .light.blue { background-color: #2196f3; }
 .light.pink { background-color: #e91e63; }
-
 @keyframes blink {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.3; transform: scale(0.8); }
 }
-
-/* NOTE: 雪花相关样式与 animation 已移除（雪花特效关闭） */
-
-/* Header */
 header {
   text-align: center;
   padding: 20px;
@@ -68,26 +54,13 @@ header {
   position: relative;
   z-index: 2;
 }
-
 header h1 {
   margin: 0 0 10px 0;
   font-weight: 700;
   font-size: 2rem;
 }
-
 header p { margin: 0; font-weight: 400; }
-
-/* 主体 */
-main {
-  padding: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-  display: block;
-}
-
-/* 卡片样式 */
+main { padding: 20px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; display: block; }
 .card {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 20px;
@@ -95,122 +68,18 @@ main {
   border-radius: 12px;
   box-shadow: 0 8px 15px rgba(0,0,0,0.1);
   transition: transform 0.2s;
-  overflow: hidden; /* 防止子元素视觉溢出 */
+  overflow: hidden;
 }
 .card:hover { transform: translateY(-3px); }
 
-/* 已提交信息栏：限制高度并启用滚动（改为 card 内的视觉模块） */
-#submissionList {
-  background: rgba(255,255,255,0.6);
-  box-shadow: none;
-  max-height: 220px;        /* 控制区域高度，按需调整 */
-  overflow: auto;           /* 超出时显示滚动条 */
-  padding: 10px;            /* 内边距，避免紧贴卡片边缘 */
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.04);
-  margin-top: 12px;
-}
-
-/* 已提交项更紧凑显示 */
-#submissionList .submission-item {
-  border: 1px solid #eee;
-  margin: 6px 0;           /* 略微减小间距 */
-  padding: 8px;            /* 略微减小内距以节省空间 */
-  border-radius: 8px;
-  background: rgba(255,255,255,0.85);
-  font-size: 0.95rem;
-  word-break: break-word;
-}
-
-/* 自定义滚动条（WebKit 浏览器） */
-#submissionList::-webkit-scrollbar {
-  width: 10px;
-}
-#submissionList::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 8px;
-}
-#submissionList::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.12);
-  border-radius: 8px;
-  border: 2px solid rgba(255,255,255,0.6);
-}
-
-/* 表单与输入样式修正：确保不透出背景且在卡片内对齐 */
-label { display: block; margin: 10px 0 6px 0; font-weight: 600; color: #222; }
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 2px;
-  transition: box-shadow 0.15s, border-color 0.15s;
-  background: #fff;
-  color: #111;
-  display: block;
-}
-/* placeholder 样式（灰色、不可选中） */
-input::placeholder {
-  color: #8b8b8b;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-input:focus {
-  border-color: #4caf50;
-  box-shadow: 0 0 6px rgba(76,175,80,0.18);
-  outline: none;
-}
-
-/* 示例文字（额外显示位置，如果你保留 .example 元素） */
-.example {
-  font-size: 0.9em;
-  color: #6c6c6c;
-  margin: 6px 0 10px 2px;
-  user-select: none;
-}
-
-/* 按钮：确保默认就显示正确的背景和文字颜色 */
-button {
-  background: linear-gradient(45deg, #4caf50 0%, #c62828 100%);
-  color: #ffffff;                 /* 默认白字 */
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: 600;
-  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.12s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  display: inline-block;
-  text-align: center;
-}
-
-/* 悬停和聚焦样式（增强交互反馈） */
-button:hover,
-button:focus {
-  background: linear-gradient(45deg, #3a8b3a 0%, #a71b1b 100%);
-  transform: translateY(-2px);
-  outline: none;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-
-/* 如果按钮被禁用，视觉表现 */
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Accordion 折叠面板样式 */
+/* 折叠面板（规则） */
 .rules-accordion { margin-top: 12px; }
 .accordion-toggle {
   width: 100%;
   text-align: left;
   padding: 10px 12px;
   background: linear-gradient(180deg, rgba(250,250,250,0.98), rgba(245,245,245,0.95));
-  color: #222;                    /* 默认深色文字，保证可读性 */
+  color: #222;
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 8px;
   cursor: pointer;
@@ -228,11 +97,9 @@ button:disabled {
   transition: transform 0.18s ease;
   font-size: 0.95rem;
 }
-/* 当展开时旋转箭头 */
 .accordion-toggle[aria-expanded="true"] .accordion-arrow {
   transform: rotate(-180deg);
 }
-
 .accordion-panel {
   margin-top: 8px;
   padding: 10px;
@@ -243,6 +110,121 @@ button:disabled {
   max-height: 0;
   transition: max-height 220ms ease;
 }
+/* ====== 已提交信息 折叠区相关 ====== */
+.submission-accordion {
+  margin-top: 20px;
+}
+.submission-toggle {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(250,250,250,0.98), rgba(245,245,245,0.95));
+  color: #222;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.08em;
+}
+.submission-toggle .arrow {
+  display: inline-block;
+  transition: transform 0.18s ease;
+  font-size: 1.1em;
+  margin-right: 8px;
+}
+.submission-toggle[aria-expanded="true"] .arrow {
+  transform: rotate(-180deg);
+}
+.submission-panel {
+  transition: max-height 240ms cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+  max-height: 0;
+  padding-top: 0;
+}
+.submission-panel[opened],
+.submission-panel:not([hidden]) {
+  max-height: 420px;
+  padding-top: 10px;
+}
+
+/* 已提交信息内容 */
+#submissionList {
+  background: rgba(255,255,255,0.6);
+  box-shadow: none;
+  max-height: 220px;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+#submissionList .submission-item {
+  border: 1px solid #eee;
+  margin: 6px 0;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.85);
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+#submissionList::-webkit-scrollbar { width: 10px; }
+#submissionList::-webkit-scrollbar-track { background: transparent; border-radius: 8px;}
+#submissionList::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; border: 2px solid rgba(255,255,255,0.6); }
+
+/* 表单样式 */
+label { display: block; margin: 10px 0 6px 0; font-weight: 600; color: #222; }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 2px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  background: #fff;
+  color: #111;
+  display: block;
+}
+input::placeholder {
+  color: #8b8b8b;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 6px rgba(76,175,80,0.18);
+  outline: none;
+}
+
+/* 按钮（正常） */
+button {
+  background: linear-gradient(45deg, #4caf50 0%, #c62828 100%);
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: inline-block;
+  text-align: center;
+}
+button:hover, button:focus {
+  background: linear-gradient(45deg, #3a8b3a 0%, #a71b1b 100%);
+  transform: translateY(-2px);
+  outline: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 /* 结果两栏布局 */
 #results-columns {
@@ -251,20 +233,13 @@ button:disabled {
   align-items: flex-start;
   justify-content: space-between;
 }
-
 .result-column {
   flex: 1 1 48%;
   min-height: 160px;
   display: flex;
   flex-direction: column;
 }
-
-.result-column h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.05rem;
-}
-
-/* 结果列表样式，可滚动 */
+.result-column h3 { margin: 0 0 10px 0; font-size: 1.05rem; }
 .result-list {
   background: rgba(250,250,250,0.9);
   border-radius: 8px;
@@ -273,7 +248,6 @@ button:disabled {
   max-height: 300px;
   overflow: auto;
 }
-
 .result-item {
   padding: 8px;
   margin: 6px 0;
@@ -281,19 +255,14 @@ button:disabled {
   background: rgba(255,255,255,0.85);
   border: 1px solid #eee;
 }
-
-/* 空状态 */
 .result-list .empty {
   color: #666;
   padding: 10px;
   text-align: center;
 }
-
-/* 管理区和结果 */
 #admin-section { margin-top: 30px; }
 #admin-controls { display: none; margin-top: 10px; }
 
-/* Footer */
 footer {
   text-align: center;
   margin-top: 40px;
@@ -304,7 +273,7 @@ footer {
   z-index: 2;
 }
 
-/* 简易 toast */
+/* toast */
 #site-toast {
   position: fixed;
   right: 20px;
@@ -319,22 +288,17 @@ footer {
 }
 #site-toast.error { background: rgba(190,20,20,0.95); }
 
-/* 响应式：窄屏单列显示 */
 @media (max-width: 800px) {
   #results-columns { flex-direction: column; }
   .result-column { flex: none; width: 100%; }
   main { padding: 12px; }
 }
-
-/* 在窄屏进一步减小提交区域高度 */
 @media (max-width: 600px) {
   #submissionList { max-height: 160px; }
   #submissionList .submission-item { padding: 6px; margin: 5px 0; font-size: 0.92rem; }
 }
-
-/* 如果用户偏好减少动画，降低动画强度 */
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
   .light { animation: none; opacity: 1 !important; }
-  .accordion-panel { transition: none; }
+  .accordion-panel, .submission-panel { transition: none; }
 }
