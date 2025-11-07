@@ -1,25 +1,15 @@
-// script.js - 模板1 更新版
-// 修改说明：placeholder 示例已实现 —— 每个输入框（verb1/verb2/adverb1/adverb2）
-// 在页面加载时随机获得 2 个示例（同类别内不重复）。下方 .example 显示已移除，
-// 所以只在 placeholder 中展示提示。其它逻辑保持不变。
-
+// script.js - 折叠“已提交信息”+ placeholder展示示例
 const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
-
 let isAdmin = false;
-
-// ====== 示例词库（可按需扩充） ======
 const VERB_LIBRARY = [
   "跑","吃","唱","睡","跳","画","写","看","听","喝",
   "抱","送","拍","游","爬","扔","搬","整理","剪","熬"
 ];
-
 const ADVERB_LIBRARY = [
   "开心地","缓慢地","神秘地","优雅地","疯狂地","悄悄地","认真地",
   "大声地","温柔地","兴奋地","安静地","随意地","小心地","愉快地",
   "快速地","坚定地","羞怯地","甜美地","慵懒地","稳重地"
 ];
-
-// ====== 工具：Fisher–Yates 洗牌 ======
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -27,38 +17,24 @@ function shuffle(array){
   }
   return array;
 }
-
-// ====== 随机填充 placeholder 到每个输入框 ======
-// 每个输入框显示 2 个示例（"示例：X，Y"），同类别（动词/副词）内不重复。
-// 逻辑：从库中取 4 个不重复词，分成两组（2 + 2），分别放到两个输入框。
 function populatePlaceholders(){
-  // verbs
   const verbsShuffled = shuffle(VERB_LIBRARY.slice());
-  const verbPick = verbsShuffled.slice(0, 4); // 4 unique verbs
+  const verbPick = verbsShuffled.slice(0, 4);
   const verb1Examples = verbPick.slice(0,2);
   const verb2Examples = verbPick.slice(2,4);
-
-  // adverbs
   const advShuffled = shuffle(ADVERB_LIBRARY.slice());
-  const advPick = advShuffled.slice(0, 4); // 4 unique adverbs
+  const advPick = advShuffled.slice(0, 4);
   const adv1Examples = advPick.slice(0,2);
   const adv2Examples = advPick.slice(2,4);
-
-  // Assign placeholders
   const verb1Input = document.getElementById('verb1');
   const verb2Input = document.getElementById('verb2');
   const adv1Input = document.getElementById('adverb1');
   const adv2Input = document.getElementById('adverb2');
-
   if(verb1Input) verb1Input.placeholder = `示例：${verb1Examples.join('，')}`;
   if(verb2Input) verb2Input.placeholder = `示例：${verb2Examples.join('，')}`;
   if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
   if(adv2Input) adv2Input.placeholder = `示例：${adv2Examples.join('，')}`;
 }
-
-// ------------------------
-// 表单提交
-// ------------------------
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
@@ -69,23 +45,17 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     adverb2: document.getElementById('adverb2').value.trim(),
     remark: document.getElementById('remark').value.trim()
   };
-
   try{
     await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
     showToast("提交成功！🎉");
     document.getElementById('giftForm').reset();
     loadSubmissions();
-    // 刷新 placeholders（用户再次填写时看到新的示例）
     populatePlaceholders();
   }catch(err){
     showToast("提交失败，请稍后再试", true);
     console.error(err);
   }
 });
-
-// ------------------------
-// 主持人登录
-// ------------------------
 document.getElementById('loginBtn').addEventListener('click', ()=>{
   const pw = document.getElementById('adminPassword').value;
   if(pw==="zxc123456"){
@@ -96,75 +66,50 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
     showToast("密码错误！", true);
   }
 });
-
-// ------------------------
-// 生成组合（每人一组）
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
-
   const res = await fetch(sheetUrl);
   const entries = await res.json();
-
   let verbs=[], adverbs=[];
   entries.forEach(e=>{ verbs.push(e.verb1,e.verb2); adverbs.push(e.adverb1,e.adverb2); });
   verbs=shuffle(verbs); adverbs=shuffle(adverbs);
-
   const combinations=[];
   entries.forEach(e=>{
     const v = verbs.pop()||"";
     const a = adverbs.pop()||"";
     combinations.push({ name:e.name, combo:`${a} ${v}` });
   });
-
-  // render to left column
   renderCombinations(combinations);
 });
-
-// ------------------------
-// 匹配名字（随机送礼）
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
-
   const res = await fetch(sheetUrl);
   const entries = await res.json();
-
   const names = entries.map(e=>e.name);
   if(names.length<2){ showToast("至少需要两位参与者"); return; }
-
-  // 更稳健的方案：多次洗牌直到没有人送自己（或达到尝试次数）
-  let receivers;
-  const maxTries = 20;
-  let tries = 0;
+  let receivers, tries=0, maxTries=20;
   do {
     receivers = shuffle([...names]);
     tries++;
     if(tries>maxTries) break;
   } while(receivers.some((r,i)=>r===names[i]));
-
-  // 如果仍然有 self-assign，作为最后手段进行局部交换
   if(receivers.some((r,i)=>r===names[i])){
     for(let i=0;i<names.length;i++){
       if(names[i]===receivers[i]){
-        const j = (i+1)%names.length;
-        [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
+        const j=(i+1)%names.length;
+        [receivers[i], receivers[j]]=[receivers[j], receivers[i]];
       }
     }
   }
-
   const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
-  // render to right column
   renderMatches(pairs);
 });
-
-// ------------------------
-// 加载报名信息
 async function loadSubmissions(){
   try{
     const res = await fetch(sheetUrl);
     const entries = await res.json();
     const container = document.getElementById('submissionList');
     container.innerHTML="<h3>已提交信息</h3>";
-    // 显示最新在上方：reverse 遍历
     entries.slice().reverse().forEach(e=>{
       const div=document.createElement('div');
       div.className = 'submission-item';
@@ -173,9 +118,6 @@ async function loadSubmissions(){
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
 }
-
-// ------------------------
-// 渲染：生成组合（左列）
 function renderCombinations(list){
   const container = document.getElementById('combinationList');
   container.innerHTML = '';
@@ -190,8 +132,6 @@ function renderCombinations(list){
     container.appendChild(row);
   });
 }
-
-// 渲染：匹配名字（右列）
 function renderMatches(list){
   const container = document.getElementById('matchList');
   container.innerHTML = '';
@@ -206,9 +146,6 @@ function renderMatches(list){
     container.appendChild(row);
   });
 }
-
-// ------------------------
-// 页面提示：简易 toast（右上角）
 function showToast(message, isError=false, timeout=3000){
   let toast = document.getElementById('site-toast');
   if(!toast){
@@ -222,35 +159,55 @@ function showToast(message, isError=false, timeout=3000){
   clearTimeout(toast._hideTimer);
   toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
-
-// ------------------------
-// Accordion（折叠面板）逻辑
+// 折叠“已提交信息”功能
+(function initSubmissionAccordion(){
+  const btn = document.getElementById('submissionToggleBtn');
+  const panel = document.getElementById('submissionList');
+  if(!btn || !panel) return;
+  function setState(open) {
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(open) {
+      panel.hidden = false;
+      panel.setAttribute('opened', '');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        panel.style.maxHeight = '0px';
+      });
+      panel.removeAttribute('opened');
+      panel.addEventListener('transitionend', function te() {
+        panel.hidden = true;
+        panel.removeEventListener('transitionend', te);
+      });
+    }
+  }
+  setState(false);
+  btn.addEventListener('click', ()=>{
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    setState(!open);
+  });
+})();
+// 折叠规则
 (function initAccordion(){
   const toggles = document.querySelectorAll('.accordion-toggle');
   toggles.forEach(btn=>{
     const panelId = btn.getAttribute('aria-controls');
     const panel = document.getElementById(panelId);
-    // Ensure initial state
     btn.setAttribute('aria-expanded', 'false');
     if(panel) panel.hidden = true;
-
     btn.addEventListener('click', ()=>{
       const expanded = btn.getAttribute('aria-expanded') === 'true';
       if(!expanded){
-        // open
         btn.setAttribute('aria-expanded','true');
         panel.hidden = false;
-        // animate height
         panel.style.maxHeight = panel.scrollHeight + 'px';
       } else {
-        // close
         btn.setAttribute('aria-expanded','false');
-        panel.style.maxHeight = panel.scrollHeight + 'px'; // set to current to trigger transition
-        // force repaint then collapse
+        panel.style.maxHeight = panel.scrollHeight + 'px';
         requestAnimationFrame(()=> {
           panel.style.maxHeight = '0px';
         });
-        // after transition, set hidden
         panel.addEventListener('transitionend', function te(){
           panel.hidden = true;
           panel.style.maxHeight = null;
@@ -258,8 +215,6 @@ function showToast(message, isError=false, timeout=3000){
         });
       }
     });
-
-    // accessibility: allow Enter / Space to toggle
     btn.addEventListener('keydown', (e)=>{
       if(e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -268,9 +223,7 @@ function showToast(message, isError=false, timeout=3000){
     });
   });
 })();
-
-// 页面加载
 window.onload=()=>{
-  populatePlaceholders(); // 随机填充每个输入框的 placeholder
+  populatePlaceholders();
   loadSubmissions();
 };
