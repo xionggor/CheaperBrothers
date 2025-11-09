@@ -1,29 +1,22 @@
-// 换成你的最新版 Web 应用地址！
 const sheetUrl = "https://script.google.com/macros/s/AKfycbxoJ7SH0V2wVpMHcDFXF9PuN-vP3QXi90qiCKORu1nZJNx-4BvK_YodPmjw35Unqac/exec";
 let isAdmin = false;
 
-// 超搞怪动词集合（可以自由添加/修改）
 const VERB_LIBRARY = [
-  "跑", "吃", "唱", "睡", "跳", "画", "写", "看", "听", "喝",
-  "拍手", "扭屁股", "尬舞", "假装飞翔", "狗刨", "原地转圈", "装作鱼游",
-  "cosplay蜘蛛侠", "说绕口令", "模仿鸭叫", "开火车", "贴地爬行",
-  "鬼笑", "吹泡泡", "装成机器人行动", "做鬼脸", "凌空蹦跳",
-  "向空中扔饼", "打滚", "发呆", "假装被吓到", "装作无重力",
-  "自言自语", "边唱边跳", "单脚跳", "吹口哨", "颠勺", "疯狂自拍"
-  // 也可以继续添加...
+  "跑","吃","唱","睡","跳","画","写","看","听","喝",
+  "拍手","扭屁股","尬舞","假装飞翔","狗刨","原地转圈","装作鱼游",
+  "cosplay蜘蛛侠","说绕口令","模仿鸭叫","开火车","贴地爬行",
+  "鬼笑","吹泡泡","装成机器人行动","做鬼脸","凌空蹦跳",
+  "向空中扔饼","打滚","发呆","假装被吓到","装作无重力",
+  "自言自语","边唱边跳","单脚跳","吹口哨","颠勺","疯狂自拍"
 ];
-
-// 超搞怪副词集合（可以自由添加/修改）
 const ADVERB_LIBRARY = [
-  "戴着墨镜地", "原地爆炸地", "摇摇摆摆地", "发疯似地", "一边跳一边哭地",
-  "装作外星人地", "慢动作地", "隐身地", "梦游般地", "鬼叫般地",
-  "鼻孔朝天地", "嘻哈风地", "咆哮地", "像猫一样地", "假装很酷地",
-  "无视所有人地", "模仿鸭子地", "顺着地板滑过去地", "边笑边尖叫地",
-  "单脚跳地", "放飞自我地", "穿着睡衣地", "一边扔纸飞机地", "打嗝地",
-  "假装失重地", "边尖叫边做地", "东张西望地", "穿拖鞋地", "一边做一边拉筋地"
-  // 也可以继续添加...
+  "戴着墨镜地","原地爆炸地","摇摇摆摆地","发疯似地","一边跳一边哭地",
+  "装作外星人地","慢动作地","隐身地","梦游般地","鬼叫般地",
+  "鼻孔朝天地","嘻哈风地","咆哮地","像猫一样地","假装很酷地",
+  "无视所有人地","模仿鸭子地","顺着地板滑过去地","边笑边尖叫地",
+  "单脚跳地","放飞自我地","穿着睡衣地","一边扔纸飞机地","打嗝地",
+  "假装失重地","边尖叫边做地","东张西望地","穿拖鞋地","一边做一边拉筋地"
 ];
-
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -31,7 +24,6 @@ function shuffle(array){
   }
   return array;
 }
-
 function populatePlaceholders(){
   const verbsShuffled = shuffle(VERB_LIBRARY.slice());
   const verbPick = verbsShuffled.slice(0, 4);
@@ -50,7 +42,6 @@ function populatePlaceholders(){
   if(adv1Input) adv1Input.placeholder = `超搞怪示例：${adv1Examples.join('，')}`;
   if(adv2Input) adv2Input.placeholder = `超搞怪示例：${adv2Examples.join('，')}`;
 }
-
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
@@ -72,7 +63,6 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     console.error(err);
   }
 });
-
 document.getElementById('loginBtn').addEventListener('click', ()=>{
   const pw = document.getElementById('adminPassword').value;
   if(pw==="zxc123456"){
@@ -83,7 +73,6 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
     showToast("密码错误！", true);
   }
 });
-
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
   const res = await fetch(sheetUrl);
@@ -99,7 +88,6 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
   });
   renderCombinations(combinations);
 });
-
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
   const res = await fetch(sheetUrl);
@@ -123,8 +111,6 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
   const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
   renderMatches(pairs);
 });
-
-// 保存“生成组合”到表格，并自动刷新显示
 document.getElementById("saveCombinationBtn").addEventListener("click", async () => {
   let arr = [];
   document.querySelectorAll("#combinationList .result-item").forEach(div=>{
@@ -139,9 +125,8 @@ document.getElementById("saveCombinationBtn").addEventListener("click", async ()
   });
   let json = await res.json();
   showToast(json.status === "ok" ? "组合已保存！" : ("保存失败："+json.message), json.status !== "ok");
-  loadComboResult(); // 自动刷新
+  loadComboResult();
 });
-
 document.getElementById("saveMatchingBtn").addEventListener("click", async () => {
   let arr = [];
   document.querySelectorAll("#matchList .result-item").forEach(div=>{
@@ -156,9 +141,8 @@ document.getElementById("saveMatchingBtn").addEventListener("click", async () =>
   });
   let json = await res.json();
   showToast(json.status === "ok" ? "匹配名单已保存！" : ("保存失败："+json.message), json.status !== "ok");
-  loadGiftMatching(); // 自动刷新
+  loadGiftMatching();
 });
-
 async function loadSubmissions(){
   try{
     const res = await fetch(sheetUrl);
@@ -173,7 +157,6 @@ async function loadSubmissions(){
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
 }
-
 function renderCombinations(list){
   const container = document.getElementById('combinationList');
   container.innerHTML = '';
@@ -188,7 +171,6 @@ function renderCombinations(list){
     container.appendChild(row);
   });
 }
-
 function renderMatches(list){
   const container = document.getElementById('matchList');
   container.innerHTML = '';
@@ -203,7 +185,6 @@ function renderMatches(list){
     container.appendChild(row);
   });
 }
-
 function showToast(message, isError=false, timeout=3000){
   let toast = document.getElementById('site-toast');
   if(!toast){
@@ -217,31 +198,20 @@ function showToast(message, isError=false, timeout=3000){
   clearTimeout(toast._hideTimer);
   toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
-
 (function initAccordion(){
   const toggles = document.querySelectorAll('.accordion-toggle');
   toggles.forEach(btn=>{
     const panelId = btn.getAttribute('aria-controls');
     const panel = document.getElementById(panelId);
     btn.setAttribute('aria-expanded', 'false');
-    if(panel) panel.hidden = true;
+    if(panel) panel.style.display = "none";
     btn.addEventListener('click', ()=>{
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      if(!expanded){
+      if(panel.style.display === "none"){
         btn.setAttribute('aria-expanded','true');
-        panel.hidden = false;
-        panel.style.maxHeight = panel.scrollHeight + 'px';
+        panel.style.display = "block";
       } else {
         btn.setAttribute('aria-expanded','false');
-        panel.style.maxHeight = panel.scrollHeight + 'px';
-        requestAnimationFrame(()=> {
-          panel.style.maxHeight = '0px';
-        });
-        panel.addEventListener('transitionend', function te(){
-          panel.hidden = true;
-          panel.style.maxHeight = null;
-          panel.removeEventListener('transitionend', te);
-        });
+        panel.style.display = "none";
       }
     });
     btn.addEventListener('keydown', (e)=>{
@@ -252,8 +222,6 @@ function showToast(message, isError=false, timeout=3000){
     });
   });
 })();
-
-// 刷新自动显示Combo和GiftMatching
 async function loadComboResult(){
   try{
     const res = await fetch(sheetUrl + '?type=combo');
@@ -261,7 +229,6 @@ async function loadComboResult(){
     renderCombinations(records);
   }catch(err){ console.error("加载组合结果失败:",err);}
 }
-
 async function loadGiftMatching(){
   try{
     const res = await fetch(sheetUrl + '?type=matching');
@@ -269,7 +236,6 @@ async function loadGiftMatching(){
     renderMatches(records);
   }catch(err){ console.error("加载匹配名单失败:",err);}
 }
-
 window.onload=()=>{
   populatePlaceholders();
   loadSubmissions();
