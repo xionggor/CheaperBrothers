@@ -1,15 +1,27 @@
-// 注意：sheetUrl 换成你的新版 Web 应用地址！
+// 换成你的最新版 Web 应用地址！
 const sheetUrl = "https://script.google.com/macros/s/AKfycbxoJ7SH0V2wVpMHcDFXF9PuN-vP3QXi90qiCKORu1nZJNx-4BvK_YodPmjw35Unqac/exec";
 let isAdmin = false;
 
+// 超搞怪动词集合（可以自由添加/修改）
 const VERB_LIBRARY = [
-  "跑","吃","唱","睡","跳","画","写","看","听","喝",
-  "抱","送","拍","游","爬","扔","搬","整理","剪","熬"
+  "跑", "吃", "唱", "睡", "跳", "画", "写", "看", "听", "喝",
+  "拍手", "扭屁股", "尬舞", "假装飞翔", "狗刨", "原地转圈", "装作鱼游",
+  "cosplay蜘蛛侠", "说绕口令", "模仿鸭叫", "开火车", "贴地爬行",
+  "鬼笑", "吹泡泡", "装成机器人行动", "做鬼脸", "凌空蹦跳",
+  "向空中扔饼", "打滚", "发呆", "假装被吓到", "装作无重力",
+  "自言自语", "边唱边跳", "单脚跳", "吹口哨", "颠勺", "疯狂自拍"
+  // 也可以继续添加...
 ];
+
+// 超搞怪副词集合（可以自由添加/修改）
 const ADVERB_LIBRARY = [
-  "开心地","缓慢地","神秘地","优雅地","疯狂地","悄悄地","认真地",
-  "大声地","温柔地","兴奋地","安静地","随意地","小心地","愉快地",
-  "快速地","坚定地","羞怯地","甜美地","慵懒地","稳重地"
+  "戴着墨镜地", "原地爆炸地", "摇摇摆摆地", "发疯似地", "一边跳一边哭地",
+  "装作外星人地", "慢动作地", "隐身地", "梦游般地", "鬼叫般地",
+  "鼻孔朝天地", "嘻哈风地", "咆哮地", "像猫一样地", "假装很酷地",
+  "无视所有人地", "模仿鸭子地", "顺着地板滑过去地", "边笑边尖叫地",
+  "单脚跳地", "放飞自我地", "穿着睡衣地", "一边扔纸飞机地", "打嗝地",
+  "假装失重地", "边尖叫边做地", "东张西望地", "穿拖鞋地", "一边做一边拉筋地"
+  // 也可以继续添加...
 ];
 
 function shuffle(array){
@@ -33,10 +45,10 @@ function populatePlaceholders(){
   const verb2Input = document.getElementById('verb2');
   const adv1Input = document.getElementById('adverb1');
   const adv2Input = document.getElementById('adverb2');
-  if(verb1Input) verb1Input.placeholder = `示例：${verb1Examples.join('，')}`;
-  if(verb2Input) verb2Input.placeholder = `示例：${verb2Examples.join('，')}`;
-  if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
-  if(adv2Input) adv2Input.placeholder = `示例：${adv2Examples.join('，')}`;
+  if(verb1Input) verb1Input.placeholder = `超搞怪示例：${verb1Examples.join('，')}`;
+  if(verb2Input) verb2Input.placeholder = `超搞怪示例：${verb2Examples.join('，')}`;
+  if(adv1Input) adv1Input.placeholder = `超搞怪示例：${adv1Examples.join('，')}`;
+  if(adv2Input) adv2Input.placeholder = `超搞怪示例：${adv2Examples.join('，')}`;
 }
 
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
@@ -130,7 +142,6 @@ document.getElementById("saveCombinationBtn").addEventListener("click", async ()
   loadComboResult(); // 自动刷新
 });
 
-// 保存“匹配名单”到表格，并自动刷新显示
 document.getElementById("saveMatchingBtn").addEventListener("click", async () => {
   let arr = [];
   document.querySelectorAll("#matchList .result-item").forEach(div=>{
