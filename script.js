@@ -37,10 +37,10 @@ function populatePlaceholders(){
   const verb2Input = document.getElementById('verb2');
   const adv1Input = document.getElementById('adverb1');
   const adv2Input = document.getElementById('adverb2');
-  if(verb1Input) verb1Input.placeholder = `超搞怪示例：${verb1Examples.join('，')}`;
-  if(verb2Input) verb2Input.placeholder = `超搞怪示例：${verb2Examples.join('，')}`;
-  if(adv1Input) adv1Input.placeholder = `超搞怪示例：${adv1Examples.join('，')}`;
-  if(adv2Input) adv2Input.placeholder = `超搞怪示例：${adv2Examples.join('，')}`;
+  if(verb1Input) verb1Input.placeholder = `示例：${verb1Examples.join('，')}`;
+  if(verb2Input) verb2Input.placeholder = `示例：${verb2Examples.join('，')}`;
+  if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
+  if(adv2Input) adv2Input.placeholder = `示例：${adv2Examples.join('，')}`;
 }
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
@@ -242,3 +242,4 @@ window.onload=()=>{
   loadComboResult();
   loadGiftMatching();
 };
+
