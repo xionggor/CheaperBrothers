@@ -1,5 +1,7 @@
-const sheetUrl = "https://script.google.com/macros/s/AKfycbyYsUncYkvvc89BsFNb3u5Gesczdy5gtnK5ZQWjJ7u2mnQmSPaTddPQPojorl4HmY8/exec";
+// 注意：sheetUrl 换成你的新版 Web 应用地址！
+const sheetUrl = "https://script.google.com/macros/s/AKfycbxoJ7SH0V2wVpMHcDFXF9PuN-vP3QXi90qiCKORu1nZJNx-4BvK_YodPmjw35Unqac/exec";
 let isAdmin = false;
+
 const VERB_LIBRARY = [
   "跑","吃","唱","睡","跳","画","写","看","听","喝",
   "抱","送","拍","游","爬","扔","搬","整理","剪","熬"
@@ -9,6 +11,7 @@ const ADVERB_LIBRARY = [
   "大声地","温柔地","兴奋地","安静地","随意地","小心地","愉快地",
   "快速地","坚定地","羞怯地","甜美地","慵懒地","稳重地"
 ];
+
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -16,6 +19,7 @@ function shuffle(array){
   }
   return array;
 }
+
 function populatePlaceholders(){
   const verbsShuffled = shuffle(VERB_LIBRARY.slice());
   const verbPick = verbsShuffled.slice(0, 4);
@@ -34,6 +38,7 @@ function populatePlaceholders(){
   if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
   if(adv2Input) adv2Input.placeholder = `示例：${adv2Examples.join('，')}`;
 }
+
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = {
@@ -55,6 +60,7 @@ document.getElementById('giftForm').addEventListener('submit', async (e)=>{
     console.error(err);
   }
 });
+
 document.getElementById('loginBtn').addEventListener('click', ()=>{
   const pw = document.getElementById('adminPassword').value;
   if(pw==="zxc123456"){
@@ -65,6 +71,7 @@ document.getElementById('loginBtn').addEventListener('click', ()=>{
     showToast("密码错误！", true);
   }
 });
+
 document.getElementById('generateBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
   const res = await fetch(sheetUrl);
@@ -80,6 +87,7 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
   });
   renderCombinations(combinations);
 });
+
 document.getElementById('matchBtn').addEventListener('click', async ()=>{
   if(!isAdmin) return showToast("请先登录主持人账号", true);
   const res = await fetch(sheetUrl);
@@ -103,6 +111,43 @@ document.getElementById('matchBtn').addEventListener('click', async ()=>{
   const pairs = names.map((sender,i)=>({ sender, receiver:receivers[i] }));
   renderMatches(pairs);
 });
+
+// 保存“生成组合”到表格，并自动刷新显示
+document.getElementById("saveCombinationBtn").addEventListener("click", async () => {
+  let arr = [];
+  document.querySelectorAll("#combinationList .result-item").forEach(div=>{
+    let txt = div.innerText.trim();
+    let parts = txt.split("→");
+    arr.push({name:parts[0].trim(), combo:(parts[1]||"").trim()});
+  });
+  if(arr.length === 0) { showToast("无组合可保存", true); return; }
+  let res = await fetch(sheetUrl, {
+    method: "POST",
+    body: JSON.stringify({type:"saveCombination", data: arr}),
+  });
+  let json = await res.json();
+  showToast(json.status === "ok" ? "组合已保存！" : ("保存失败："+json.message), json.status !== "ok");
+  loadComboResult(); // 自动刷新
+});
+
+// 保存“匹配名单”到表格，并自动刷新显示
+document.getElementById("saveMatchingBtn").addEventListener("click", async () => {
+  let arr = [];
+  document.querySelectorAll("#matchList .result-item").forEach(div=>{
+    let txt = div.innerText.trim();
+    let m = txt.match(/^(.+?)\s*🎁\s*送给\s*→\s*(.+)$/);
+    if(m) arr.push({sender:m[1].trim(), receiver:m[2].trim()});
+  });
+  if(arr.length === 0) { showToast("无匹配可保存", true); return; }
+  let res = await fetch(sheetUrl, {
+    method: "POST",
+    body: JSON.stringify({type:"saveMatching", data: arr}),
+  });
+  let json = await res.json();
+  showToast(json.status === "ok" ? "匹配名单已保存！" : ("保存失败："+json.message), json.status !== "ok");
+  loadGiftMatching(); // 自动刷新
+});
+
 async function loadSubmissions(){
   try{
     const res = await fetch(sheetUrl);
@@ -117,6 +162,7 @@ async function loadSubmissions(){
     });
   }catch(err){ console.error("加载提交信息失败:",err);}
 }
+
 function renderCombinations(list){
   const container = document.getElementById('combinationList');
   container.innerHTML = '';
@@ -131,6 +177,7 @@ function renderCombinations(list){
     container.appendChild(row);
   });
 }
+
 function renderMatches(list){
   const container = document.getElementById('matchList');
   container.innerHTML = '';
@@ -145,6 +192,7 @@ function renderMatches(list){
     container.appendChild(row);
   });
 }
+
 function showToast(message, isError=false, timeout=3000){
   let toast = document.getElementById('site-toast');
   if(!toast){
@@ -158,7 +206,7 @@ function showToast(message, isError=false, timeout=3000){
   clearTimeout(toast._hideTimer);
   toast._hideTimer = setTimeout(()=>{ toast.style.opacity = '0'; }, timeout);
 }
-// 通用accordion：支持规则简介和已提交信息都可折叠
+
 (function initAccordion(){
   const toggles = document.querySelectorAll('.accordion-toggle');
   toggles.forEach(btn=>{
@@ -193,7 +241,27 @@ function showToast(message, isError=false, timeout=3000){
     });
   });
 })();
+
+// 刷新自动显示Combo和GiftMatching
+async function loadComboResult(){
+  try{
+    const res = await fetch(sheetUrl + '?type=combo');
+    const records = await res.json();
+    renderCombinations(records);
+  }catch(err){ console.error("加载组合结果失败:",err);}
+}
+
+async function loadGiftMatching(){
+  try{
+    const res = await fetch(sheetUrl + '?type=matching');
+    const records = await res.json();
+    renderMatches(records);
+  }catch(err){ console.error("加载匹配名单失败:",err);}
+}
+
 window.onload=()=>{
   populatePlaceholders();
   loadSubmissions();
+  loadComboResult();
+  loadGiftMatching();
 };
