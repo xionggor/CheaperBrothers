@@ -4,31 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cheaper Brothers - Breathing Neon Lights</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
-  /* 霓虹渐变背景 */
-  background: radial-gradient(ellipse 110% 85% at 58% 35%, #2e233a 0%, #12121c 58%, #000 100%);
-  font-family: "BBH Sans Hegarty", "Noto Serif TC", sans-serif;
+  padding-top: 15vh;
+  background-color: #000;
+  font-family: "BBH Sans Hegarty", sans-serif;
   text-align: center;
-  transition: background 0.7s;
 }
 
 h1 {
-  font-size: 8vw;
-  line-height: 1.1;
-  letter-spacing: 4px;
+  font-size: 5.5rem;
+  line-height: 1.2;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  margin-top: 12vh;
-  margin-bottom: 0;
-  user-select: none;
+  margin: 0;
 }
 
 .line {
@@ -37,30 +40,20 @@ h1 {
 
 .line span {
   display: inline-block;
-  color: #f5deb3;
   opacity: 1;
-  text-shadow: 0 0 10px #f5deb3, 0 0 22px #f5deb3;
-  transition: color 0.28s, text-shadow 0.28s, transform 0.2s;
-  will-change: color, text-shadow, transform;
-}
-
-@media (max-width: 600px) {
-  h1 { font-size: 13vw; margin-top: 7vh;}
-  footer { font-size: 0.9rem;}
+  color: #f5deb3;
+  text-shadow: 0 0 6px #f5deb3, 0 0 12px #f5deb3;
+  transition: color 0.2s, text-shadow 0.2s;
 }
 
 footer {
   position: absolute;
-  left: 0; right: 0;
-  bottom: 32px;
-  width: 100vw;
-  text-align: center;
+  bottom: 30px;
   font-family: "Noto Serif TC", serif;
   font-weight: 400;
-  font-size: 1.1rem;
-  opacity: 0.9;
-  letter-spacing: 1.1px;
-  z-index: 2;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  letter-spacing: 1px;
 }
 
 footer a {
@@ -79,29 +72,38 @@ footer a {
   </span>
 </h1>
 <footer>
-  <a href="lottery.html">Cheaper Brothers Co. 廉兄集团 →第一届圣诞节活动入口🎄 </a>
+  <a href="lottery.html">Cheaper Brothers Co. 廉兄集团 🎄 </a>
 </footer>
+
 <script>
-const colors = ['#f5deb3','#ff6347','#32cd32','#1e90ff','#ff69b4'];
-const minBlur = 9, maxBlur = 23;
-document.querySelectorAll('h1 .line span').forEach(span => {
+const colors = ['#f5deb3','#ff6347','#32cd32','#1e90ff','#ff69b4']; // 彩灯颜色
+const minBlur = 6;
+const maxBlur = 16;
+
+// 给每个字母设置随机初始偏移，保证呼吸不同步
+document.querySelectorAll('h1 span').forEach(span => {
   span.dataset.offset = Math.random() * Math.PI * 2;
 });
+
+// 呼吸灯动画
 function breathing() {
-  const t = Date.now() / 1770;
-  document.querySelectorAll('h1 .line span').forEach(span => {
+  const t = Date.now() / 2000; // 2秒周期，可以改慢
+  document.querySelectorAll('h1 span').forEach(span => {
     const offset = parseFloat(span.dataset.offset);
-    const intensity = (Math.sin(t + offset) + 1) / 2;
-    const color = colors[Math.floor(intensity * colors.length)];
+    const intensity = (Math.sin(t + offset) + 1) / 2; // 0~1
+    const color = colors[Math.floor(intensity * colors.length)] // 根据强度选颜色
     const blur1 = minBlur + intensity * (maxBlur - minBlur);
     const blur2 = blur1 * 2;
     span.style.color = color;
     span.style.textShadow = `0 0 ${blur1}px ${color}, 0 0 ${blur2}px ${color}`;
-    span.style.transform = `scale(${1 + intensity*0.037})`;
   });
   requestAnimationFrame(breathing);
 }
+
+// 启动动画
 breathing();
 </script>
 </body>
 </html>
+
+
