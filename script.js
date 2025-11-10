@@ -1,6 +1,7 @@
 const sheetUrl = "https://script.google.com/macros/s/AKfycbxoJ7SH0V2wVpMHcDFXF9PuN-vP3QXi90qiCKORu1nZJNx-4BvK_YodPmjw35Unqac/exec";
 let isAdmin = false;
 
+// 超搞怪动词集合
 const VERB_LIBRARY = [
   "跑","吃","唱","睡","跳","画","写","看","听","喝",
   "拍手","扭屁股","尬舞","假装飞翔","狗刨","原地转圈","装作鱼游",
@@ -17,6 +18,7 @@ const ADVERB_LIBRARY = [
   "单脚跳地","放飞自我地","穿着睡衣地","一边扔纸飞机地","打嗝地",
   "假装失重地","边尖叫边做地","东张西望地","穿拖鞋地","一边做一边拉筋地"
 ];
+
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -37,6 +39,7 @@ function populatePlaceholders(){
   const verb2Input = document.getElementById('verb2');
   const adv1Input = document.getElementById('adverb1');
   const adv2Input = document.getElementById('adverb2');
+  // 仅“示例”
   if(verb1Input) verb1Input.placeholder = `示例：${verb1Examples.join('，')}`;
   if(verb2Input) verb2Input.placeholder = `示例：${verb2Examples.join('，')}`;
   if(adv1Input) adv1Input.placeholder = `示例：${adv1Examples.join('，')}`;
@@ -44,14 +47,21 @@ function populatePlaceholders(){
 }
 document.getElementById('giftForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const data = {
-    name: document.getElementById('name').value.trim(),
-    verb1: document.getElementById('verb1').value.trim(),
-    verb2: document.getElementById('verb2').value.trim(),
-    adverb1: document.getElementById('adverb1').value.trim(),
-    adverb2: document.getElementById('adverb2').value.trim(),
-    remark: document.getElementById('remark').value.trim()
-  };
+  // 校验，名字/动词/副词不能留空
+  const name = document.getElementById('name').value.trim();
+  const verb1 = document.getElementById('verb1').value.trim();
+  const verb2 = document.getElementById('verb2').value.trim();
+  const adverb1 = document.getElementById('adverb1').value.trim();
+  const adverb2 = document.getElementById('adverb2').value.trim();
+  const remark = document.getElementById('remark').value.trim();
+
+  if (!name || !verb1 || !verb2 || !adverb1 || !adverb2) {
+    showToast("名字、动词和副词必须全部填写，不能留空！", true);
+    return;
+  }
+
+  const data = { name, verb1, verb2, adverb1, adverb2, remark };
+
   try{
     await fetch(sheetUrl, { method:'POST', body:JSON.stringify(data) });
     showToast("提交成功！🎉");
@@ -242,4 +252,3 @@ window.onload=()=>{
   loadComboResult();
   loadGiftMatching();
 };
-
