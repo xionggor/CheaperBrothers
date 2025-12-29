@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cheaper Brothers - Fuzzy Text</title>
+<title>Cheaper Brothers</title>
 
+<!-- 1. 引入 UnifrakturCook 字体 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+
+<!-- 2. 底部版权文字依然使用 Noto Serif TC -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
@@ -24,6 +27,18 @@ body {
   overflow: hidden;
 }
 
+/* 
+   关键修复：创建一个看不见的元素使用该字体 
+   这会强制浏览器下载字体文件
+*/
+#font-loader {
+  font-family: "UnifrakturCook", cursive;
+  font-weight: 700;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .fuzzy-container {
   display: flex;
   flex-direction: column;
@@ -32,20 +47,15 @@ body {
   margin-bottom: 5vh;
 }
 
-/* --- 画布间距调整 --- */
 canvas {
   cursor: pointer;
   max-width: 100%;
-  /* 电脑端：使用负边距让大字紧凑一些 */
   margin: -10px 0; 
 }
 
-/* 手机端适配 (屏幕宽度小于 768px) */
 @media (max-width: 768px) {
   canvas {
-    /* 手机端：清除负边距，防止重叠 */
     margin: 0; 
-    /* 如果觉得太散，可以微调这个值，比如 -2px */
   }
 }
 
@@ -60,11 +70,14 @@ footer {
   letter-spacing: 1px;
   text-align: center;
   pointer-events: none;
-  width: 100%; /* 确保文字不换行 */
+  width: 100%;
 }
 </style>
 </head>
 <body>
+
+<!-- 这里的文字不可见，但它的存在会强制浏览器加载字体 -->
+<div id="font-loader">Force Font Load</div>
 
 <div class="fuzzy-container">
   <canvas id="fuzzy-text-1"></canvas>
@@ -107,9 +120,20 @@ class FuzzyText {
   }
 
   async init() {
+    // 强制等待字体确认加载完成
+    try {
+        await document.fonts.load("700 80px UnifrakturCook");
+    } catch(e) {
+        console.log("Font loading check skipped");
+    }
     await document.fonts.ready;
-    this.resize();
-    this.startAnimation();
+
+    // 为了保险起见，稍微延迟一点点再渲染，确保万无一失
+    setTimeout(() => {
+        this.resize();
+        this.startAnimation();
+    }, 100);
+
     if (this.enableHover) {
       this.canvas.addEventListener('mousemove', this.handleMouseMove);
       this.canvas.addEventListener('mouseleave', this.handleMouseLeave);
@@ -123,9 +147,7 @@ class FuzzyText {
     const screenWidth = window.innerWidth;
     let responsiveSize = this.fontSize;
     
-    // 手机端适配逻辑
     if(screenWidth < 600) {
-      // 手机端字体倍率，如果还觉得手机端字大，可以把 0.6 改成 0.5
       responsiveSize = this.fontSize * 0.6; 
     }
     
@@ -135,8 +157,8 @@ class FuzzyText {
     
     const metrics = this.offCtx.measureText(this.text);
     const width = Math.ceil(metrics.width);
-    // 增加高度倍率，防止字被切头去尾
-    const height = Math.ceil(responsiveSize * 1.4); 
+    // 增加高度，因为哥特字体比较高
+    const height = Math.ceil(responsiveSize * 1.6); 
     
     this.offscreen.width = width + 20; 
     this.offscreen.height = height;
@@ -144,7 +166,8 @@ class FuzzyText {
     this.offCtx.font = fontString;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
-    // 垂直居中修正
+    
+    // 这里的偏移量微调一下，确保居中
     this.offCtx.fillText(this.text, 10, height / 2 + responsiveSize * 0.05);
 
     this.width = this.offscreen.width + this.fuzzRange * 2;
@@ -177,22 +200,22 @@ class FuzzyText {
 
 // --- 配置参数 ---
 const commonConfig = {
-  fontFamily: "BBH Sans Hegarty", 
-  fontWeight: "bold", 
+  fontFamily: "UnifrakturCook", 
+  fontWeight: 700, 
   color: '#ffffff',
   baseIntensity: 0.15, 
   hoverIntensity: 0.5,
   fuzzRange: 30
 };
 
-// 1. CHEAPER
+// 1. Cheaper
 new FuzzyText('fuzzy-text-1', {
   ...commonConfig,
   text: "CHEAPER",
   fontSize: 80 
 });
 
-// 2. BROTHERS
+// 2. Brothers
 new FuzzyText('fuzzy-text-2', {
   ...commonConfig,
   text: "BROTHERS",
