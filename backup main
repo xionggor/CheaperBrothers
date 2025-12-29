@@ -1,117 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cheaper Brothers - 靠上模板</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheaper Brothers - Fuzzy Text</title>
 
-  <!-- 主字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&display=swap" rel="stylesheet">
+<!-- 1. 引入 Manufacturing Consent 字体 (中间大字用) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap" rel="stylesheet">
 
-  <!-- 副字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+<!-- 2. 引入 Noto Serif TC (底部中文用) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      background-color: #000;
-      color: #f5deb3;
-      font-family: "BBH Sans Hegarty", sans-serif;
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* 从顶部开始排列 */
-      align-items: center;
-      padding-top: 15vh; /* 调整距离顶部高度，可微调 */
-      text-align: center;
-    }
+<!-- 3. 引入一种代码风格的字体 (底部乱码特效用) -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
 
-    h1 {
-      font-size: 5.5rem;
-      line-height: 1.2;
-      letter-spacing: 3px;
-      margin: 0;
-      text-transform: uppercase;
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  overflow: hidden;
+}
 
-    .line {
-      display: block;
-    }
+/* 强制加载大字体的隐藏元素 */
+#font-loader {
+  font-family: "Manufacturing Consent", system-ui;
+  font-weight: 400;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
 
-    .line span {
-      display: inline-block;
-      opacity: 0;
-      animation: flicker 1.2s ease forwards;
-    }
+.fuzzy-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5vh;
+}
 
-    /* CHEAPER */
-    .line1 span:nth-child(1) { animation-delay: 0.1s; }
-    .line1 span:nth-child(2) { animation-delay: 0.25s; }
-    .line1 span:nth-child(3) { animation-delay: 0.4s; }
-    .line1 span:nth-child(4) { animation-delay: 0.55s; }
-    .line1 span:nth-child(5) { animation-delay: 0.7s; }
-    .line1 span:nth-child(6) { animation-delay: 0.85s; }
-    .line1 span:nth-child(7) { animation-delay: 1s; }
+canvas {
+  cursor: pointer;
+  max-width: 100%;
+  margin: -10px 0; 
+}
 
-    /* BROTHERS */
-    .line2 span:nth-child(1) { animation-delay: 1.15s; }
-    .line2 span:nth-child(2) { animation-delay: 1.3s; }
-    .line2 span:nth-child(3) { animation-delay: 1.45s; }
-    .line2 span:nth-child(4) { animation-delay: 1.6s; }
-    .line2 span:nth-child(5) { animation-delay: 1.75s; }
-    .line2 span:nth-child(6) { animation-delay: 1.9s; }
-    .line2 span:nth-child(7) { animation-delay: 2.05s; }
-    .line2 span:nth-child(8) { animation-delay: 2.2s; }
+@media (max-width: 768px) {
+  canvas {
+    margin: 0; 
+  }
+}
 
-    @keyframes flicker {
-      0% { opacity: 0; }
-      20% { opacity: 1; }
-      40% { opacity: 0.3; }
-      60% { opacity: 1; }
-      100% { opacity: 1; }
-    }
+/* --- 底部文字特效样式 --- */
+footer {
+  position: absolute;
+  bottom: 30px;
+  /* 使用等宽字体，乱码效果更好看 */
+  font-family: "Space Mono", "Noto Serif TC", monospace; 
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.8;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 100%;
+  user-select: none; /* 防止选中 */
+}
 
-    footer {
-      position: absolute;
-      bottom: 30px;
-      font-family: "Noto Serif TC", serif;
-      font-weight: 400;
-      font-size: 0.9rem;
-      opacity: 0;
-      letter-spacing: 1px;
-      animation: fadeInFooter 3.5s ease forwards;
-      animation-delay: 2.5s;
-    }
-
-    footer a {
-      color: #f5deb3;
-      text-decoration: none;
-    }
-
-    @keyframes fadeInFooter {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 0.8; transform: translateY(0); }
-    }
-  </style>
+/* 单个字符的样式 */
+.scramble-char {
+  display: inline-block;
+  min-width: 1ch; /* 保持字符宽度，防止乱码时抖动 */
+  transition: color 0.1s;
+}
+/* 乱码时的颜色（可选，比如变成黑客绿） */
+.scrambling {
+  color: #00ff41; 
+  text-shadow: 0 0 5px #00ff41;
+}
+</style>
 </head>
 <body>
-  <h1>
-    <span class="line line1">
-      <span>C</span><span>H</span><span>E</span><span>A</span><span>P</span><span>E</span><span>R</span>
-    </span>
-    <span class="line line2">
-      <span>B</span><span>R</span><span>O</span><span>T</span><span>H</span><span>E</span><span>R</span><span>S</span>
-    </span>
-  </h1>
-  <footer>
-    <a href="lottery.html">Cheaper Brothers Co. 廉价洋行 🎄 </a>
-  </footer>
+
+<!-- 隐藏的字体加载器 -->
+<div id="font-loader">Force Font Load</div>
+
+<div class="fuzzy-container">
+  <canvas id="fuzzy-text-1"></canvas>
+  <canvas id="fuzzy-text-2"></canvas>
+</div>
+
+<footer id="footer-text">
+  Cheaper Brothers Co. 廉兄集团
+</footer>
+
+<script>
+/**
+ * ------------------------------------------------------------------
+ * 1. FuzzyText 类 (中间大字特效 - 保持不变)
+ * ------------------------------------------------------------------
+ */
+class FuzzyText {
+  constructor(canvasId, options = {}) {
+    this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) return;
+    
+    this.text = options.text || "";
+    this.fontSize = options.fontSize || 80;
+    this.fontWeight = options.fontWeight || 400;
+    this.fontFamily = options.fontFamily || 'sans-serif';
+    this.color = options.color || '#fff';
+    this.baseIntensity = options.baseIntensity || 0.18;
+    this.hoverIntensity = options.hoverIntensity || 0.5;
+    this.fuzzRange = options.fuzzRange || 30;
+    this.enableHover = options.enableHover !== false;
+    
+    this.ctx = this.canvas.getContext('2d');
+    this.offscreen = document.createElement('canvas');
+    this.offCtx = this.offscreen.getContext('2d');
+    
+    this.isHovering = false;
+    this.animationFrameId = null;
+    
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.animate = this.animate.bind(this);
+    this.resize = this.resize.bind(this);
+
+    this.init();
+  }
+
+  async init() {
+    try {
+        await document.fonts.load("400 80px \"Manufacturing Consent\"");
+    } catch(e) {}
+    await document.fonts.ready;
+
+    setTimeout(() => {
+        this.resize();
+        this.startAnimation();
+    }, 100);
+
+    if (this.enableHover) {
+      this.canvas.addEventListener('mousemove', this.handleMouseMove);
+      this.canvas.addEventListener('mouseleave', this.handleMouseLeave);
+      this.canvas.addEventListener('touchstart', () => this.isHovering = true);
+      this.canvas.addEventListener('touchend', () => this.isHovering = false);
+    }
+    window.addEventListener('resize', this.resize);
+  }
+
+  resize() {
+    const screenWidth = window.innerWidth;
+    let responsiveSize = this.fontSize;
+    if(screenWidth < 600) responsiveSize = this.fontSize * 0.6; 
+    
+    const fontString = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
+    this.offCtx.font = fontString;
+    this.offCtx.textBaseline = 'alphabetic';
+    
+    const metrics = this.offCtx.measureText(this.text);
+    const width = Math.ceil(metrics.width);
+    const height = Math.ceil(responsiveSize * 1.6); 
+    
+    this.offscreen.width = width + 20; 
+    this.offscreen.height = height;
+    
+    this.offCtx.font = fontString;
+    this.offCtx.fillStyle = this.color;
+    this.offCtx.textBaseline = 'middle';
+    this.offCtx.fillText(this.text, 10, height / 2 + responsiveSize * 0.05);
+
+    this.width = this.offscreen.width + this.fuzzRange * 2;
+    this.height = this.offscreen.height;
+    
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+  }
+
+  handleMouseMove() { this.isHovering = true; }
+  handleMouseLeave() { this.isHovering = false; }
+
+  animate() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    const intensity = this.isHovering ? this.hoverIntensity : this.baseIntensity;
+    const tightHeight = this.offscreen.height;
+    const offscreenWidth = this.offscreen.width;
+
+    for (let j = 0; j < tightHeight; j++) {
+      const dx = Math.floor(intensity * (Math.random() - 0.5) * this.fuzzRange);
+      this.ctx.drawImage(this.offscreen, 0, j, offscreenWidth, 1, dx + this.fuzzRange, j, offscreenWidth, 1);
+    }
+    this.animationFrameId = requestAnimationFrame(this.animate);
+  }
+
+  startAnimation() {
+    if (!this.animationFrameId) this.animate();
+  }
+}
+
+/**
+ * ------------------------------------------------------------------
+ * 2. ScrambleText 类 (底部小字特效 - 新增)
+ *    原生 JS 实现鼠标靠近乱码效果
+ * ------------------------------------------------------------------
+ */
+class ScrambleText {
+  constructor(elementId, options = {}) {
+    this.element = document.getElementById(elementId);
+    if (!this.element) return;
+
+    this.chars = "!<>-_\\/[]{}—=+*^?#________"; // 乱码字符集
+    this.radius = options.radius || 100; // 鼠标感应半径
+    
+    this.originalText = this.element.innerText;
+    this.element.innerHTML = ''; // 清空原文
+    this.spanElements = [];
+    
+    // 1. 将文字拆分为 span
+    this.originalText.split('').forEach(char => {
+      const span = document.createElement('span');
+      span.innerText = char;
+      span.className = 'scramble-char';
+      span.dataset.original = char; // 存原字符
+      
+      // 对于空格，我们需要特殊处理，否则 span 没宽度
+      if(char === ' ') span.style.width = '0.5ch'; 
+
+      this.element.appendChild(span);
+      this.spanElements.push(span);
+    });
+
+    this.mouse = { x: -9999, y: -9999 };
+
+    // 2. 绑定事件
+    window.addEventListener('mousemove', (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+    });
+    
+    // 移动端触摸处理
+    window.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      this.mouse.x = touch.clientX;
+      this.mouse.y = touch.clientY;
+    });
+
+    // 3. 启动循环
+    this.update();
+  }
+
+  update() {
+    this.spanElements.forEach(span => {
+      const rect = span.getBoundingClientRect();
+      // 计算字符中心点
+      const charCenterX = rect.left + rect.width / 2;
+      const charCenterY = rect.top + rect.height / 2;
+      
+      // 计算鼠标距离
+      const dist = Math.hypot(this.mouse.x - charCenterX, this.mouse.y - charCenterY);
+      
+      // 如果在感应半径内
+      if (dist < this.radius) {
+        // 随机显示乱码
+        const randomChar = this.chars[Math.floor(Math.random() * this.chars.length)];
+        
+        // 为了不让乱码闪得太快，可以加个简单的概率判断，或者直接闪烁
+        // 这里如果是中文，乱码替换后可能会变宽度，所以 CSS 设置了 min-width
+        if (Math.random() > 0.3) {
+           span.innerText = randomChar;
+        }
+        
+        span.classList.add('scrambling');
+      } else {
+        // 恢复原文
+        if (span.innerText !== span.dataset.original) {
+          span.innerText = span.dataset.original;
+          span.classList.remove('scrambling');
+        }
+      }
+    });
+
+    requestAnimationFrame(this.update.bind(this));
+  }
+}
+
+// ==========================
+// 运行所有特效
+// ==========================
+
+// 1. 启动大字特效
+const commonConfig = {
+  fontFamily: "Manufacturing Consent",
+  fontWeight: 400,
+  color: '#ffffff',
+  baseIntensity: 0.15, 
+  hoverIntensity: 0.5,
+  fuzzRange: 30
+};
+
+new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
+new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
+
+// 2. 启动底部小字特效 (新)
+// radius: 80 代表鼠标靠近 80px 范围内时触发
+new ScrambleText('footer-text', { radius: 80 });
+
+</script>
 </body>
 </html>
-
-
-
