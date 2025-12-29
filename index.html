@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cheaper Brothers - Fuzzy Text</title>
 
-<!-- 保持你原来的字体引用 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&display=swap" rel="stylesheet">
@@ -21,7 +20,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #000; /* 黑色背景 */
+  background-color: #000;
   overflow: hidden;
 }
 
@@ -30,15 +29,24 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* 调整这里可以让文字整体向上或向下移 */
-  margin-bottom: 5vh; 
+  margin-bottom: 5vh;
 }
 
+/* --- 画布间距调整 --- */
 canvas {
   cursor: pointer;
   max-width: 100%;
-  /* 调整行间距：负值越大，两行字越紧凑 */
-  margin: -15px 0; 
+  /* 电脑端：使用负边距让大字紧凑一些 */
+  margin: -10px 0; 
+}
+
+/* 手机端适配 (屏幕宽度小于 768px) */
+@media (max-width: 768px) {
+  canvas {
+    /* 手机端：清除负边距，防止重叠 */
+    margin: 0; 
+    /* 如果觉得太散，可以微调这个值，比如 -2px */
+  }
 }
 
 footer {
@@ -52,6 +60,7 @@ footer {
   letter-spacing: 1px;
   text-align: center;
   pointer-events: none;
+  width: 100%; /* 确保文字不换行 */
 }
 </style>
 </head>
@@ -67,17 +76,14 @@ footer {
 </footer>
 
 <script>
-/**
- * FuzzyText 类
- */
 class FuzzyText {
   constructor(canvasId, options = {}) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
     
     this.text = options.text || "";
-    this.fontSize = options.fontSize || 80; // 默认字体变小
-    this.fontWeight = options.fontWeight || 700; // 稍微减小粗细，防止太糊
+    this.fontSize = options.fontSize || 80;
+    this.fontWeight = options.fontWeight || 700;
     this.fontFamily = options.fontFamily || 'sans-serif';
     this.color = options.color || '#fff';
     this.baseIntensity = options.baseIntensity || 0.18;
@@ -101,7 +107,6 @@ class FuzzyText {
   }
 
   async init() {
-    // 确保字体加载后再渲染
     await document.fonts.ready;
     this.resize();
     this.startAnimation();
@@ -117,17 +122,21 @@ class FuzzyText {
   resize() {
     const screenWidth = window.innerWidth;
     let responsiveSize = this.fontSize;
-    // 手机端适配：屏幕越小字体越小
-    if(screenWidth < 600) responsiveSize = this.fontSize * 0.6; 
     
-    // 这里确保使用你指定的字体
+    // 手机端适配逻辑
+    if(screenWidth < 600) {
+      // 手机端字体倍率，如果还觉得手机端字大，可以把 0.6 改成 0.5
+      responsiveSize = this.fontSize * 0.6; 
+    }
+    
     const fontString = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.font = fontString;
     this.offCtx.textBaseline = 'alphabetic';
     
     const metrics = this.offCtx.measureText(this.text);
     const width = Math.ceil(metrics.width);
-    const height = Math.ceil(responsiveSize * 1.2); 
+    // 增加高度倍率，防止字被切头去尾
+    const height = Math.ceil(responsiveSize * 1.4); 
     
     this.offscreen.width = width + 20; 
     this.offscreen.height = height;
@@ -135,7 +144,7 @@ class FuzzyText {
     this.offCtx.font = fontString;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
-    // 微调垂直对齐
+    // 垂直居中修正
     this.offCtx.fillText(this.text, 10, height / 2 + responsiveSize * 0.05);
 
     this.width = this.offscreen.width + this.fuzzRange * 2;
@@ -167,12 +176,11 @@ class FuzzyText {
 }
 
 // --- 配置参数 ---
-
 const commonConfig = {
-  fontFamily: "BBH Sans Hegarty", // 确保是这个字体
-  fontWeight: "bold", // 使用 bold 或者 700
+  fontFamily: "BBH Sans Hegarty", 
+  fontWeight: "bold", 
   color: '#ffffff',
-  baseIntensity: 0.15, // 稍微降低一点静止时的模糊度，让小字更清晰
+  baseIntensity: 0.15, 
   hoverIntensity: 0.5,
   fuzzRange: 30
 };
@@ -181,16 +189,15 @@ const commonConfig = {
 new FuzzyText('fuzzy-text-1', {
   ...commonConfig,
   text: "CHEAPER",
-  fontSize: 80 // 字体大小设为 80
+  fontSize: 80 
 });
 
 // 2. BROTHERS
 new FuzzyText('fuzzy-text-2', {
   ...commonConfig,
   text: "BROTHERS",
-  fontSize: 80 // 字体大小设为 80
+  fontSize: 80 
 });
-
 </script>
 </body>
 </html>
