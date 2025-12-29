@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cheaper Brothers</title>
 
-<!-- 1. 引入 Manufacturing Consent 字体 -->
+<!-- ========================== -->
+<!-- 【修改部分 1】引入新字体链接 -->
+<!-- ========================== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap" rel="stylesheet">
 
-<!-- 2. 底部版权文字依然使用 Noto Serif TC -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
@@ -28,12 +29,15 @@ body {
 }
 
 /* 
-   关键修复：创建一个看不见的元素使用该字体 
-   这会强制浏览器下载字体文件
+   强制加载字体的隐藏元素 
 */
 #font-loader {
-  font-family: "Manufacturing Consent", cursive;
-  font-weight: 700;
+  /* ========================== */
+  /* 【修改部分 2】更新这里以匹配新字体 */
+  /* ========================== */
+  font-family: "Manufacturing Consent", system-ui;
+  font-weight: 400; /* 这个字体通常是 Regular (400) */
+  
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -76,7 +80,7 @@ footer {
 </head>
 <body>
 
-<!-- 这里的文字不可见，但它的存在会强制浏览器加载字体 -->
+<!-- 隐藏的字体加载器 -->
 <div id="font-loader">Force Font Load</div>
 
 <div class="fuzzy-container">
@@ -96,7 +100,7 @@ class FuzzyText {
     
     this.text = options.text || "";
     this.fontSize = options.fontSize || 80;
-    this.fontWeight = options.fontWeight || 700;
+    this.fontWeight = options.fontWeight || 400;
     this.fontFamily = options.fontFamily || 'sans-serif';
     this.color = options.color || '#fff';
     this.baseIntensity = options.baseIntensity || 0.18;
@@ -120,15 +124,17 @@ class FuzzyText {
   }
 
   async init() {
-    // 强制等待字体确认加载完成
+    // ==========================
+    // 【修改部分 3】更新 JS 里的字体加载检测
+    // ==========================
     try {
-        await document.fonts.load("700 80px UnifrakturCook");
+        // 检测 400 粗细的 Manufacturing Consent
+        await document.fonts.load("400 80px \"Manufacturing Consent\"");
     } catch(e) {
         console.log("Font loading check skipped");
     }
     await document.fonts.ready;
 
-    // 为了保险起见，稍微延迟一点点再渲染，确保万无一失
     setTimeout(() => {
         this.resize();
         this.startAnimation();
@@ -157,7 +163,6 @@ class FuzzyText {
     
     const metrics = this.offCtx.measureText(this.text);
     const width = Math.ceil(metrics.width);
-    // 增加高度，因为哥特字体比较高
     const height = Math.ceil(responsiveSize * 1.6); 
     
     this.offscreen.width = width + 20; 
@@ -167,7 +172,6 @@ class FuzzyText {
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
     
-    // 这里的偏移量微调一下，确保居中
     this.offCtx.fillText(this.text, 10, height / 2 + responsiveSize * 0.05);
 
     this.width = this.offscreen.width + this.fuzzRange * 2;
@@ -198,10 +202,12 @@ class FuzzyText {
   }
 }
 
-// --- 配置参数 ---
+// ==========================
+// 【修改部分 4】配置参数更新
+// ==========================
 const commonConfig = {
-  fontFamily: "UnifrakturCook", 
-  fontWeight: 700, 
+  fontFamily: "Manufacturing Consent", // 字体名
+  fontWeight: 400,                     // 粗细 (Regular)
   color: '#ffffff',
   baseIntensity: 0.15, 
   hoverIntensity: 0.5,
@@ -224,4 +230,3 @@ new FuzzyText('fuzzy-text-2', {
 </script>
 </body>
 </html>
-
