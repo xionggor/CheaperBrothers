@@ -31,6 +31,367 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-family: var(--main-font);
+        font-weight: 400;
+        font-size: clamp(2.5rem, 12vw, 4rem);
+        letter-spacing: 5px;
+        margin: 20px 0;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .settings-bar {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    input[type="number"], 
+    input[type="text"], 
+    button {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: white;
+        height: var(--input-height);
+        font-family: var(--sub-font);
+        font-size: 1rem;
+        outline: none;
+        border-radius: 0;
+    }
+
+    input[type="number"] {
+        width: 70px;
+        text-align: center;
+    }
+
+    .add-player-area {
+        width: 100%;
+        display: flex;
+        margin-bottom: 30px; /* 增加了一点间距 */
+    }
+
+    .add-player-area input {
+        flex: 1;
+        padding: 0 12px;
+        border-right: none;
+    }
+
+    .add-player-area button {
+        padding: 0 20px;
+        white-space: nowrap;
+    }
+
+    .table-container {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        border: 1px solid var(--border-color);
+        padding: 12px 2px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th {
+        font-family: var(--main-font);
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background: rgba(255,255,255,0.1);
+    }
+
+    /* 表头Clear按钮样式 */
+    .header-clear-btn {
+        height: 24px !important;
+        font-size: 0.6rem !important;
+        padding: 0 5px !important;
+        margin-left: 5px;
+        vertical-align: middle;
+        line-height: 1;
+        border-color: rgba(255,255,255,0.5);
+        color: rgba(255,255,255,0.8);
+    }
+
+    .header-clear-btn:active {
+        background: #fff;
+        color: #000;
+    }
+
+    .col-name { width: 20%; }
+    .col-ops { width: 34%; } 
+    .col-num { width: 12%; }
+    .col-total { width: 20%; }
+    .col-del { width: 14%; }
+
+    .btn-group {
+        display: flex;
+        gap: 3px;
+        justify-content: center;
+        align-items: center;
+        padding: 0 2px;
+    }
+
+    .btn-group button {
+        height: 34px;
+        flex: 1;
+        font-size: 1.2rem;
+        padding: 0;
+    }
+
+    .checkbox-box {
+        height: 34px;
+        flex: 1;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.1rem;
+    }
+
+    .checkbox-box.active {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .checkbox-box.active::after {
+        content: "✓";
+        color: white;
+    }
+
+    .score-total {
+        font-family: var(--main-font);
+        font-size: 1.1rem;
+    }
+
+    .delete-btn {
+        width: 100%;
+        height: 34px;
+        border: 1px solid #ff4444;
+        color: #ff4444;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .clear-data {
+        margin: 40px 0 120px 0;
+        border-color: #444;
+        color: #666;
+        font-size: 0.8rem;
+        height: 35px;
+        padding: 0 20px;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        font-family: var(--sub-font);
+        font-size: 0.8rem;
+        opacity: 0.8;
+        text-align: center;
+        width: 100%;
+        background-color: #000;
+        padding: 15px 0;
+        z-index: 10;
+        border-top: 1px solid #222;
+    }
+
+    footer a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Poker Score</h1>
+
+        <div class="settings-bar">
+            <span>每组金额 ($):</span>
+            <input type="number" id="unitValue" value="30" oninput="updateStorage()">
+        </div>
+
+        <div class="add-player-area">
+            <input type="text" id="playerName" placeholder="名字" onkeydown="if(event.key==='Enter') addPlayer()">
+            <button onclick="addPlayer()">添加</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-name">玩家</th>
+                        <th class="col-ops">
+                            操作 <button class="header-clear-btn" onclick="clearAllStandups()">Clear</button>
+                        </th>
+                        <th class="col-num">组</th>
+                        <th class="col-total">总额</th>
+                        <th class="col-del">删</th>
+                    </tr>
+                </thead>
+                <tbody id="playerList"></tbody>
+            </table>
+        </div>
+
+        <button class="clear-data" onclick="clearAllData()">重置整局数据</button>
+    </div>
+
+    <footer>
+        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
+    </footer>
+
+    <script>
+        let players = [];
+
+        window.onload = function() {
+            const savedPlayers = localStorage.getItem('poker_players');
+            const savedUnit = localStorage.getItem('poker_unit');
+            if (savedPlayers) players = JSON.parse(savedPlayers);
+            if (savedUnit) document.getElementById('unitValue').value = savedUnit;
+            renderTable();
+        };
+
+        function updateStorage() {
+            localStorage.setItem('poker_players', JSON.stringify(players));
+            localStorage.setItem('poker_unit', document.getElementById('unitValue').value);
+            renderTable();
+        }
+
+        function addPlayer() {
+            const nameInput = document.getElementById('playerName');
+            const name = nameInput.value.trim();
+            if (name === "") return;
+
+            players.push({
+                id: "ID_" + Date.now(),
+                name: name,
+                groups: 1,
+                standup: false
+            });
+            nameInput.value = "";
+            updateStorage();
+        }
+
+        function changeGroup(id, delta) {
+            const player = players.find(p => p.id === id);
+            if (player) {
+                player.groups += delta;
+                if (player.groups < 0) player.groups = 0;
+                updateStorage();
+            }
+        }
+
+        function toggleStandup(id) {
+            const player = players.find(p => p.id === id);
+            if (player) {
+                player.standup = !player.standup;
+                updateStorage();
+            }
+        }
+
+        function clearAllStandups() {
+            players.forEach(p => p.standup = false);
+            updateStorage();
+        }
+
+        function deletePlayer(id) {
+            players = players.filter(p => p.id !== id);
+            updateStorage();
+        }
+
+        function clearAllData() {
+            if(confirm("确定清空全部数据吗？")) {
+                players = [];
+                updateStorage();
+            }
+        }
+
+        function renderTable() {
+            const unit = parseFloat(document.getElementById('unitValue').value) || 0;
+            const tbody = document.getElementById('playerList');
+            tbody.innerHTML = "";
+
+            players.forEach(player => {
+                const total = (player.groups * unit).toLocaleString();
+                const tr = document.createElement('tr');
+                const checkboxClass = player.standup ? "checkbox-box active" : "checkbox-box";
+
+                tr.innerHTML = `
+                    <td>${player.name}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button onclick="changeGroup('${player.id}', 1)">+</button>
+                            <button onclick="changeGroup('${player.id}', -1)">-</button>
+                            <div class="${checkboxClass}" onclick="toggleStandup('${player.id}')"></div>
+                        </div>
+                    </td>
+                    <td>${player.groups}</td>
+                    <td class="score-total">${total}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deletePlayer('${player.id}')">×</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>Poker Tracker - Cheaper Brothers</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --border-color: #ffffff;
+        --main-font: "Manufacturing Consent", sans-serif;
+        --sub-font: "Noto Serif TC", serif;
+        --input-height: 48px;
+    }
+
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: #000;
+        color: #fff;
+        font-family: var(--sub-font);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         padding: 20px 10px; /* 缩小边距给表格腾空间 */
     }
 
