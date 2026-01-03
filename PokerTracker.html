@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 禁止用户缩放，保持比例统一点 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>Poker Tracker - Cheaper Brothers</title>
 
 <!-- 引入原有的字体 -->
@@ -15,8 +16,12 @@
         --border-color: #ffffff;
         --main-font: "Manufacturing Consent", sans-serif;
         --sub-font: "Noto Serif TC", serif;
-        --input-height: 45px;
-        --standard-padding: 0 15px;
+        --input-height: 48px; /* 稍微加大一点方便手机点击 */
+    }
+
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
     }
 
     body {
@@ -28,23 +33,41 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
-        padding: 40px 20px;
-        box-sizing: border-box;
+        padding: 20px 15px;
     }
 
+    /* 标题自适应：大屏幕4rem，小屏幕10vw */
     h1 {
         font-family: var(--main-font);
         font-weight: 400;
-        font-size: 4rem;
+        font-size: clamp(2.5rem, 10vw, 4rem);
         letter-spacing: 5px;
-        margin: 0 0 40px 0;
+        margin: 20px 0 30px 0;
         text-transform: uppercase;
         text-align: center;
-        width: 100%;
     }
 
-    /* 统一输入框和按钮样式 */
+    /* 容器统一样式 */
+    .container {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 顶部设置框 */
+    .settings-bar {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    /* 统一所有输入框和按钮 */
     input[type="number"], 
     input[type="text"], 
     button {
@@ -52,203 +75,203 @@
         border: 1px solid var(--border-color);
         color: white;
         height: var(--input-height);
-        box-sizing: border-box;
         font-family: var(--sub-font);
         font-size: 1rem;
-        padding: var(--standard-padding);
         outline: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: 0; /* 保持硬朗线条 */
     }
 
-    button {
-        cursor: pointer;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-    }
-
-    button:hover {
-        background: white;
-        color: black;
-    }
-
-    .settings-bar {
-        width: 100%;
-        max-width: 500px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-
-    .settings-bar input {
-        width: 100px;
+    input[type="number"] {
+        width: 80px;
         text-align: center;
     }
 
+    /* 添加玩家区域 */
     .add-player-area {
         width: 100%;
-        max-width: 500px;
-        margin-bottom: 40px;
         display: flex;
+        margin-bottom: 30px;
     }
 
     .add-player-area input {
-        flex-grow: 1;
+        flex: 1;
+        padding: 0 15px;
         border-right: none;
     }
 
+    .add-player-area button {
+        padding: 0 20px;
+    }
+
+    /* 表格样式优化 */
     .table-container {
         width: 100%;
-        max-width: 700px;
-        display: flex;
-        justify-content: center;
+        overflow-x: auto; /* 极小屏幕下可滑动 */
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 100px;
+        table-layout: fixed; /* 固定列宽比例 */
     }
 
     th, td {
         border: 1px solid var(--border-color);
-        padding: 15px 10px;
+        padding: 10px 5px;
         text-align: center;
+        word-break: break-all;
     }
 
     th {
         font-family: var(--main-font);
-        letter-spacing: 2px;
-        font-size: 1.2rem;
-        background: rgba(255,255,255,0.05);
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        background: rgba(255,255,255,0.1);
     }
+
+    /* 调整表格列宽 */
+    .col-name { width: 25%; }
+    .col-ops { width: 35%; }
+    .col-num { width: 15%; }
+    .col-total { width: 25%; }
 
     .btn-group {
         display: flex;
-        gap: 5px;
+        gap: 4px;
         justify-content: center;
     }
 
     .btn-group button {
-        height: 35px;
-        padding: 0 10px;
+        height: 32px;
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 0;
     }
 
     .score-total {
         font-family: var(--main-font);
-        font-size: 1.5rem;
-    }
-
-    .delete-btn {
-        width: 35px;
-        height: 35px;
-        padding: 0;
-        border-color: #ff4444;
-        color: #ff4444;
         font-size: 1.2rem;
     }
 
-    .delete-btn:hover {
-        background: #ff4444;
-        color: white;
+    /* 移除按钮放在姓名旁边或独立一列 */
+    .delete-btn {
+        border: none;
+        color: #ff4444;
+        font-size: 1.2rem;
+        height: auto;
+        padding: 0;
+        margin-left: 5px;
     }
 
+    /* 底部清空按钮 */
+    .clear-data {
+        margin: 40px 0 100px 0;
+        border-color: #444;
+        color: #666;
+        font-size: 0.8rem;
+        height: 35px;
+        padding: 0 20px;
+    }
+
+    /* 页脚链接样式 */
     footer {
         position: fixed;
         bottom: 20px;
         font-family: var(--sub-font);
         font-size: 0.8rem;
-        opacity: 0.5;
+        opacity: 0.7;
         text-align: center;
         width: 100%;
-        pointer-events: none;
+        background-color: rgba(0,0,0,0.8); /* 防止遮挡内容 */
+        padding: 10px 0;
     }
 
-    .clear-data {
-        margin-top: 20px;
-        border-color: #666;
-        color: #666;
-        font-size: 0.7rem;
+    footer a {
+        color: #ffffff; /* 保持白色 */
+        text-decoration: none; /* 无下划线 */
+        transition: opacity 0.3s;
+    }
+
+    footer a:hover {
+        opacity: 1;
+    }
+
+    /* 针对极窄屏幕的微调 */
+    @media (max-width: 360px) {
+        :root { --input-height: 40px; }
+        h1 { letter-spacing: 2px; }
+        .score-total { font-size: 1rem; }
     }
 </style>
 </head>
 <body>
 
-    <h1>Poker Score</h1>
+    <div class="container">
+        <h1>Poker Score</h1>
 
-    <div class="settings-bar">
-        <span>每组金额 ($):</span>
-        <input type="number" id="unitValue" value="30" oninput="updateStorage()">
+        <!-- 顶部设置 -->
+        <div class="settings-bar">
+            <span>每组金额 ($):</span>
+            <input type="number" id="unitValue" value="30" oninput="updateStorage()">
+        </div>
+
+        <!-- 添加玩家 -->
+        <div class="add-player-area">
+            <input type="text" id="playerName" placeholder="玩家姓名" onkeydown="if(event.key==='Enter') addPlayer()">
+            <button onclick="addPlayer()">添加</button>
+        </div>
+
+        <!-- 表格 -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-name">姓名</th>
+                        <th class="col-ops">操作</th>
+                        <th class="col-num">组</th>
+                        <th class="col-total">总额</th>
+                    </tr>
+                </thead>
+                <tbody id="playerList">
+                    <!-- 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="clear-data" onclick="clearAllData()">重置整局数据</button>
     </div>
-
-    <div class="add-player-area">
-        <input type="text" id="playerName" placeholder="输入玩家姓名..." onkeydown="if(event.key==='Enter') addPlayer()">
-        <button onclick="addPlayer()">添加玩家</button>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th width="20%">姓名</th>
-                    <th width="35%">操作</th>
-                    <th width="15%">组数</th>
-                    <th width="20%">总金额</th>
-                    <th width="10%">移除</th>
-                </tr>
-            </thead>
-            <tbody id="playerList"></tbody>
-        </table>
-    </div>
-
-    <!-- 清空按钮仅供调试或重置整局使用 -->
-    <button class="clear-data" onclick="clearAllData()">重置整局数据</button>
 
     <footer>
-        Cheaper Brothers Co. 廉兄集团
+        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
     </footer>
 
     <script>
         let players = [];
 
-        // 1. 页面加载时：从本地存储读取数据
         window.onload = function() {
             const savedPlayers = localStorage.getItem('poker_players');
             const savedUnit = localStorage.getItem('poker_unit');
-            
-            if (savedPlayers) {
-                players = JSON.parse(savedPlayers);
-            }
-            if (savedUnit) {
-                document.getElementById('unitValue').value = savedUnit;
-            }
+            if (savedPlayers) players = JSON.parse(savedPlayers);
+            if (savedUnit) document.getElementById('unitValue').value = savedUnit;
             renderTable();
         };
 
-        // 2. 保存数据到本地存储
         function updateStorage() {
             localStorage.setItem('poker_players', JSON.stringify(players));
             localStorage.setItem('poker_unit', document.getElementById('unitValue').value);
             renderTable();
         }
 
-        // 3. 添加玩家 (修改：默认1组)
         function addPlayer() {
             const nameInput = document.getElementById('playerName');
             const name = nameInput.value.trim();
-            
             if (name === "") return;
 
-            const newPlayer = {
-                id: "ID_" + Date.now(), 
+            players.push({
+                id: "ID_" + Date.now(),
                 name: name,
-                groups: 1  // <-- 修改点：默认添加后就是1组
-            };
-
-            players.push(newPlayer);
+                groups: 1
+            });
             nameInput.value = "";
             updateStorage();
         }
@@ -268,7 +291,7 @@
         }
 
         function clearAllData() {
-            if(confirm("确定要清空所有玩家和分数吗？")) {
+            if(confirm("确定清空全部吗？")) {
                 players = [];
                 updateStorage();
             }
@@ -283,18 +306,18 @@
                 const total = (player.groups * unit).toLocaleString();
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${player.name}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deletePlayer('${player.id}')">×</button>
+                        ${player.name}
+                    </td>
                     <td>
                         <div class="btn-group">
-                            <button onclick="changeGroup('${player.id}', 1)">+1组</button>
-                            <button onclick="changeGroup('${player.id}', -1)">-1组</button>
+                            <button onclick="changeGroup('${player.id}', 1)">+1</button>
+                            <button onclick="changeGroup('${player.id}', -1)">-1</button>
                         </div>
                     </td>
                     <td>${player.groups}</td>
                     <td class="score-total">${total}</td>
-                    <td>
-                        <button class="delete-btn" onclick="deletePlayer('${player.id}')">×</button>
-                    </td>
                 `;
                 tbody.appendChild(tr);
             });
