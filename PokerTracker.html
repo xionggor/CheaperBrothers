@@ -298,30 +298,30 @@
             }
         }
 
-        // 修改后的 Standup 逻辑
+        // 核心逻辑：勾选判断与动态姓名弹窗
         function toggleStandup(id) {
             const player = players.find(p => p.id === id);
             if (!player) return;
 
-            // 如果当前是取消勾选，直接切换
             if (player.standup) {
                 player.standup = false;
                 updateStorage();
             } 
-            // 如果是准备勾选
             else {
                 player.standup = true;
-                updateStorage(); // 先渲染出勾选效果
+                updateStorage(); 
 
                 const totalPlayers = players.length;
                 const checkedCount = players.filter(p => p.standup).length;
 
-                // 判断是否达到了“总人数 - 1”
                 if (totalPlayers > 1 && checkedCount === totalPlayers - 1) {
-                    // 使用 setTimeout 确保页面先显示 ✓，再弹出提示
+                    // 找到那个唯一没勾选的人
+                    const loser = players.find(p => !p.standup);
+                    const loserName = loser ? loser.name : "未知玩家";
+
                     setTimeout(() => {
-                        alert("派钱！💰");
-                        clearAllStandups(); // 点击确定后自动清除
+                        alert(loserName + " 需要派钱！💰");
+                        clearAllStandups(); 
                     }, 100);
                 }
             }
