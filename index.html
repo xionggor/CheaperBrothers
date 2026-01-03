@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cheaper Brothers</title>
 
-<!-- ========================== -->
-<!-- 【修改部分 1】引入新字体链接 -->
-<!-- ========================== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap" rel="stylesheet">
@@ -28,16 +25,9 @@ body {
   overflow: hidden;
 }
 
-/* 
-   强制加载字体的隐藏元素 
-*/
 #font-loader {
-  /* ========================== */
-  /* 【修改部分 2】更新这里以匹配新字体 */
-  /* ========================== */
   font-family: "Manufacturing Consent", system-ui;
-  font-weight: 400; /* 这个字体通常是 Regular (400) */
-  
+  font-weight: 400;
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -63,6 +53,9 @@ canvas {
   }
 }
 
+/* ========================== */
+/* 【修改部分：页脚样式】 */
+/* ========================== */
 footer {
   position: absolute;
   bottom: 30px;
@@ -73,14 +66,25 @@ footer {
   opacity: 0.8;
   letter-spacing: 1px;
   text-align: center;
-  pointer-events: none;
   width: 100%;
+  /* 必须删掉之前的 pointer-events: none; 否则点不了 */
+  pointer-events: auto; 
+}
+
+/* 确保链接看起来和普通文字一模一样 */
+footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+footer a:hover {
+  opacity: 1; /* 鼠标悬停时稍微亮一点，增加交互感 */
 }
 </style>
 </head>
 <body>
 
-<!-- 隐藏的字体加载器 -->
 <div id="font-loader">Force Font Load</div>
 
 <div class="fuzzy-container">
@@ -88,8 +92,11 @@ footer {
   <canvas id="fuzzy-text-2"></canvas>
 </div>
 
+<!-- ========================== -->
+<!-- 【修改部分：添加超链接】 -->
+<!-- ========================== -->
 <footer>
-  <a href="Poker Tracker.html">Cheaper Brothers Co. 廉兄集团</a>
+  <a href="PokerTracker.html">Cheaper Brothers Co. 廉兄集团</a>
 </footer>
 
 <script>
@@ -124,15 +131,9 @@ class FuzzyText {
   }
 
   async init() {
-    // ==========================
-    // 【修改部分 3】更新 JS 里的字体加载检测
-    // ==========================
     try {
-        // 检测 400 粗细的 Manufacturing Consent
         await document.fonts.load("400 80px \"Manufacturing Consent\"");
-    } catch(e) {
-        console.log("Font loading check skipped");
-    }
+    } catch(e) {}
     await document.fonts.ready;
 
     setTimeout(() => {
@@ -152,31 +153,22 @@ class FuzzyText {
   resize() {
     const screenWidth = window.innerWidth;
     let responsiveSize = this.fontSize;
-    
-    if(screenWidth < 600) {
-      responsiveSize = this.fontSize * 0.6; 
-    }
+    if(screenWidth < 600) responsiveSize = this.fontSize * 0.6; 
     
     const fontString = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.font = fontString;
-    this.offCtx.textBaseline = 'alphabetic';
-    
     const metrics = this.offCtx.measureText(this.text);
     const width = Math.ceil(metrics.width);
     const height = Math.ceil(responsiveSize * 1.6); 
     
     this.offscreen.width = width + 20; 
     this.offscreen.height = height;
-    
     this.offCtx.font = fontString;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
-    
     this.offCtx.fillText(this.text, 10, height / 2 + responsiveSize * 0.05);
-
     this.width = this.offscreen.width + this.fuzzRange * 2;
     this.height = this.offscreen.height;
-    
     this.canvas.width = this.width;
     this.canvas.height = this.height;
   }
@@ -202,32 +194,17 @@ class FuzzyText {
   }
 }
 
-// ==========================
-// 【修改部分 4】配置参数更新
-// ==========================
 const commonConfig = {
-  fontFamily: "Manufacturing Consent", // 字体名
-  fontWeight: 400,                     // 粗细 (Regular)
+  fontFamily: "Manufacturing Consent",
+  fontWeight: 400,
   color: '#ffffff',
   baseIntensity: 0.15, 
   hoverIntensity: 0.5,
   fuzzRange: 30
 };
 
-// 1. Cheaper
-new FuzzyText('fuzzy-text-1', {
-  ...commonConfig,
-  text: "CHEAPER",
-  fontSize: 80 
-});
-
-// 2. Brothers
-new FuzzyText('fuzzy-text-2', {
-  ...commonConfig,
-  text: "BROTHERS",
-  fontSize: 80 
-});
+new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
+new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
 </script>
 </body>
 </html>
-
