@@ -87,9 +87,6 @@
         max-width: 500px;
     }
 
-    /* ========================================= */
-    /* 设置区域：UNIT BASIS & POOL TOTAL */
-    /* ========================================= */
     .settings-area {
         display: flex;
         flex-direction: column;
@@ -151,7 +148,6 @@
         width: 120px;
         text-align: right;
     }
-    /* ========================================= */
 
     .input-group {
         display: flex;
@@ -248,18 +244,7 @@
         outline: none;
         border-radius: 0;
     }
-
-    .player-bar.active .cash-input { 
-        border-color: #fff;
-        background: rgba(255,255,255,0.2);
-        color: #fff !important; 
-    }
-
-    .cash-input::placeholder { 
-        color: rgba(0,0,0,0.4); 
-        font-size: 0.85rem; 
-        text-align: center; 
-    }
+    .player-bar.active .cash-input { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff !important; }
 
     .result-display {
         font-family: var(--num-font);
@@ -299,7 +284,6 @@
         justify-content: center;
         cursor: pointer;
     }
-    .player-bar.active .btn-step { border-color: #fff; }
 
     .unit-display {
         font-family: var(--num-font);
@@ -318,10 +302,64 @@
         font-weight: 900;
     }
 
+    /* 结算展示区 */
+    .settlement-summary-section {
+        margin-top: 40px;
+        width: 100%;
+        display: none;
+    }
+
+    .summary-title {
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-style: italic;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        border-bottom: 2px solid #fff;
+    }
+
+    .settle-bill-bar {
+        background: #fff;
+        color: #000;
+        padding: 10px 15px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border-radius: 2px;
+    }
+
+    .bill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bill-name { font-family: var(--heavy-font); font-weight: 900; font-size: 1.2rem; }
+    .bill-tag { font-size: 0.6rem; opacity: 0.5; margin-left: 5px; }
+    .bill-amount { font-family: var(--num-font); font-size: 1.6rem; }
+
+    .bill-detail {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-style: italic;
+        font-size: 0.85rem;
+    }
+    .settle-bill-bar.open .bill-detail {
+        max-height: 300px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #ccc;
+    }
+    .instruction-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+
     .footer-actions {
         margin-top: 40px;
         display: flex;
-        gap: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
         justify-content: center;
         width: 100%;
     }
@@ -330,21 +368,17 @@
         background: transparent;
         border: 1px solid #333;
         color: #666;
-        padding: 10px 20px;
+        padding: 10px 16px;
         font-family: var(--heavy-font);
         font-weight: 900;
         text-transform: uppercase;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         letter-spacing: 1px;
         cursor: pointer;
         transition: all 0.3s;
     }
-
-    .btn-ghost.active {
-        border-color: #fff;
-        color: #fff;
-        background: rgba(255,255,255,0.1);
-    }
+    .btn-ghost.active { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); }
+    .btn-generate { background: #fff; color: #000; border: none; }
 
     footer {
         margin: 60px 0 30px 0;
@@ -365,13 +399,11 @@
     </header>
 
     <div class="container">
-        <!-- 设置区域 -->
         <div class="settings-area">
             <div class="settings-bar">
                 <div class="unit-label">UNIT BASIS $</div>
                 <input type="number" id="unitValue" value="30" oninput="updateStorage()">
             </div>
-            <!-- 总额显示 -->
             <div class="bank-summary">
                 <div class="bank-label">POOL TOTAL</div>
                 <div id="totalBankDisplay" class="bank-total-display">0</div>
@@ -385,8 +417,14 @@
 
         <div id="playerList" class="player-list"></div>
 
+        <div id="summarySection" class="settlement-summary-section">
+            <div class="summary-title">Settlement List</div>
+            <div id="summaryList"></div>
+        </div>
+
         <div class="footer-actions">
             <button id="calcModeBtn" class="btn-ghost" onclick="toggleCalcMode()">CASH OUT</button>
+            <button id="generateBtn" class="btn-ghost btn-generate" style="display:none;" onclick="calculateDebts()">GENERATE BILLS</button>
             <button class="btn-ghost" onclick="clearAllData()">Reset All</button>
         </div>
     </div>
@@ -416,6 +454,8 @@
         function toggleCalcMode() {
             isCalcMode = !isCalcMode;
             document.getElementById('calcModeBtn').classList.toggle('active', isCalcMode);
+            document.getElementById('generateBtn').style.display = isCalcMode ? 'block' : 'none';
+            if (!isCalcMode) document.getElementById('summarySection').style.display = 'none';
             renderTable();
         }
 
@@ -423,6 +463,87 @@
             const unit = parseFloat(document.getElementById('unitValue').value) || 0;
             const total = players.reduce((sum, p) => sum + (p.groups * unit), 0);
             document.getElementById('totalBankDisplay').innerText = total.toLocaleString();
+            return total;
+        }
+
+        // 核心债务算法（支持 ±5 容差）
+        function calculateDebts() {
+            const unitValue = parseFloat(document.getElementById('unitValue').value) || 0;
+            const poolTotal = updateBankTotal();
+            const handTotal = players.reduce((sum, p) => sum + (parseFloat(p.handCash) || 0), 0);
+
+            // 1. 容差校验：允许偏差 ±5
+            if (Math.abs(poolTotal - handTotal) > 5) {
+                alert(`账目不平 (BALANCE ERROR)\n偏差超过了允许范围(±5)\nPOOL: ${poolTotal}\nHAND: ${handTotal}\nDIFF: ${poolTotal - handTotal}`);
+                return;
+            }
+
+            // 2. 准备数据并进行微调（抹平微小差额）
+            let debtors = []; 
+            let creditors = []; 
+            let totalNet = 0;
+
+            players.forEach(p => {
+                const net = (p.groups * unitValue) - (parseFloat(p.handCash) || 0);
+                totalNet += net;
+                if (net > 0) debtors.push({ name: p.name, amount: net, trans: [], initial: net });
+                else if (net < 0) creditors.push({ name: p.name, amount: Math.abs(net), trans: [], initial: Math.abs(net) });
+            });
+
+            // 如果有小偏差（例如差2块），将差额补给第一个赢家或输家，以保证算法闭环
+            if (Math.abs(totalNet) > 0 && Math.abs(totalNet) <= 5) {
+                if (totalNet > 0 && creditors.length > 0) creditors[0].amount += totalNet;
+                else if (totalNet < 0 && debtors.length > 0) debtors[0].amount += Math.abs(totalNet);
+            }
+
+            // 3. 匹配算法
+            let dIdx = 0, cIdx = 0;
+            let safety = 0;
+            while (dIdx < debtors.length && cIdx < creditors.length && safety < 100) {
+                safety++;
+                let d = debtors[dIdx];
+                let c = creditors[cIdx];
+                let settle = Math.min(d.amount, c.amount);
+
+                if (settle > 0) {
+                    d.trans.push(`PAY TO ${c.name}: $${settle}`);
+                    c.trans.push(`FROM ${d.name}: $${settle}`);
+                    d.amount -= settle;
+                    c.amount -= settle;
+                }
+
+                if (d.amount <= 0.01) dIdx++;
+                if (c.amount <= 0.01) cIdx++;
+            }
+
+            renderSummary(debtors, creditors);
+        }
+
+        function renderSummary(debtors, creditors) {
+            const section = document.getElementById('summarySection');
+            const list = document.getElementById('summaryList');
+            section.style.display = 'block';
+            list.innerHTML = "";
+
+            const allSettle = [...debtors, ...creditors];
+            allSettle.forEach(item => {
+                const isDebtor = debtors.includes(item);
+                const bar = document.createElement('div');
+                bar.className = 'settle-bill-bar';
+                bar.onclick = () => bar.classList.toggle('open');
+
+                let details = item.trans.map(t => `<div class="instruction-row"><span>${t.split(':')[0]}</span><span>${t.split(':')[1]}</span></div>`).join('');
+
+                bar.innerHTML = `
+                    <div class="bill-header">
+                        <div class="bill-name">${item.name} <span class="bill-tag">${isDebtor ? 'DEBTOR' : 'CREDITOR'}</span></div>
+                        <div class="bill-amount" style="color:${isDebtor ? 'var(--loss-color)' : 'var(--profit-color)'}">${isDebtor ? '' : '+'}${item.initial}</div>
+                    </div>
+                    <div class="bill-detail">${details}</div>
+                `;
+                list.appendChild(bar);
+            });
+            window.scrollTo({ top: section.offsetTop, behavior: 'smooth' });
         }
 
         function updateHandCash(id, val) {
@@ -432,23 +553,13 @@
                 const unitValue = parseFloat(document.getElementById('unitValue').value) || 0;
                 const buyInTotal = player.groups * unitValue;
                 const hand = parseFloat(val) || 0;
-                
                 const result = buyInTotal - hand;
                 const displayEl = document.getElementById('res-' + id);
 
-                if (val === "") {
-                    displayEl.innerText = "WAITING";
-                    displayEl.className = "result-display";
-                } else if (result > 0) {
-                    displayEl.innerText = "LOSS " + result;
-                    displayEl.className = "result-display status-loss";
-                } else if (result < 0) {
-                    displayEl.innerText = "PROFIT " + Math.abs(result);
-                    displayEl.className = "result-display status-profit";
-                } else {
-                    displayEl.innerText = "EVEN";
-                    displayEl.className = "result-display";
-                }
+                if (val === "") { displayEl.innerText = "WAITING"; displayEl.className = "result-display"; }
+                else if (result > 0) { displayEl.innerText = "LOSS " + result; displayEl.className = "result-display status-loss"; }
+                else if (result < 0) { displayEl.innerText = "PROFIT " + Math.abs(result); displayEl.className = "result-display status-profit"; }
+                else { displayEl.innerText = "EVEN"; displayEl.className = "result-display"; }
                 localStorage.setItem('poker_players', JSON.stringify(players));
             }
         }
@@ -457,13 +568,7 @@
             const nameInput = document.getElementById('playerName');
             const name = nameInput.value.trim();
             if (name === "") return;
-            players.push({
-                id: "ID_" + Date.now(),
-                name: name,
-                groups: 1,
-                standup: false,
-                handCash: ""
-            });
+            players.push({ id: "ID_" + Date.now(), name: name, groups: 1, standup: false, handCash: "" });
             nameInput.value = "";
             updateStorage();
         }
@@ -471,53 +576,26 @@
         function changeGroup(event, id, delta) {
             event.stopPropagation(); 
             const player = players.find(p => p.id === id);
-            if (player) {
-                player.groups += delta;
-                if (player.groups < 0) player.groups = 0;
-                updateStorage();
-            }
+            if (player) { player.groups += delta; if (player.groups < 0) player.groups = 0; updateStorage(); }
         }
 
         function toggleStandup(id) {
             const player = players.find(p => p.id === id);
             if (!player) return;
-            if (player.standup) {
-                player.standup = false;
-                updateStorage();
-            } else {
-                player.standup = true;
-                updateStorage(); 
-                const total = players.length;
+            if (player.standup) { player.standup = false; updateStorage(); }
+            else {
+                player.standup = true; updateStorage(); 
                 const checked = players.filter(p => p.standup).length;
-                if (total > 1 && checked === total - 1) {
+                if (players.length > 1 && checked === players.length - 1) {
                     const loser = players.find(p => !p.standup);
-                    setTimeout(() => {
-                        alert((loser ? loser.name : "PLAYER").toUpperCase() + " PAYS THE PRICE! 💰");
-                        clearAllStandups();
-                    }, 100);
+                    setTimeout(() => { alert((loser ? loser.name : "PLAYER").toUpperCase() + " PAYS THE PRICE! 💰"); clearAllStandups(); }, 100);
                 }
             }
         }
 
-        function clearAllStandups() {
-            players.forEach(p => p.standup = false);
-            updateStorage();
-        }
-
-        function deletePlayer(event, id) {
-            event.stopPropagation(); 
-            if(confirm("REMOVE PLAYER?")) {
-                players = players.filter(p => p.id !== id);
-                updateStorage();
-            }
-        }
-
-        function clearAllData() {
-            if(confirm("RESET ENTIRE SYSTEM?")) {
-                players = [];
-                updateStorage();
-            }
-        }
+        function clearAllStandups() { players.forEach(p => p.standup = false); updateStorage(); }
+        function deletePlayer(event, id) { event.stopPropagation(); if(confirm("REMOVE PLAYER?")) { players = players.filter(p => p.id !== id); updateStorage(); } }
+        function clearAllData() { if(confirm("RESET ENTIRE SYSTEM?")) { players = []; updateStorage(); } }
 
         function renderTable() {
             const unit = parseFloat(document.getElementById('unitValue').value) || 0;
