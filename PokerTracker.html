@@ -17,6 +17,9 @@
         --bar-active-bg: #ff0000;
         --text-dark: #000;
         --text-light: #fff;
+        --loss-color: #ff1744;   /* 亏损红 */
+        --profit-color: #00c853; /* 盈利绿 */
+        /* 字体定义 */
         --heavy-font: "Chiron Hei HK", sans-serif;
         --num-font: "Bebas Neue", sans-serif;
         --body-font: "Helvetica Neue", Arial, sans-serif;
@@ -47,7 +50,6 @@
         margin-bottom: 30px;
     }
 
-    /* 标题：Chiron Hei HK 900 Italic */
     h1 {
         font-family: var(--heavy-font);
         font-weight: 900;
@@ -63,10 +65,11 @@
         font-family: var(--heavy-font);
         font-weight: 900;
         font-style: italic;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         letter-spacing: 1px;
         margin-top: 10px;
         color: #fff;
+        opacity: 0.9;
     }
 
     .container {
@@ -74,7 +77,6 @@
         max-width: 500px;
     }
 
-    /* 设置区域 - 修复换行问题 */
     .settings-bar {
         display: flex;
         align-items: center;
@@ -82,17 +84,16 @@
         margin-bottom: 25px;
         border-bottom: 2px solid #222;
         padding-bottom: 5px;
-        flex-wrap: nowrap; /* 强制不换行 */
+        flex-wrap: nowrap;
     }
 
     .unit-label {
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-size: clamp(1.1rem, 4vw, 1.5rem); /* 使用响应式字号 */
+        font-size: clamp(1.1rem, 4.5vw, 1.6rem);
         text-transform: uppercase;
         line-height: 1;
-        white-space: nowrap; /* 核心修改：强制文字在一行显示 */
-        margin-right: 10px;
+        white-space: nowrap;
     }
 
     input[type="number"] {
@@ -105,7 +106,6 @@
         width: 100px;
         outline: none;
         text-align: right;
-        flex-shrink: 0; /* 防止输入框被挤压 */
     }
 
     .input-group {
@@ -134,9 +134,9 @@
         font-family: var(--heavy-font);
         font-weight: 900;
         font-size: 0.9rem;
+        cursor: pointer;
     }
 
-    /* 玩家色块列表 - 矮长方形优化 */
     .player-list {
         display: flex;
         flex-direction: column;
@@ -146,7 +146,7 @@
     .player-bar {
         background-color: var(--bar-bg);
         color: var(--text-dark);
-        padding: 6px 15px;
+        padding: 8px 15px;
         border-radius: 2px;
         display: flex;
         flex-direction: column;
@@ -169,7 +169,7 @@
     .player-name {
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-size: 1.3rem;
+        font-size: 1.35rem;
         text-transform: uppercase;
         line-height: 1;
     }
@@ -179,6 +179,57 @@
         font-size: 2rem;
         line-height: 0.9;
     }
+
+    /* ========================================= */
+    /* 计算模式 UI 优化修复 */
+    /* ========================================= */
+    .settle-row {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(0,0,0,0.2);
+    }
+    .player-bar.active .settle-row { border-top-color: rgba(255,255,255,0.3); }
+
+    .cash-input {
+        width: 95px;
+        height: 30px;
+        border: 1px solid rgba(0,0,0,0.3);
+        background: #f0f0f0; /* 给个浅灰色背景确保输入框明显 */
+        color: #000 !important; /* 核心修复：强制在白底时显示黑字 */
+        font-family: var(--num-font);
+        font-size: 1rem;
+        text-align: center;
+        outline: none;
+        border-radius: 0;
+    }
+
+    /* 当色块变红时的输入框样式 */
+    .player-bar.active .cash-input { 
+        border-color: #fff;
+        background: rgba(255,255,255,0.2);
+        color: #fff !important; /* 核心修复：强制在红底时显示白字 */
+    }
+
+    .cash-input::placeholder { color: rgba(0,0,0,0.4); font-size: 0.75rem; }
+    .player-bar.active .cash-input::placeholder { color: rgba(255,255,255,0.6); }
+
+    .result-display {
+        font-family: var(--num-font);
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+    .res-label {
+        font-family: var(--heavy-font);
+        font-size: 0.85rem;
+        font-style: italic;
+        margin-right: 4px;
+    }
+    .status-loss { color: var(--loss-color); font-weight: 900; }
+    .status-profit { color: var(--profit-color); font-weight: 900; }
+    /* ========================================= */
 
     .bar-sub {
         display: flex;
@@ -214,7 +265,6 @@
     .unit-display {
         font-family: var(--num-font);
         font-size: 1rem;
-        letter-spacing: 1px;
     }
 
     .remove-link {
@@ -229,11 +279,11 @@
         font-weight: 900;
     }
 
-    /* 底部按钮居中 */
     .footer-actions {
         margin-top: 40px;
         display: flex;
-        gap: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
         justify-content: center;
         width: 100%;
     }
@@ -242,20 +292,27 @@
         background: transparent;
         border: 1px solid #333;
         color: #666;
-        padding: 10px 20px;
+        padding: 10px 16px;
         font-family: var(--heavy-font);
         font-weight: 900;
         text-transform: uppercase;
         font-size: 0.75rem;
         letter-spacing: 1px;
         cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-ghost.active {
+        border-color: #fff;
+        color: #fff;
+        background: rgba(255,255,255,0.1);
     }
 
     footer {
         margin: 60px 0 30px 0;
-        font-size: 0.6rem;
-        letter-spacing: 3px;
-        opacity: 0.3;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        opacity: 0.4;
         text-align: center;
     }
     
@@ -270,24 +327,20 @@
     </header>
 
     <div class="container">
-        <!-- 核心设置 -->
         <div class="settings-bar">
             <div class="unit-label">UNIT VALUE $</div>
             <input type="number" id="unitValue" value="30" oninput="updateStorage()">
         </div>
 
-        <!-- 添加玩家 -->
         <div class="input-group">
-            <input type="text" id="playerName" placeholder="ENTER NAME" onkeydown="if(event.key==='Enter') addPlayer()">
+            <input type="text" id="playerName" placeholder="ENTER PLAYER NAME" onkeydown="if(event.key==='Enter') addPlayer()">
             <button onclick="addPlayer()">ADD</button>
         </div>
 
-        <!-- 动态列表 -->
-        <div id="playerList" class="player-list">
-            <!-- 由 JS 渲染 -->
-        </div>
+        <div id="playerList" class="player-list"></div>
 
         <div class="footer-actions">
+            <button id="calcModeBtn" class="btn-ghost" onclick="toggleCalcMode()">Calculation Mode</button>
             <button class="btn-ghost" onclick="clearAllStandups()">Clear Standups</button>
             <button class="btn-ghost" onclick="clearAllData()">Reset All</button>
         </div>
@@ -299,6 +352,7 @@
 
     <script>
         let players = [];
+        let isCalcMode = false;
 
         window.onload = function() {
             const savedPlayers = localStorage.getItem('poker_players');
@@ -314,16 +368,50 @@
             renderTable();
         }
 
+        function toggleCalcMode() {
+            isCalcMode = !isCalcMode;
+            document.getElementById('calcModeBtn').classList.toggle('active', isCalcMode);
+            renderTable();
+        }
+
+        function updateHandCash(id, val) {
+            const player = players.find(p => p.id === id);
+            if (player) {
+                player.handCash = val;
+                const unitValue = parseFloat(document.getElementById('unitValue').value) || 0;
+                const buyInTotal = player.groups * unitValue;
+                const hand = parseFloat(val) || 0;
+                
+                const result = buyInTotal - hand;
+                const displayEl = document.getElementById('res-' + id);
+
+                if (val === "") {
+                    displayEl.innerHTML = "WAIT";
+                    displayEl.className = "result-display";
+                } else if (result > 0) {
+                    displayEl.innerHTML = `<span class="res-label">LOSS</span> ${result}`;
+                    displayEl.className = "result-display status-loss";
+                } else if (result < 0) {
+                    displayEl.innerHTML = `<span class="res-label">PROFIT</span> ${Math.abs(result)}`;
+                    displayEl.className = "result-display status-profit";
+                } else {
+                    displayEl.innerHTML = "EVEN";
+                    displayEl.className = "result-display";
+                }
+                localStorage.setItem('poker_players', JSON.stringify(players));
+            }
+        }
+
         function addPlayer() {
             const nameInput = document.getElementById('playerName');
             const name = nameInput.value.trim();
             if (name === "") return;
-
             players.push({
                 id: "ID_" + Date.now(),
                 name: name,
                 groups: 1,
-                standup: false
+                standup: false,
+                handCash: ""
             });
             nameInput.value = "";
             updateStorage();
@@ -342,25 +430,19 @@
         function toggleStandup(id) {
             const player = players.find(p => p.id === id);
             if (!player) return;
-
             if (player.standup) {
                 player.standup = false;
                 updateStorage();
-            } 
-            else {
+            } else {
                 player.standup = true;
                 updateStorage(); 
-
-                const totalPlayers = players.length;
-                const checkedCount = players.filter(p => p.standup).length;
-
-                if (totalPlayers > 1 && checkedCount === totalPlayers - 1) {
+                const total = players.length;
+                const checked = players.filter(p => p.standup).length;
+                if (total > 1 && checked === total - 1) {
                     const loser = players.find(p => !p.standup);
-                    const loserName = loser ? loser.name : "UNKNOWN";
-
                     setTimeout(() => {
-                        alert(loserName.toUpperCase() + " PAYS THE PRICE! 💰");
-                        clearAllStandups(); 
+                        alert((loser ? loser.name : "PLAYER").toUpperCase() + " PAYS THE PRICE! 💰");
+                        clearAllStandups();
                     }, 100);
                 }
             }
@@ -380,7 +462,7 @@
         }
 
         function clearAllData() {
-            if(confirm("RESET ENTIRE SYSTEM?")) {
+            if(confirm("RESET SYSTEM?")) {
                 players = [];
                 updateStorage();
             }
@@ -392,16 +474,38 @@
             container.innerHTML = "";
 
             players.forEach(player => {
-                const total = (player.groups * unit).toLocaleString();
+                const buyIn = player.groups * unit;
                 const bar = document.createElement('div');
                 bar.className = player.standup ? 'player-bar active' : 'player-bar';
                 bar.onclick = () => toggleStandup(player.id);
                 
+                let settleUI = "";
+                if (isCalcMode) {
+                    const hand = parseFloat(player.handCash) || 0;
+                    const res = buyIn - hand;
+                    let resText = "WAIT", resClass = "";
+                    
+                    if (player.handCash !== "") {
+                        if (res > 0) { resText = `<span class="res-label">LOSS</span> ${res}`; resClass = "status-loss"; }
+                        else if (res < 0) { resText = `<span class="res-label">PROFIT</span> ${Math.abs(res)}`; resClass = "status-profit"; }
+                        else { resText = "EVEN"; }
+                    }
+
+                    settleUI = `
+                        <div class="settle-row" onclick="event.stopPropagation()">
+                            <input type="number" class="cash-input" placeholder="HAND CASH" 
+                                value="${player.handCash}" oninput="updateHandCash('${player.id}', this.value)">
+                            <div id="res-${player.id}" class="result-display ${resClass}">${resText}</div>
+                        </div>
+                    `;
+                }
+
                 bar.innerHTML = `
                     <div class="bar-main">
                         <div class="player-name">${player.name}</div>
-                        <div class="player-total">$${total}</div>
+                        <div class="player-total">$${buyIn.toLocaleString()}</div>
                     </div>
+                    ${settleUI}
                     <div class="bar-sub">
                         <div class="controls">
                             <button class="btn-step" onclick="changeGroup(event, '${player.id}', -1)">-</button>
