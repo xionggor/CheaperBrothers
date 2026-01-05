@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - Cheaper Brothers</title>
+
+<!-- 引入 Alumni Sans Pinstripe (极细长) 和 Noto Serif TC (页脚) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+
+<style>
+    /* 基础设置 */
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* 防止出现滚动条 */
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* 极大化的 ABOUT 标题 */
+    h1 {
+        font-family: "Alumni Sans Pinstripe", sans-serif;
+        font-weight: 400;
+        /* 提升字号：在手机上占屏幕宽度的 40%，在电脑上更大 */
+        font-size: clamp(8rem, 35vw, 25rem); 
+        text-transform: uppercase;
+        /* 负的字间距让细长字体看起来更具有整体感和张力 */
+        letter-spacing: -0.02em; 
+        margin: 0;
+        /* 压缩行高，使字母上下边缘更接近屏幕中心 */
+        line-height: 0.8;
+        opacity: 0.95;
+        text-align: center;
+        white-space: nowrap;
+        
+        /* 优雅的浮入效果 */
+        animation: breathIn 2.5s ease-out;
+    }
+
+    @keyframes breathIn {
+        from { opacity: 0; transform: scale(1.05); filter: blur(10px); }
+        to { opacity: 0.95; transform: scale(1); filter: blur(0); }
+    }
+
+    /* 页脚样式 */
+    footer {
+        position: absolute;
+        bottom: 50px;
+        font-family: "Noto Serif TC", serif;
+        font-weight: 400;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        text-align: center;
+        width: 100%;
+    }
+
+    footer a {
+        color: #ffffff;
+        text-decoration: none;
+        opacity: 0.6;
+        transition: all 0.4s ease;
+    }
+
+    footer a:hover {
+        opacity: 1;
+        letter-spacing: 4px; /* 悬停时文字微微散开，增加交互感 */
+    }
+
+    /* 适配极小屏幕 */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 28vw;
+        }
+        footer {
+            font-size: 0.75rem;
+            bottom: 40px;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <!-- 极大化细长标题 -->
+    <h1>ABOUT</h1>
+
+    <!-- 页脚链接 -->
+    <footer>
+        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
+    </footer>
+
+</body>
+</html>
