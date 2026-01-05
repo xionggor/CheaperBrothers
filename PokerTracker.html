@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>Tracker - Cheaper Brothers</title>
 
-<!-- 引入指定的字体库 -->
+<!-- 引入字体库 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Chiron+Hei+HK:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -17,11 +17,9 @@
         --bar-active-bg: #ff0000;
         --text-dark: #000;
         --text-light: #fff;
-        /* 字体定义 */
         --heavy-font: "Chiron Hei HK", sans-serif;
-        --impact-font: "Anton", sans-serif;
         --num-font: "Bebas Neue", sans-serif;
-        --body-font: "Roboto", sans-serif;
+        --body-font: "Helvetica Neue", Arial, sans-serif;
     }
 
     * {
@@ -38,7 +36,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 40px 15px;
+        padding: 30px 15px;
         -webkit-font-smoothing: antialiased;
     }
 
@@ -46,32 +44,29 @@
         width: 100%;
         max-width: 500px;
         text-align: left;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
     }
 
-    /* POKER 标题：Chiron Hei HK 900 Italic */
+    /* 标题：Chiron Hei HK 900 Italic */
     h1 {
         font-family: var(--heavy-font);
         font-weight: 900;
         font-style: italic;
-        font-size: clamp(4rem, 20vw, 8rem);
+        font-size: clamp(3.5rem, 18vw, 7rem);
         text-transform: uppercase;
         margin: 0;
         line-height: 0.8;
         letter-spacing: -2px;
-        color: #fff;
     }
 
-    /* 副标题：Chiron Hei HK 900 Italic */
     .brand-tag {
         font-family: var(--heavy-font);
         font-weight: 900;
         font-style: italic;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         letter-spacing: 1px;
-        margin-top: 15px;
+        margin-top: 10px;
         color: #fff;
-        opacity: 0.9;
     }
 
     .container {
@@ -79,24 +74,25 @@
         max-width: 500px;
     }
 
-    /* 设置区域：UNIT VALUE $ 使用 Chiron Hei HK 900 */
+    /* 设置区域 - 修复换行问题 */
     .settings-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
         border-bottom: 2px solid #222;
-        padding-bottom: 10px;
+        padding-bottom: 5px;
+        flex-wrap: nowrap; /* 强制不换行 */
     }
 
     .unit-label {
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-style: normal;
-        font-size: 1.8rem; /* 调整至与数字框平衡 */
+        font-size: clamp(1.1rem, 4vw, 1.5rem); /* 使用响应式字号 */
         text-transform: uppercase;
         line-height: 1;
-        margin-right: 15px;
+        white-space: nowrap; /* 核心修改：强制文字在一行显示 */
+        margin-right: 10px;
     }
 
     input[type="number"] {
@@ -105,19 +101,18 @@
         color: #fff;
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-size: 2.5rem;
-        width: 120px;
+        font-size: 2.2rem;
+        width: 100px;
         outline: none;
         text-align: right;
-        line-height: 1;
+        flex-shrink: 0; /* 防止输入框被挤压 */
     }
 
-    /* 添加玩家输入框 */
     .input-group {
         display: flex;
         width: 100%;
-        margin-bottom: 40px;
-        height: 50px;
+        margin-bottom: 30px;
+        height: 45px;
     }
 
     .input-group input {
@@ -125,39 +120,37 @@
         background: transparent;
         border: 1px solid #333;
         color: #fff;
-        padding: 0 15px;
+        padding: 0 12px;
         font-family: var(--body-font);
         text-transform: uppercase;
         outline: none;
-        font-size: 0.9rem;
     }
 
     .input-group button {
         background: #fff;
         color: #000;
         border: none;
-        padding: 0 25px;
+        padding: 0 20px;
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-size: 1rem;
-        cursor: pointer;
+        font-size: 0.9rem;
     }
 
-    /* 玩家色块列表 */
+    /* 玩家色块列表 - 矮长方形优化 */
     .player-list {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 4px;
     }
 
     .player-bar {
         background-color: var(--bar-bg);
         color: var(--text-dark);
-        padding: 12px 18px;
+        padding: 6px 15px;
         border-radius: 2px;
         display: flex;
         flex-direction: column;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        transition: background-color 0.2s ease;
         cursor: pointer;
     }
 
@@ -176,24 +169,24 @@
     .player-name {
         font-family: var(--heavy-font);
         font-weight: 900;
-        font-size: 1.6rem;
+        font-size: 1.3rem;
         text-transform: uppercase;
         line-height: 1;
     }
 
     .player-total {
         font-family: var(--num-font);
-        font-size: 2.4rem;
-        line-height: 0.8;
+        font-size: 2rem;
+        line-height: 0.9;
     }
 
     .bar-sub {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 12px;
+        margin-top: 6px;
         border-top: 1px solid rgba(0,0,0,0.1);
-        padding-top: 10px;
+        padding-top: 6px;
     }
 
     .player-bar.active .bar-sub { border-top-color: rgba(255,255,255,0.2); }
@@ -201,12 +194,12 @@
     .controls {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
     }
 
     .btn-step {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         border: 1px solid #000;
         background: transparent;
         color: inherit;
@@ -220,15 +213,15 @@
 
     .unit-display {
         font-family: var(--num-font);
-        font-size: 1.2rem;
+        font-size: 1rem;
         letter-spacing: 1px;
     }
 
     .remove-link {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
         text-transform: uppercase;
         color: inherit;
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: pointer;
         border: none;
         background: transparent;
@@ -236,11 +229,11 @@
         font-weight: 900;
     }
 
-    /* 底部功能：居中排列 */
+    /* 底部按钮居中 */
     .footer-actions {
-        margin-top: 60px;
+        margin-top: 40px;
         display: flex;
-        gap: 20px;
+        gap: 15px;
         justify-content: center;
         width: 100%;
     }
@@ -249,27 +242,20 @@
         background: transparent;
         border: 1px solid #333;
         color: #666;
-        padding: 12px 24px;
+        padding: 10px 20px;
         font-family: var(--heavy-font);
         font-weight: 900;
         text-transform: uppercase;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         letter-spacing: 1px;
         cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .btn-ghost:hover {
-        border-color: #fff;
-        color: #fff;
     }
 
     footer {
-        margin: 80px 0 40px 0;
+        margin: 60px 0 30px 0;
         font-size: 0.6rem;
-        letter-spacing: 4px;
+        letter-spacing: 3px;
         opacity: 0.3;
-        text-transform: uppercase;
         text-align: center;
     }
     
@@ -292,13 +278,13 @@
 
         <!-- 添加玩家 -->
         <div class="input-group">
-            <input type="text" id="playerName" placeholder="ENTER PLAYER NAME" onkeydown="if(event.key==='Enter') addPlayer()">
+            <input type="text" id="playerName" placeholder="ENTER NAME" onkeydown="if(event.key==='Enter') addPlayer()">
             <button onclick="addPlayer()">ADD</button>
         </div>
 
         <!-- 动态列表 -->
         <div id="playerList" class="player-list">
-            <!-- JS 渲染 -->
+            <!-- 由 JS 渲染 -->
         </div>
 
         <div class="footer-actions">
@@ -308,7 +294,7 @@
     </div>
 
     <footer>
-        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
+        <a href="index.html">CB STUDIO EST. 2024</a>
     </footer>
 
     <script>
