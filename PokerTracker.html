@@ -3,18 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<title>Poker Tracker - Cheaper Brothers</title>
+<title>Tracker - Cheaper Brothers</title>
 
+<!-- 引入指定的字体库 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Chiron+Hei+HK:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
 <style>
     :root {
-        --border-color: #ffffff;
-        --main-font: "Manufacturing Consent", sans-serif;
-        --sub-font: "Noto Serif TC", serif;
-        --input-height: 48px;
+        --bg-color: #000;
+        --bar-bg: #fff;
+        --bar-active-bg: #ff0000;
+        --text-dark: #000;
+        --text-light: #fff;
+        /* 字体定义 */
+        --heavy-font: "Chiron Hei HK", sans-serif;
+        --impact-font: "Anton", sans-serif;
+        --num-font: "Bebas Neue", sans-serif;
+        --body-font: "Roboto", sans-serif;
     }
 
     * {
@@ -25,236 +32,283 @@
     body {
         margin: 0;
         min-height: 100vh;
-        background-color: #000;
-        color: #fff;
-        font-family: var(--sub-font);
+        background-color: var(--bg-color);
+        color: var(--text-light);
+        font-family: var(--body-font);
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 20px 10px;
+        padding: 40px 15px;
+        -webkit-font-smoothing: antialiased;
     }
 
+    header {
+        width: 100%;
+        max-width: 500px;
+        text-align: left;
+        margin-bottom: 50px;
+    }
+
+    /* POKER 标题：Chiron Hei HK 900 Italic */
     h1 {
-        font-family: var(--main-font);
-        font-weight: 400;
-        font-size: clamp(2.5rem, 12vw, 4rem);
-        letter-spacing: 5px;
-        margin: 20px 0;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-style: italic;
+        font-size: clamp(4rem, 20vw, 8rem);
         text-transform: uppercase;
-        text-align: center;
+        margin: 0;
+        line-height: 0.8;
+        letter-spacing: -2px;
+        color: #fff;
+    }
+
+    /* 副标题：Chiron Hei HK 900 Italic */
+    .brand-tag {
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-style: italic;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        margin-top: 15px;
+        color: #fff;
+        opacity: 0.9;
     }
 
     .container {
         width: 100%;
-        max-width: 600px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        max-width: 500px;
     }
 
+    /* 设置区域：UNIT VALUE $ 使用 Chiron Hei HK 900 */
     .settings-bar {
-        width: 100%;
         display: flex;
-        justify-content: center;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #222;
+        padding-bottom: 10px;
     }
 
-    input[type="number"], 
-    input[type="text"], 
-    button {
-        background: transparent;
-        border: 1px solid var(--border-color);
-        color: white;
-        height: var(--input-height);
-        font-family: var(--sub-font);
-        font-size: 1rem;
-        outline: none;
-        border-radius: 0;
+    .unit-label {
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-style: normal;
+        font-size: 1.8rem; /* 调整至与数字框平衡 */
+        text-transform: uppercase;
+        line-height: 1;
+        margin-right: 15px;
     }
 
     input[type="number"] {
-        width: 70px;
-        text-align: center;
-    }
-
-    .add-player-area {
-        width: 100%;
-        display: flex;
-        margin-bottom: 30px;
-    }
-
-    .add-player-area input {
-        flex: 1;
-        padding: 0 12px;
-        border-right: none;
-    }
-
-    .add-player-area button {
-        padding: 0 20px;
-        white-space: nowrap;
-    }
-
-    .table-container {
-        width: 100%;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-    }
-
-    th, td {
-        border: 1px solid var(--border-color);
-        padding: 12px 2px;
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    th {
-        font-family: var(--main-font);
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-        background: rgba(255,255,255,0.1);
-    }
-
-    .header-clear-btn {
-        height: 24px !important;
-        font-size: 0.6rem !important;
-        padding: 0 8px !important;
-        margin-left: 5px;
-        vertical-align: middle;
-        line-height: 1;
-        border-color: rgba(255,255,255,0.6);
+        background: transparent;
+        border: none;
         color: #fff;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-size: 2.5rem;
+        width: 120px;
+        outline: none;
+        text-align: right;
+        line-height: 1;
     }
 
-    .col-name { width: 20%; }
-    .col-ops { width: 34%; } 
-    .col-num { width: 12%; }
-    .col-total { width: 20%; }
-    .col-del { width: 14%; }
-
-    .btn-group {
+    /* 添加玩家输入框 */
+    .input-group {
         display: flex;
-        gap: 3px;
-        justify-content: center;
+        width: 100%;
+        margin-bottom: 40px;
+        height: 50px;
+    }
+
+    .input-group input {
+        flex: 1;
+        background: transparent;
+        border: 1px solid #333;
+        color: #fff;
+        padding: 0 15px;
+        font-family: var(--body-font);
+        text-transform: uppercase;
+        outline: none;
+        font-size: 0.9rem;
+    }
+
+    .input-group button {
+        background: #fff;
+        color: #000;
+        border: none;
+        padding: 0 25px;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    /* 玩家色块列表 */
+    .player-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .player-bar {
+        background-color: var(--bar-bg);
+        color: var(--text-dark);
+        padding: 12px 18px;
+        border-radius: 2px;
+        display: flex;
+        flex-direction: column;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .player-bar.active {
+        background-color: var(--bar-active-bg);
+        color: var(--text-light);
+    }
+
+    .bar-main {
+        display: flex;
         align-items: center;
-        padding: 0 2px;
+        justify-content: space-between;
+        width: 100%;
     }
 
-    .btn-group button {
-        height: 34px;
-        flex: 1;
-        font-size: 1.2rem;
-        padding: 0;
+    .player-name {
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        font-size: 1.6rem;
+        text-transform: uppercase;
+        line-height: 1;
     }
 
-    .checkbox-box {
-        height: 34px;
-        flex: 1;
-        border: 1px solid var(--border-color);
+    .player-total {
+        font-family: var(--num-font);
+        font-size: 2.4rem;
+        line-height: 0.8;
+    }
+
+    .bar-sub {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 12px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        padding-top: 10px;
+    }
+
+    .player-bar.active .bar-sub { border-top-color: rgba(255,255,255,0.2); }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-step {
+        width: 28px;
+        height: 28px;
+        border: 1px solid #000;
+        background: transparent;
+        color: inherit;
+        font-weight: 900;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        font-size: 1.1rem;
     }
+    .player-bar.active .btn-step { border-color: #fff; }
 
-    .checkbox-box.active {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .checkbox-box.active::after {
-        content: "✓";
-        color: white;
-    }
-
-    .score-total {
-        font-family: var(--main-font);
-        font-size: 1.1rem;
-    }
-
-    .delete-btn {
-        width: 100%;
-        height: 34px;
-        border: 1px solid #ff4444;
-        color: #ff4444;
+    .unit-display {
+        font-family: var(--num-font);
         font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        letter-spacing: 1px;
     }
 
-    .clear-data {
-        margin: 40px 0 120px 0;
-        border-color: #444;
+    .remove-link {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: inherit;
+        opacity: 0.5;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+    }
+
+    /* 底部功能：居中排列 */
+    .footer-actions {
+        margin-top: 60px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btn-ghost {
+        background: transparent;
+        border: 1px solid #333;
         color: #666;
+        padding: 12px 24px;
+        font-family: var(--heavy-font);
+        font-weight: 900;
+        text-transform: uppercase;
         font-size: 0.8rem;
-        height: 35px;
-        padding: 0 20px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-ghost:hover {
+        border-color: #fff;
+        color: #fff;
     }
 
     footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        font-family: var(--sub-font);
-        font-size: 0.8rem;
-        opacity: 0.8;
+        margin: 80px 0 40px 0;
+        font-size: 0.6rem;
+        letter-spacing: 4px;
+        opacity: 0.3;
+        text-transform: uppercase;
         text-align: center;
-        width: 100%;
-        background-color: #000;
-        padding: 15px 0;
-        z-index: 10;
-        border-top: 1px solid #222;
     }
-
-    footer a {
-        color: #ffffff;
-        text-decoration: none;
-    }
+    
+    footer a { color: inherit; text-decoration: none; }
 </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Poker Score</h1>
+    <header>
+        <h1>POKER</h1>
+        <div class="brand-tag">Cheaper Brothers專用德州計分器</div>
+    </header>
 
+    <div class="container">
+        <!-- 核心设置 -->
         <div class="settings-bar">
-            <span>每组金额 ($):</span>
+            <div class="unit-label">UNIT VALUE $</div>
             <input type="number" id="unitValue" value="30" oninput="updateStorage()">
         </div>
 
-        <div class="add-player-area">
-            <input type="text" id="playerName" placeholder="名字" onkeydown="if(event.key==='Enter') addPlayer()">
-            <button onclick="addPlayer()">添加</button>
+        <!-- 添加玩家 -->
+        <div class="input-group">
+            <input type="text" id="playerName" placeholder="ENTER PLAYER NAME" onkeydown="if(event.key==='Enter') addPlayer()">
+            <button onclick="addPlayer()">ADD</button>
         </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="col-name">玩家</th>
-                        <th class="col-ops">
-                            操作 <button class="header-clear-btn" onclick="clearAllStandups()">Clear</button>
-                        </th>
-                        <th class="col-num">组</th>
-                        <th class="col-total">总额</th>
-                        <th class="col-del">删</th>
-                    </tr>
-                </thead>
-                <tbody id="playerList"></tbody>
-            </table>
+        <!-- 动态列表 -->
+        <div id="playerList" class="player-list">
+            <!-- JS 渲染 -->
         </div>
 
-        <button class="clear-data" onclick="clearAllData()">重置整局数据</button>
+        <div class="footer-actions">
+            <button class="btn-ghost" onclick="clearAllStandups()">Clear Standups</button>
+            <button class="btn-ghost" onclick="clearAllData()">Reset All</button>
+        </div>
     </div>
 
     <footer>
-        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
+        <a href="index.html">CB STUDIO EST. 2024</a>
     </footer>
 
     <script>
@@ -289,7 +343,8 @@
             updateStorage();
         }
 
-        function changeGroup(id, delta) {
+        function changeGroup(event, id, delta) {
+            event.stopPropagation(); 
             const player = players.find(p => p.id === id);
             if (player) {
                 player.groups += delta;
@@ -298,7 +353,6 @@
             }
         }
 
-        // 核心逻辑：勾选判断与动态姓名弹窗
         function toggleStandup(id) {
             const player = players.find(p => p.id === id);
             if (!player) return;
@@ -315,12 +369,11 @@
                 const checkedCount = players.filter(p => p.standup).length;
 
                 if (totalPlayers > 1 && checkedCount === totalPlayers - 1) {
-                    // 找到那个唯一没勾选的人
                     const loser = players.find(p => !p.standup);
-                    const loserName = loser ? loser.name : "未知玩家";
+                    const loserName = loser ? loser.name : "UNKNOWN";
 
                     setTimeout(() => {
-                        alert(loserName + " 需要派钱！💰");
+                        alert(loserName.toUpperCase() + " PAYS THE PRICE! 💰");
                         clearAllStandups(); 
                     }, 100);
                 }
@@ -332,13 +385,16 @@
             updateStorage();
         }
 
-        function deletePlayer(id) {
-            players = players.filter(p => p.id !== id);
-            updateStorage();
+        function deletePlayer(event, id) {
+            event.stopPropagation(); 
+            if(confirm("REMOVE PLAYER?")) {
+                players = players.filter(p => p.id !== id);
+                updateStorage();
+            }
         }
 
         function clearAllData() {
-            if(confirm("确定清空全部数据吗？")) {
+            if(confirm("RESET ENTIRE SYSTEM?")) {
                 players = [];
                 updateStorage();
             }
@@ -346,30 +402,30 @@
 
         function renderTable() {
             const unit = parseFloat(document.getElementById('unitValue').value) || 0;
-            const tbody = document.getElementById('playerList');
-            tbody.innerHTML = "";
+            const container = document.getElementById('playerList');
+            container.innerHTML = "";
 
             players.forEach(player => {
                 const total = (player.groups * unit).toLocaleString();
-                const tr = document.createElement('tr');
-                const checkboxClass = player.standup ? "checkbox-box active" : "checkbox-box";
-
-                tr.innerHTML = `
-                    <td>${player.name}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button onclick="changeGroup('${player.id}', 1)">+</button>
-                            <button onclick="changeGroup('${player.id}', -1)">-</button>
-                            <div class="${checkboxClass}" onclick="toggleStandup('${player.id}')"></div>
+                const bar = document.createElement('div');
+                bar.className = player.standup ? 'player-bar active' : 'player-bar';
+                bar.onclick = () => toggleStandup(player.id);
+                
+                bar.innerHTML = `
+                    <div class="bar-main">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-total">$${total}</div>
+                    </div>
+                    <div class="bar-sub">
+                        <div class="controls">
+                            <button class="btn-step" onclick="changeGroup(event, '${player.id}', -1)">-</button>
+                            <span class="unit-display">${player.groups} UNITS</span>
+                            <button class="btn-step" onclick="changeGroup(event, '${player.id}', 1)">+</button>
                         </div>
-                    </td>
-                    <td>${player.groups}</td>
-                    <td class="score-total">${total}</td>
-                    <td>
-                        <button class="delete-btn" onclick="deletePlayer('${player.id}')">×</button>
-                    </td>
+                        <button class="remove-link" onclick="deletePlayer(event, '${player.id}')">Remove</button>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(bar);
             });
         }
     </script>
