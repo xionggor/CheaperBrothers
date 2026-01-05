@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cheaper Brothers</title>
 
+<!-- 引入字体：原有字体 + Alumni Sans + Bebas Neue -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap" rel="stylesheet">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 
 <style>
+/* ========================== */
+/* 基础页面样式 */
+/* ========================== */
 body {
   margin: 0;
   height: 100vh;
@@ -48,14 +48,9 @@ canvas {
 }
 
 @media (max-width: 768px) {
-  canvas {
-    margin: 0; 
-  }
+  canvas { margin: 0; }
 }
 
-/* ========================== */
-/* 【修改部分：页脚样式】 */
-/* ========================== */
 footer {
   position: absolute;
   bottom: 30px;
@@ -67,23 +62,193 @@ footer {
   letter-spacing: 1px;
   text-align: center;
   width: 100%;
-  /* 必须删掉之前的 pointer-events: none; 否则点不了 */
   pointer-events: auto; 
 }
 
-/* 确保链接看起来和普通文字一模一样 */
 footer a {
   color: inherit;
   text-decoration: none;
   transition: opacity 0.3s;
 }
 
-footer a:hover {
-  opacity: 1; /* 鼠标悬停时稍微亮一点，增加交互感 */
+footer a:hover { opacity: 1; }
+
+/* ========================== */
+/* CHEAPER BROTHERS NAV (V6)  */
+/* ========================== */
+:root {
+    --nav-bg: #ffffff; 
+    --nav-text: #000000;
+    --primary-font: "Alumni Sans Pinstripe", sans-serif;
+    --secondary-font: "Bebas Neue", sans-serif; /* 【更新】二级菜单专用 */
+    --nav-transition: 0.5s;
+    --nav-delay: 0.08s;
 }
+
+.nav-wrapper {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-bottom: 40px; 
+}
+
+.nav-trigger {
+    width: 32px;
+    height: 32px;
+    background-color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.menu-list {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px; 
+    width: 210px; 
+    pointer-events: none;
+}
+
+.menu-bar {
+    background-color: var(--nav-bg);
+    border-radius: 3px;
+    padding: 1px 12px; /* 维持 1px 视觉间距 */
+    color: var(--nav-text);
+    text-decoration: none; 
+    cursor: pointer;
+    transform: translateY(-15px); 
+    opacity: 0;
+    transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 顺序动画 */
+.menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
+.menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
+.menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
+.menu-bar:nth-child(4) { transition-delay: 0s; }
+
+.nav-wrapper.active .menu-list { pointer-events: auto; }
+.nav-wrapper.active .menu-bar { transform: translateY(0); opacity: 1; }
+
+.nav-wrapper.active .menu-bar:nth-child(1) { transition-delay: 0s; }
+.nav-wrapper.active .menu-bar:nth-child(2) { transition-delay: var(--nav-delay); }
+.nav-wrapper.active .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 2); }
+.nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
+
+/* 一级标题样式 */
+.bar-title {
+    font-family: var(--primary-font);
+    font-size: 2.6rem; 
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    line-height: 0.8; 
+    margin: 0;
+    white-space: nowrap;
+}
+
+.dot {
+    width: 8px; 
+    height: 8px;
+    background-color: var(--nav-text);
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0; 
+}
+
+/* 二级菜单内容 */
+.sub-content {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    padding-left: 18px; 
+}
+
+.menu-bar.expanded .sub-content {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 10px;
+    padding-bottom: 12px;
+}
+
+.sub-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-item { margin: 6px 0; }
+
+.sub-item a {
+    text-decoration: none;
+    color: var(--nav-text);
+    /* 【核心修改】二级菜单使用 Bebas Neue */
+    font-family: var(--secondary-font);
+    font-size: 1.3rem; 
+    display: block;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.sub-item a::before {
+    content: "└─ ";
+    font-family: sans-serif; /* 符号保持系统字体以防变形 */
+    margin-right: 6px;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
+
+.sub-item a:hover { opacity: 1; }
 </style>
 </head>
 <body>
+
+<!-- 导航栏 HTML -->
+<div class="nav-wrapper" id="navWrapper">
+    <div class="nav-trigger" id="navTrigger"></div>
+    <div class="menu-list">
+        <!-- Events -->
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>Events</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
+                    <li class="sub-item"><a href="Lottery.html">LIVE LOTTERY</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Art -->
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>Art</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="art-2024.html">2024</a></li>
+                    <li class="sub-item"><a href="art-2025.html">2025</a></li>
+                    <li class="sub-item"><a href="art-2026.html">2026</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Shop -->
+        <a href="shop.html" class="menu-bar"><div class="bar-title">Shop</div></a>
+        <!-- About -->
+        <a href="about.html" class="menu-bar"><div class="bar-title">About</div></a>
+    </div>
+</div>
 
 <div id="font-loader">Force Font Load</div>
 
@@ -92,19 +257,18 @@ footer a:hover {
   <canvas id="fuzzy-text-2"></canvas>
 </div>
 
-<!-- ========================== -->
-<!-- 【修改部分：添加超链接】 -->
-<!-- ========================== -->
 <footer>
   <a href="PokerTracker.html">Cheaper Brothers Co. 廉兄集团</a>
 </footer>
 
 <script>
+/* ========================== */
+/* FUZZY TEXT LOGIC           */
+/* ========================== */
 class FuzzyText {
   constructor(canvasId, options = {}) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
-    
     this.text = options.text || "";
     this.fontSize = options.fontSize || 80;
     this.fontWeight = options.fontWeight || 400;
@@ -114,33 +278,21 @@ class FuzzyText {
     this.hoverIntensity = options.hoverIntensity || 0.5;
     this.fuzzRange = options.fuzzRange || 30;
     this.enableHover = options.enableHover !== false;
-    
     this.ctx = this.canvas.getContext('2d');
     this.offscreen = document.createElement('canvas');
     this.offCtx = this.offscreen.getContext('2d');
-    
     this.isHovering = false;
     this.animationFrameId = null;
-    
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.animate = this.animate.bind(this);
     this.resize = this.resize.bind(this);
-
     this.init();
   }
-
   async init() {
-    try {
-        await document.fonts.load("400 80px \"Manufacturing Consent\"");
-    } catch(e) {}
+    try { await document.fonts.load("400 80px \"Manufacturing Consent\""); } catch(e) {}
     await document.fonts.ready;
-
-    setTimeout(() => {
-        this.resize();
-        this.startAnimation();
-    }, 100);
-
+    setTimeout(() => { this.resize(); this.startAnimation(); }, 100);
     if (this.enableHover) {
       this.canvas.addEventListener('mousemove', this.handleMouseMove);
       this.canvas.addEventListener('mouseleave', this.handleMouseLeave);
@@ -149,18 +301,15 @@ class FuzzyText {
     }
     window.addEventListener('resize', this.resize);
   }
-
   resize() {
     const screenWidth = window.innerWidth;
     let responsiveSize = this.fontSize;
     if(screenWidth < 600) responsiveSize = this.fontSize * 0.6; 
-    
     const fontString = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.font = fontString;
     const metrics = this.offCtx.measureText(this.text);
     const width = Math.ceil(metrics.width);
     const height = Math.ceil(responsiveSize * 1.6); 
-    
     this.offscreen.width = width + 20; 
     this.offscreen.height = height;
     this.offCtx.font = fontString;
@@ -172,26 +321,20 @@ class FuzzyText {
     this.canvas.width = this.width;
     this.canvas.height = this.height;
   }
-
   handleMouseMove() { this.isHovering = true; }
   handleMouseLeave() { this.isHovering = false; }
-
   animate() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     const intensity = this.isHovering ? this.hoverIntensity : this.baseIntensity;
     const tightHeight = this.offscreen.height;
     const offscreenWidth = this.offscreen.width;
-
     for (let j = 0; j < tightHeight; j++) {
       const dx = Math.floor(intensity * (Math.random() - 0.5) * this.fuzzRange);
       this.ctx.drawImage(this.offscreen, 0, j, offscreenWidth, 1, dx + this.fuzzRange, j, offscreenWidth, 1);
     }
     this.animationFrameId = requestAnimationFrame(this.animate);
   }
-
-  startAnimation() {
-    if (!this.animationFrameId) this.animate();
-  }
+  startAnimation() { if (!this.animationFrameId) this.animate(); }
 }
 
 const commonConfig = {
@@ -205,6 +348,33 @@ const commonConfig = {
 
 new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
 new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
+
+/* ========================== */
+/* NAV LOGIC                  */
+/* ========================== */
+const wrapper = document.getElementById('navWrapper');
+const trigger = document.getElementById('navTrigger');
+
+trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
+wrapper.addEventListener('mouseleave', () => {
+    wrapper.classList.remove('active');
+    document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
+});
+trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    wrapper.classList.toggle('active');
+});
+function toggleAccordion(event, element) {
+    if (event.target.tagName === 'A') return;
+    const subContent = element.querySelector('.sub-content');
+    if (!subContent) return; 
+    if (element.classList.contains('expanded')) {
+        element.classList.remove('expanded');
+        return;
+    }
+    document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
+    element.classList.add('expanded');
+}
 </script>
 </body>
 </html>
