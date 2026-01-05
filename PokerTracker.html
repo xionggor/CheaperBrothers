@@ -30,6 +30,16 @@
         -webkit-tap-highlight-color: transparent;
     }
 
+    /* 彻底移除所有输入框箭头 */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     body {
         margin: 0;
         min-height: 100vh;
@@ -77,14 +87,22 @@
         max-width: 500px;
     }
 
+    /* ========================================= */
+    /* 设置区域：UNIT BASIS & POOL TOTAL */
+    /* ========================================= */
+    .settings-area {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+    }
+
     .settings-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 25px;
+        flex-wrap: nowrap;
         border-bottom: 2px solid #222;
         padding-bottom: 5px;
-        flex-wrap: nowrap;
     }
 
     .unit-label {
@@ -103,10 +121,37 @@
         font-family: var(--heavy-font);
         font-weight: 900;
         font-size: 2.2rem;
-        width: 100px;
+        width: 120px;
         outline: none;
         text-align: right;
     }
+
+    .bank-summary {
+        display: flex;
+        justify-content: flex-end; 
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .bank-label {
+        font-family: var(--num-font);
+        font-weight: 400;
+        font-size: 1.8rem;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .bank-total-display {
+        font-family: var(--num-font);
+        font-size: 1.8rem;
+        color: #fff;
+        line-height: 1;
+        width: 120px;
+        text-align: right;
+    }
+    /* ========================================= */
 
     .input-group {
         display: flex;
@@ -133,6 +178,7 @@
         padding: 0 20px;
         font-family: var(--heavy-font);
         font-weight: 900;
+        font-style: italic;
         font-size: 0.9rem;
         cursor: pointer;
     }
@@ -146,7 +192,7 @@
     .player-bar {
         background-color: var(--bar-bg);
         color: var(--text-dark);
-        padding: 8px 15px;
+        padding: 6px 15px;
         border-radius: 2px;
         display: flex;
         flex-direction: column;
@@ -180,9 +226,6 @@
         line-height: 0.9;
     }
 
-    /* ========================================= */
-    /* 计算模式 UI 优化修复 */
-    /* ========================================= */
     .settle-row {
         margin-top: 8px;
         display: flex;
@@ -194,42 +237,38 @@
     .player-bar.active .settle-row { border-top-color: rgba(255,255,255,0.3); }
 
     .cash-input {
-        width: 95px;
+        width: 120px;
         height: 30px;
         border: 1px solid rgba(0,0,0,0.3);
-        background: #f0f0f0; /* 给个浅灰色背景确保输入框明显 */
-        color: #000 !important; /* 核心修复：强制在白底时显示黑字 */
+        background: #f0f0f0; 
+        color: #000 !important; 
         font-family: var(--num-font);
-        font-size: 1rem;
-        text-align: center;
+        font-size: 1.1rem; 
+        text-align: center; 
         outline: none;
         border-radius: 0;
     }
 
-    /* 当色块变红时的输入框样式 */
     .player-bar.active .cash-input { 
         border-color: #fff;
         background: rgba(255,255,255,0.2);
-        color: #fff !important; /* 核心修复：强制在红底时显示白字 */
+        color: #fff !important; 
     }
 
-    .cash-input::placeholder { color: rgba(0,0,0,0.4); font-size: 0.75rem; }
-    .player-bar.active .cash-input::placeholder { color: rgba(255,255,255,0.6); }
+    .cash-input::placeholder { 
+        color: rgba(0,0,0,0.4); 
+        font-size: 0.85rem; 
+        text-align: center; 
+    }
 
     .result-display {
         font-family: var(--num-font);
         font-size: 1.1rem;
         letter-spacing: 0.5px;
-    }
-    .res-label {
-        font-family: var(--heavy-font);
-        font-size: 0.85rem;
-        font-style: italic;
-        margin-right: 4px;
+        text-align: right;
     }
     .status-loss { color: var(--loss-color); font-weight: 900; }
     .status-profit { color: var(--profit-color); font-weight: 900; }
-    /* ========================================= */
 
     .bar-sub {
         display: flex;
@@ -282,8 +321,7 @@
     .footer-actions {
         margin-top: 40px;
         display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+        gap: 15px;
         justify-content: center;
         width: 100%;
     }
@@ -292,11 +330,11 @@
         background: transparent;
         border: 1px solid #333;
         color: #666;
-        padding: 10px 16px;
+        padding: 10px 20px;
         font-family: var(--heavy-font);
         font-weight: 900;
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         letter-spacing: 1px;
         cursor: pointer;
         transition: all 0.3s;
@@ -327,9 +365,17 @@
     </header>
 
     <div class="container">
-        <div class="settings-bar">
-            <div class="unit-label">UNIT VALUE $</div>
-            <input type="number" id="unitValue" value="30" oninput="updateStorage()">
+        <!-- 设置区域 -->
+        <div class="settings-area">
+            <div class="settings-bar">
+                <div class="unit-label">UNIT BASIS $</div>
+                <input type="number" id="unitValue" value="30" oninput="updateStorage()">
+            </div>
+            <!-- 总额显示 -->
+            <div class="bank-summary">
+                <div class="bank-label">POOL TOTAL</div>
+                <div id="totalBankDisplay" class="bank-total-display">0</div>
+            </div>
         </div>
 
         <div class="input-group">
@@ -340,8 +386,7 @@
         <div id="playerList" class="player-list"></div>
 
         <div class="footer-actions">
-            <button id="calcModeBtn" class="btn-ghost" onclick="toggleCalcMode()">Calculation Mode</button>
-            <button class="btn-ghost" onclick="clearAllStandups()">Clear Standups</button>
+            <button id="calcModeBtn" class="btn-ghost" onclick="toggleCalcMode()">CASH OUT</button>
             <button class="btn-ghost" onclick="clearAllData()">Reset All</button>
         </div>
     </div>
@@ -374,6 +419,12 @@
             renderTable();
         }
 
+        function updateBankTotal() {
+            const unit = parseFloat(document.getElementById('unitValue').value) || 0;
+            const total = players.reduce((sum, p) => sum + (p.groups * unit), 0);
+            document.getElementById('totalBankDisplay').innerText = total.toLocaleString();
+        }
+
         function updateHandCash(id, val) {
             const player = players.find(p => p.id === id);
             if (player) {
@@ -386,16 +437,16 @@
                 const displayEl = document.getElementById('res-' + id);
 
                 if (val === "") {
-                    displayEl.innerHTML = "WAIT";
+                    displayEl.innerText = "WAITING";
                     displayEl.className = "result-display";
                 } else if (result > 0) {
-                    displayEl.innerHTML = `<span class="res-label">LOSS</span> ${result}`;
+                    displayEl.innerText = "LOSS " + result;
                     displayEl.className = "result-display status-loss";
                 } else if (result < 0) {
-                    displayEl.innerHTML = `<span class="res-label">PROFIT</span> ${Math.abs(result)}`;
+                    displayEl.innerText = "PROFIT " + Math.abs(result);
                     displayEl.className = "result-display status-profit";
                 } else {
-                    displayEl.innerHTML = "EVEN";
+                    displayEl.innerText = "EVEN";
                     displayEl.className = "result-display";
                 }
                 localStorage.setItem('poker_players', JSON.stringify(players));
@@ -462,7 +513,7 @@
         }
 
         function clearAllData() {
-            if(confirm("RESET SYSTEM?")) {
+            if(confirm("RESET ENTIRE SYSTEM?")) {
                 players = [];
                 updateStorage();
             }
@@ -483,21 +534,16 @@
                 if (isCalcMode) {
                     const hand = parseFloat(player.handCash) || 0;
                     const res = buyIn - hand;
-                    let resText = "WAIT", resClass = "";
-                    
+                    let resText = "WAITING", resClass = "";
                     if (player.handCash !== "") {
-                        if (res > 0) { resText = `<span class="res-label">LOSS</span> ${res}`; resClass = "status-loss"; }
-                        else if (res < 0) { resText = `<span class="res-label">PROFIT</span> ${Math.abs(res)}`; resClass = "status-profit"; }
+                        if (res > 0) { resText = "LOSS " + res; resClass = "status-loss"; }
+                        else if (res < 0) { resText = "PROFIT " + Math.abs(res); resClass = "status-profit"; }
                         else { resText = "EVEN"; }
                     }
-
-                    settleUI = `
-                        <div class="settle-row" onclick="event.stopPropagation()">
-                            <input type="number" class="cash-input" placeholder="HAND CASH" 
-                                value="${player.handCash}" oninput="updateHandCash('${player.id}', this.value)">
-                            <div id="res-${player.id}" class="result-display ${resClass}">${resText}</div>
-                        </div>
-                    `;
+                    settleUI = `<div class="settle-row" onclick="event.stopPropagation()">
+                        <input type="number" class="cash-input" placeholder="HAND CASH" value="${player.handCash}" oninput="updateHandCash('${player.id}', this.value)">
+                        <div id="res-${player.id}" class="result-display ${resClass}">${resText}</div>
+                    </div>`;
                 }
 
                 bar.innerHTML = `
@@ -517,6 +563,7 @@
                 `;
                 container.appendChild(bar);
             });
+            updateBankTotal();
         }
     </script>
 </body>
