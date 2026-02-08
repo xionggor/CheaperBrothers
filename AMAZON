@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>订单管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  background: #f5f5f5;
+}
+
+.container { max-width: 600px; margin: 0 auto; padding: 12px; }
+
+.post { position: relative; background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+.post.refunded { filter: grayscale(1); opacity: 0.55; }
+
+.row { display: flex; justify-content: space-between; gap: 10px; }
+.info { font-size: 13px; line-height: 1.6; }
+
+.status-tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; height: fit-content; }
+.unrefunded { background: #ff4d4f; color: #fff; }
+.refunded-tag { background: #d4edda; color: #155724; }
+
+.images { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; }
+.images img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; flex-shrink: 0; cursor: pointer; }
+
+.edit-btn { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 13px; cursor: pointer; }
+
+.add-btn { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); padding: 12px 26px; border-radius: 24px; background: #007bff; color: #fff; border: none; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 100; justify-content: center; align-items: center; padding: 10px; box-sizing: border-box; }
+.sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 16px; padding: 16px; max-height: 90%; overflow-y: auto; box-sizing: border-box; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+label { font-size:13px; color:#555; display:block; margin-top:14px; }
+input, select { width:100%; margin-top:6px; padding:10px; border-radius:8px; border:1px solid #ddd; font-size:14px; box-sizing:border-box; }
+
+.submit-btn, .delete-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 24px; border: none; font-size: 15px; cursor: pointer; }
+.submit-btn { background: #007bff; color: #fff; }
+.delete-btn { background: #dc3545; color: #fff; }
+
+.preview { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 200; }
+.preview img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<div class="container" id="list"></div>
+
+<button class="add-btn" onclick="openSheet()">➕ 新建订单</button>
+
+<div class="overlay" id="overlay" onclick="closeSheet()">
+  <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
+    <h2 id="form-title">新建订单</h2>
+
+    <label>订单号</label>
+    <input id="orderId" required>
+
+    <label>价格 (美元)</label>
+    <input id="price" type="number" required>
+
+    <label>自费金额 ($)</label>
+    <input id="selfPay" type="number" value="0">
+
+    <label>评论类型</label>
+    <select id="commentType">
+      <option value="免评">免评</option>
+      <option value="点星">点星</option>
+      <option value="评论">评论</option>
+    </select>
+
+    <label>下单日期</label>
+    <input id="date" type="date">
+
+    <label id="arrivalLabel" style="display:none;">到货日期</label>
+    <input id="arrivalDate" type="date" style="display:none;">
+
+    <label>订单截图</label>
+    <input id="images" type="file" multiple accept="image/*">
+
+    <button class="submit-btn" type="submit">提交</button>
+    <button type="button" class="delete-btn" id="deleteBtn" onclick="deleteOrder()">删除订单</button>
+  </form>
+</div>
+
+<div class="preview" id="preview" onclick="closePreview()">
+  <img id="previewImg">
+</div>
+
+<script>
+const list = document.getElementById('list');
+const overlay = document.getElementById('overlay');
+const preview = document.getElementById('preview');
+const previewImg = document.getElementById('previewImg');
+
+let orders = [];
+let editingIndex = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').value = today;
+  document.getElementById('commentType').value = '免评';
+});
+
+/* 打开表单 */
+function openSheet(editIndex = null) {
+  editingIndex = editIndex;
+  const formTitle = document.getElementById('form-title');
+  const deleteBtn = document.getElementById('deleteBtn');
+  const arrivalLabel = document.getElementById('arrivalLabel');
+  const arrivalInput = document.getElementById('arrivalDate');
+
+  if(editingIndex !== null){
+    formTitle.textContent = '修改订单';
+    deleteBtn.style.display = 'block';
+    arrivalLabel.style.display = 'block';
+    arrivalInput.style.display = 'block';
+    const order = orders[editingIndex];
+    orderId.value = order.orderId;
+    price.value = order.price;
+    selfPay.value = order.selfPay;
+    commentType.value = order.commentType;
+    date.value = order.date;
+    const today = new Date().toISOString().split('T')[0];
+    arrivalInput.value = order.arrivalDate || today;
+    images.value = '';
+  } else {
+    formTitle.textContent = '新建订单';
+    deleteBtn.style.display = 'none';
+    arrivalLabel.style.display = 'none';
+    arrivalInput.style.display = 'none';
+    document.querySelector('form').reset();
+    const today = new Date().toISOString().split('T')[0];
+    date.value = today;
+    commentType.value = "免评";
+  }
+
+  overlay.style.display = 'flex';
+}
+
+function closeSheet() { overlay.style.display = 'none'; }
+
+function deleteOrder() {
+  if(editingIndex !== null){
+    orders.splice(editingIndex,1);
+    refreshList();
+    closeSheet();
+  }
+}
+
+function openPreview(src) {
+  previewImg.src = src;
+  preview.style.display = 'flex';
+}
+
+function closePreview() { preview.style.display = 'none'; }
+
+function renderOrder(order, index){
+  const post = document.createElement('div');
+  post.className = 'post'+(order.refunded?' refunded':'');
+  post.innerHTML = `
+    <div class="row">
+      <div class="info">
+        <div>订单号：${order.orderId}</div>
+        <div>价格：$${order.price} · 自费 $${order.selfPay}</div>
+        <div>评论方式：${order.commentType}</div>
+        <div>下单日期：${order.date}</div>
+        ${order.arrivalDate ? `<div>到货日期：${order.arrivalDate}</div>` : ''}
+      </div>
+
+      <div class="status-tag ${order.refunded?'refunded-tag':'unrefunded'}">
+        ${order.refunded?'已退款':'未退款'}
+      </div>
+    </div>
+
+    <div class="images">
+      ${order.images.map(src=>`<img src="${src}" onclick="openPreview('${src}')">`).join('')}
+    </div>
+
+    <div class="edit-btn">修改</div>
+  `;
+
+  post.querySelector('.status-tag').onclick = e=>{
+    e.stopPropagation();
+    order.refunded = !order.refunded;
+    post.classList.toggle('refunded',order.refunded);
+    const tag = post.querySelector('.status-tag');
+    tag.textContent = order.refunded?'已退款':'未退款';
+    tag.className = 'status-tag ' + (order.refunded?'refunded-tag':'unrefunded');
+  };
+
+  post.querySelector('.edit-btn').onclick = e=>{
+    e.stopPropagation();
+    openSheet(index);
+  };
+
+  list.appendChild(post);
+}
+
+function submitOrder(e){
+  e.preventDefault();
+
+  // 处理截图，修改时保留原图
+  let imageUrls = [];
+  if(images.files.length > 0){
+    imageUrls = [...images.files].map(f => URL.createObjectURL(f));
+  } else if(editingIndex !== null){
+    imageUrls = orders[editingIndex].images || [];
+  }
+
+  const orderData = {
+    orderId: orderId.value,
+    price: Number(price.value),
+    selfPay: Number(selfPay.value),
+    commentType: commentType.value,
+    date: date.value,
+    arrivalDate: editingIndex!==null ? arrivalDate.value : undefined,
+    refunded: editingIndex!==null ? orders[editingIndex].refunded : false,
+    images: imageUrls
+  };
+
+  if(editingIndex!==null){
+    orders[editingIndex] = {...orders[editingIndex], ...orderData};
+  } else {
+    orders.unshift(orderData);
+  }
+
+  refreshList();
+  closeSheet();
+}
+
+function refreshList(){
+  list.innerHTML = '';
+  orders.forEach((order,index)=> renderOrder(order,index));
+}
+
+// 初始化空列表
+refreshList();
+</script>
+
+</body>
+</html>
