@@ -106,7 +106,6 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('commentType').value = '免评';
 });
 
-/* 打开表单 */
 function openSheet(editIndex = null) {
   editingIndex = editIndex;
   const formTitle = document.getElementById('form-title');
@@ -204,7 +203,6 @@ function renderOrder(order, index){
 function submitOrder(e){
   e.preventDefault();
 
-  // 处理截图，修改时保留原图
   let imageUrls = [];
   if(images.files.length > 0){
     imageUrls = [...images.files].map(f => URL.createObjectURL(f));
@@ -238,7 +236,6 @@ function refreshList(){
   orders.forEach((order,index)=> renderOrder(order,index));
 }
 
-// 初始化空列表
 refreshList();
 </script>
 
