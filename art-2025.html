@@ -7,25 +7,40 @@
 <style>
   html, body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; }
   .container { max-width: 600px; margin: 0 auto; padding: 12px; }
+  
+  /* 登录界面 */
   #authPage { padding-top: 60px; text-align: center; }
   .auth-card { background: #fff; padding: 35px 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
   
+  /* 顶部导航条 */
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px; margin-bottom: 10px; }
+  .header h2 { margin: 0; font-size: 20px; color: #007bff; }
+  .logout-link { color: #ff4d4f; font-size: 14px; cursor: pointer; text-decoration: none; font-weight: bold; }
+
   /* 订单卡片样式 */
   .post { position: relative; background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; }
   .post.refunded { filter: grayscale(1); opacity: 0.55; background: #fafafa; }
   
-  .row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .info { font-size: 14px; line-height: 1.7; }
-  .status-tag { font-size: 12px; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+  /* 三行并列布局核心 CSS */
+  .info { font-size: 13px; line-height: 1.8; flex: 1; }
+  .info-line { display: flex; justify-content: space-between; border-bottom: 1px dashed #f0f0f0; padding: 2px 0; }
+  .info-line:last-child { border-bottom: none; }
+  .label-text { color: #888; margin-right: 4px; }
+  .value-text { font-weight: 500; color: #333; }
+
+  /* 状态标签 */
+  .status-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-left: 10px; height: fit-content; }
   .unrefunded { background: #ff4d4f; color: #fff; }
   .refunded-tag { background: #d4edda; color: #155724; }
   
-  .images { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; min-height: 50px; }
-  .images img { width: 85px; height: 85px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
+  /* 图片列表 */
+  .images { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
+  .images img { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
   
-  .edit-btn { position: absolute; right: 15px; bottom: 15px; padding: 6px 15px; border-radius: 8px; background: #6c757d; color: #fff; font-size: 12px; cursor: pointer; }
+  .edit-btn { position: absolute; right: 15px; bottom: 12px; padding: 5px 12px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 12px; cursor: pointer; }
   .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; cursor: pointer; }
   
+  /* 弹窗样式 */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 100; justify-content: center; align-items: center; padding: 15px; }
   .sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
   label { font-size: 13px; color: #888; display: block; margin-top: 15px; }
@@ -39,6 +54,7 @@
 </head>
 <body>
 
+<!-- 登录界面 -->
 <div id="authPage" class="container">
   <div class="auth-card">
     <h2 style="margin-top:0; color:#007bff;">订单管理系统</h2>
@@ -49,11 +65,19 @@
   </div>
 </div>
 
+<!-- 主界面 -->
 <div id="mainPage" style="display:none;">
-  <div class="container" id="list" style="padding-bottom: 100px;"></div>
+  <div class="container">
+    <div class="header">
+      <h2>我的订单</h2>
+      <span class="logout-link" onclick="logout()">退出登录</span>
+    </div>
+    <div id="list" style="padding-bottom: 100px;"></div>
+  </div>
   <button class="add-btn" id="addBtn" onclick="openSheet()">➕ 新建订单</button>
 </div>
 
+<!-- 订单详情弹窗 -->
 <div class="overlay" id="overlay" onclick="closeSheet()">
   <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
     <h3 id="formTitle" style="margin-top:0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">订单详情</h3>
@@ -75,6 +99,7 @@
   </form>
 </div>
 
+<!-- 图片大图预览 -->
 <div class="preview-modal" id="imgPreview" onclick="this.style.display='none'"><img id="fullImg"></div>
 
 <script>
@@ -98,6 +123,12 @@ async function handleAuth(action) {
   } else alert(res.message);
 }
 
+function logout() {
+  if(!confirm("确定退出登录吗？")) return;
+  localStorage.removeItem('order_uid');
+  location.reload();
+}
+
 function showMain() {
   document.getElementById('authPage').style.display='none';
   document.getElementById('mainPage').style.display='block';
@@ -115,17 +146,25 @@ async function refreshList() {
   }
 }
 
-// 核心修正：renderOrder 增加即时 UI 反馈逻辑
+// 核心修改：三行并列布局渲染逻辑
 function renderOrder(o, i) {
   const post = document.createElement('div');
   post.className = 'post' + (o.refundStatus ? ' refunded' : '');
   post.innerHTML = `
-    <div class="row">
+    <div style="display:flex; justify-content:space-between;">
       <div class="info">
-        <div><b>单号：${o.orderNo}</b></div>
-        <div>价格：$${o.price} · 自费：$${o.selfPay}</div>
-        <div>类型：${o.commentType} · 下单：${o.orderDate}</div>
-        ${o.arrivalDate ? `<div>到货：${o.arrivalDate}</div>` : ''}
+        <div class="info-line">
+          <span><span class="label-text">单号:</span><span class="value-text">${o.orderNo}</span></span>
+          <span><span class="label-text">类型:</span><span class="value-text">${o.commentType}</span></span>
+        </div>
+        <div class="info-line">
+          <span><span class="label-text">价格:</span><span class="value-text">$${o.price}</span></span>
+          <span><span class="label-text">自费:</span><span class="value-text">$${o.selfPay}</span></span>
+        </div>
+        <div class="info-line">
+          <span><span class="label-text">下单:</span><span class="value-text">${o.orderDate}</span></span>
+          <span><span class="label-text">到货:</span><span class="value-text">${o.arrivalDate || '-'}</span></span>
+        </div>
       </div>
       <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
         ${o.refundStatus ? '已退款' : '未退款'}
@@ -135,27 +174,20 @@ function renderOrder(o, i) {
     <div class="edit-btn" onclick="openSheet(${i})">编辑</div>
   `;
   
-  // 绑定状态标签点击事件（即时变灰逻辑）
   const tag = post.querySelector('.status-tag');
   tag.onclick = async (e) => {
     e.stopPropagation();
-    
-    // 1. 立即切换本地状态
     o.refundStatus = !o.refundStatus;
-    
-    // 2. 立即更新 UI 效果
     post.classList.toggle('refunded', o.refundStatus);
     tag.textContent = o.refundStatus ? '已退款' : '未退款';
     tag.className = `status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}`;
-
-    // 3. 后台同步到服务器
     await api({ action: 'saveOrder', userId: currentUserId, order: o });
   };
   
   document.getElementById('list').appendChild(post);
 }
 
-// 图片压缩逻辑
+// 图片本地压缩
 async function processImages(files) {
   const results = [];
   for (let file of files) {
