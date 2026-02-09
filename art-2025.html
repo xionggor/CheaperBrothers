@@ -12,40 +12,43 @@
   #authPage { padding-top: 60px; text-align: center; }
   .auth-card { background: #fff; padding: 35px 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
   
-  /* 顶部导航条 */
+  /* 顶部导航 */
   .header { display: flex; justify-content: space-between; align-items: center; padding: 5px; margin-bottom: 10px; }
   .header h2 { margin: 0; font-size: 18px; color: #007bff; }
   .logout-link { color: #999; font-size: 13px; cursor: pointer; text-decoration: underline; }
 
-  /* 订单卡片样式 */
-  .post { position: relative; background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; }
+  /* 订单卡片 */
+  .post { position: relative; background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .post.refunded { filter: grayscale(1); opacity: 0.5; background: #fafafa; }
   
-  /* 左对齐三行布局 */
   .info { font-size: 13px; line-height: 1.6; }
   .info-row { display: flex; gap: 15px; margin-bottom: 2px; }
-  .info-row span { white-space: nowrap; }
   .label-text { color: #888; margin-right: 3px; }
 
-  /* 状态标签 */
-  .status-tag { position: absolute; top: 12px; right: 12px; font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+  /* 右侧状态区 */
+  .status-box { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .status-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; font-weight: bold; }
   .unrefunded { background: #ff4d4f; color: #fff; }
   .refunded-tag { background: #d4edda; color: #155724; }
   
-  /* 缩小图片尺寸 */
+  /* 倒计时文字样式 */
+  .countdown { font-size: 10px; color: #ff9800; font-weight: bold; font-family: monospace; }
+  .expired { color: #999; }
+  .urgent { color: #ff4d4f; }
+
   .images { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; padding-bottom: 5px; }
   .images img { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
   
   .edit-btn { position: absolute; right: 12px; bottom: 10px; padding: 4px 10px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 11px; cursor: pointer; }
-  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; cursor: pointer; }
+  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; }
   
-  /* 弹窗样式 */
+  /* 弹窗 */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 100; justify-content: center; align-items: center; padding: 15px; }
   .sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
   label { font-size: 13px; color: #888; display: block; margin-top: 15px; }
-  input, select { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; font-size: 14px; }
+  input, select { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; }
   
-  .submit-btn { background: #007bff; color: #fff; width: 100%; padding: 14px; border: none; border-radius: 30px; margin-top: 25px; cursor: pointer; font-weight: bold; font-size: 16px; }
+  .submit-btn { background: #007bff; color: #fff; width: 100%; padding: 14px; border: none; border-radius: 30px; margin-top: 25px; cursor: pointer; font-weight: bold; }
   .delete-btn { background: #fff; color: #ff4d4f; width: 100%; padding: 10px; border: 1px solid #ff4d4f; border-radius: 30px; margin-top: 12px; cursor: pointer; font-size: 13px; }
   .preview-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; z-index: 200; justify-content: center; align-items: center; }
   .preview-modal img { max-width: 95%; max-height: 95%; border-radius: 8px; }
@@ -53,7 +56,6 @@
 </head>
 <body>
 
-<!-- 登录/注册 -->
 <div id="authPage" class="container">
   <div class="auth-card">
     <h2 style="margin-top:0; color:#007bff;">订单管理系统</h2>
@@ -64,7 +66,6 @@
   </div>
 </div>
 
-<!-- 主页列表 -->
 <div id="mainPage" style="display:none;">
   <div class="container">
     <div class="header">
@@ -76,7 +77,6 @@
   <button class="add-btn" id="addBtn" onclick="openSheet()">➕ 新建订单</button>
 </div>
 
-<!-- 弹窗表单 -->
 <div class="overlay" id="overlay" onclick="closeSheet()">
   <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
     <h3 id="formTitle" style="margin-top:0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">订单详情</h3>
@@ -106,6 +106,25 @@ let orders = [], editingIndex = null, currentUserId = localStorage.getItem('orde
 
 window.onload = () => { if(currentUserId) showMain(); };
 
+// --- 倒计时计算函数 ---
+function getCountdown(orderDateStr) {
+  if (!orderDateStr) return "";
+  const orderDate = new Date(orderDateStr);
+  const expiryDate = new Date(orderDate);
+  expiryDate.setDate(orderDate.getDate() + 25); // 25天后过期
+  
+  const now = new Date();
+  const diff = expiryDate - now;
+  
+  if (diff <= 0) return '<span class="expired">⌛ 已超期</span>';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  const urgentClass = days < 3 ? 'urgent' : ''; // 少于3天变红
+  return `<span class="${urgentClass}">⌛ 剩${days}天${hours}时</span>`;
+}
+
 async function api(data) {
   const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
   return await res.json();
@@ -113,7 +132,7 @@ async function api(data) {
 
 async function handleAuth(action) {
   const u = document.getElementById('username').value, p = document.getElementById('password').value;
-  if(!u || !p) return alert("请完整填写");
+  if(!u || !p) return alert("请填完账号密码");
   const res = await api({ action, username: u, password: p });
   if(res.success) {
     if(action === 'register') alert("注册成功");
@@ -121,11 +140,7 @@ async function handleAuth(action) {
   } else alert(res.message);
 }
 
-function logout() {
-  if(!confirm("确定退出？")) return;
-  localStorage.removeItem('order_uid');
-  location.reload();
-}
+function logout() { localStorage.removeItem('order_uid'); location.reload(); }
 
 function showMain() {
   document.getElementById('authPage').style.display='none';
@@ -135,7 +150,7 @@ function showMain() {
 
 async function refreshList() {
   const listEl = document.getElementById('list');
-  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">读取中...</p>';
+  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">载入中...</p>';
   const res = await api({ action: 'getOrders', userId: currentUserId });
   if(res.success) {
     orders = res.orders;
@@ -144,7 +159,6 @@ async function refreshList() {
   }
 }
 
-// 核心渲染逻辑：左对齐三行
 function renderOrder(o, i) {
   const post = document.createElement('div');
   post.className = 'post' + (o.refundStatus ? ' refunded' : '');
@@ -163,8 +177,11 @@ function renderOrder(o, i) {
         <span><span class="label-text">到货:</span>${o.arrivalDate || '-'}</span>
       </div>
     </div>
-    <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
-      ${o.refundStatus ? '已退款' : '未退款'}
+    <div class="status-box">
+      <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
+        ${o.refundStatus ? '已退款' : '未退款'}
+      </div>
+      <div class="countdown">${o.refundStatus ? '' : getCountdown(o.orderDate)}</div>
     </div>
     <div class="images">${o.imageUrl.map(src => `<img src="${src}" onclick="showFull('${src}')">`).join('')}</div>
     <div class="edit-btn" onclick="openSheet(${i})">编辑</div>
@@ -177,12 +194,13 @@ function renderOrder(o, i) {
     post.classList.toggle('refunded', o.refundStatus);
     tag.textContent = o.refundStatus ? '已退款' : '未退款';
     tag.className = `status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}`;
+    // 如果变更为已退款，清空倒计时显示
+    post.querySelector('.countdown').innerHTML = o.refundStatus ? '' : getCountdown(o.orderDate);
     await api({ action: 'saveOrder', userId: currentUserId, order: o });
   };
   document.getElementById('list').appendChild(post);
 }
 
-// 本地图片压缩 (Base64)
 async function processImages(files) {
   const results = [];
   for (let file of files) {
