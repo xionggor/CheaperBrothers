@@ -9,21 +9,28 @@
   .container { max-width: 600px; margin: 0 auto; padding: 12px; }
   #authPage { padding-top: 60px; text-align: center; }
   .auth-card { background: #fff; padding: 35px 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-  .post { position: relative; background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-  .post.refunded { filter: grayscale(1); opacity: 0.6; }
+  
+  /* 订单卡片样式 */
+  .post { position: relative; background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; }
+  .post.refunded { filter: grayscale(1); opacity: 0.55; background: #fafafa; }
+  
   .row { display: flex; justify-content: space-between; align-items: flex-start; }
   .info { font-size: 14px; line-height: 1.7; }
-  .status-tag { font-size: 12px; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+  .status-tag { font-size: 12px; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.2s; }
   .unrefunded { background: #ff4d4f; color: #fff; }
   .refunded-tag { background: #d4edda; color: #155724; }
+  
   .images { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; min-height: 50px; }
   .images img { width: 85px; height: 85px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
+  
   .edit-btn { position: absolute; right: 15px; bottom: 15px; padding: 6px 15px; border-radius: 8px; background: #6c757d; color: #fff; font-size: 12px; cursor: pointer; }
-  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; }
+  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; cursor: pointer; }
+  
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 100; justify-content: center; align-items: center; padding: 15px; }
   .sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
   label { font-size: 13px; color: #888; display: block; margin-top: 15px; }
   input, select { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; font-size: 14px; }
+  
   .submit-btn { background: #007bff; color: #fff; width: 100%; padding: 14px; border: none; border-radius: 30px; margin-top: 25px; cursor: pointer; font-weight: bold; font-size: 16px; }
   .delete-btn { background: #fff; color: #ff4d4f; width: 100%; padding: 10px; border: 1px solid #ff4d4f; border-radius: 30px; margin-top: 12px; cursor: pointer; font-size: 13px; }
   .preview-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; z-index: 200; justify-content: center; align-items: center; }
@@ -59,7 +66,7 @@
     <label id="arrivalLabel" style="display:none;">到货日期</label>
     <input id="arrivalDate" type="date" style="display:none;">
     
-    <label style="color:#007bff; font-weight:bold;">🖼️ 订单截图 (直接保存到表格)</label>
+    <label style="color:#007bff; font-weight:bold;">🖼️ 订单截图</label>
     <input id="imageFiles" type="file" multiple accept="image/*" onchange="previewLocal()">
     <div id="localPreview" class="images"></div>
     
@@ -77,21 +84,16 @@ let orders = [], editingIndex = null, currentUserId = localStorage.getItem('orde
 window.onload = () => { if(currentUserId) showMain(); };
 
 async function api(data) {
-  try {
-    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
-    return await res.json();
-  } catch (e) {
-    alert("网络请求失败，请检查网络并重试");
-    return {success: false};
-  }
+  const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
+  return await res.json();
 }
 
 async function handleAuth(action) {
   const u = document.getElementById('username').value, p = document.getElementById('password').value;
-  if(!u || !p) return alert("请完整填写用户名和密码");
+  if(!u || !p) return alert("请完整填写");
   const res = await api({ action, username: u, password: p });
   if(res.success) {
-    if(action === 'register') alert("注册成功，请点击登录进入系统");
+    if(action === 'register') alert("注册成功，请登录");
     else { currentUserId = res.userId; localStorage.setItem('order_uid', currentUserId); showMain(); }
   } else alert(res.message);
 }
@@ -104,15 +106,16 @@ function showMain() {
 
 async function refreshList() {
   const listEl = document.getElementById('list');
-  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">正在获取云端数据...</p>';
+  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">数据同步中...</p>';
   const res = await api({ action: 'getOrders', userId: currentUserId });
   if(res.success) {
     orders = res.orders;
-    listEl.innerHTML = orders.length ? '' : '<p style="text-align:center; color:#999; margin-top:50px;">目前还没有订单记录</p>';
+    listEl.innerHTML = orders.length ? '' : '<p style="text-align:center; color:#999; margin-top:50px;">暂无数据</p>';
     orders.forEach((o, i) => renderOrder(o, i));
   }
 }
 
+// 核心修正：renderOrder 增加即时 UI 反馈逻辑
 function renderOrder(o, i) {
   const post = document.createElement('div');
   post.className = 'post' + (o.refundStatus ? ' refunded' : '');
@@ -124,21 +127,35 @@ function renderOrder(o, i) {
         <div>类型：${o.commentType} · 下单：${o.orderDate}</div>
         ${o.arrivalDate ? `<div>到货：${o.arrivalDate}</div>` : ''}
       </div>
-      <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">${o.refundStatus ? '已退款' : '未退款'}</div>
+      <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
+        ${o.refundStatus ? '已退款' : '未退款'}
+      </div>
     </div>
     <div class="images">${o.imageUrl.map(src => `<img src="${src}" onclick="showFull('${src}')">`).join('')}</div>
     <div class="edit-btn" onclick="openSheet(${i})">编辑</div>
   `;
-  post.querySelector('.status-tag').onclick = async (e) => {
+  
+  // 绑定状态标签点击事件（即时变灰逻辑）
+  const tag = post.querySelector('.status-tag');
+  tag.onclick = async (e) => {
     e.stopPropagation();
+    
+    // 1. 立即切换本地状态
     o.refundStatus = !o.refundStatus;
+    
+    // 2. 立即更新 UI 效果
+    post.classList.toggle('refunded', o.refundStatus);
+    tag.textContent = o.refundStatus ? '已退款' : '未退款';
+    tag.className = `status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}`;
+
+    // 3. 后台同步到服务器
     await api({ action: 'saveOrder', userId: currentUserId, order: o });
-    refreshList();
   };
+  
   document.getElementById('list').appendChild(post);
 }
 
-// 图片压缩逻辑 (重点：不再依赖外部图床)
+// 图片压缩逻辑
 async function processImages(files) {
   const results = [];
   for (let file of files) {
@@ -154,7 +171,7 @@ async function processImages(files) {
           if (w > max) { h = Math.round((h * max) / w); w = max; }
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.6)); // 压缩质量 0.6
+          resolve(canvas.toDataURL('image/jpeg', 0.6));
         };
       };
     });
@@ -166,7 +183,7 @@ async function processImages(files) {
 async function submitOrder(e) {
   e.preventDefault();
   const btn = document.getElementById('subBtn');
-  btn.disabled = true; btn.textContent = "图片同步中...";
+  btn.disabled = true; btn.textContent = "处理中...";
   
   const files = document.getElementById('imageFiles').files;
   let imgData = [];
@@ -185,7 +202,6 @@ async function submitOrder(e) {
     imageUrl: imgData
   };
 
-  btn.textContent = "正在保存数据...";
   const res = await api({ action: 'saveOrder', userId: currentUserId, order: data });
   if(res.success) { closeSheet(); refreshList(); }
   btn.disabled = false; btn.textContent = "保存并同步";
@@ -198,7 +214,7 @@ function openSheet(idx = null) {
   document.getElementById('imageFiles').value='';
   if(idx !== null) {
     const o = orders[idx];
-    document.getElementById('formTitle').textContent='修改订单信息';
+    document.getElementById('formTitle').textContent='编辑订单';
     document.getElementById('orderNo').value=o.orderNo;
     document.getElementById('price').value=o.price;
     document.getElementById('selfPay').value=o.selfPay;
@@ -228,7 +244,7 @@ function previewLocal() {
 function showFull(s) { document.getElementById('fullImg').src=s; document.getElementById('imgPreview').style.display='flex'; }
 
 async function deleteOrder() {
-  if(!confirm("确定要删除这条订单记录吗？")) return;
+  if(!confirm("确定删除？")) return;
   const res = await api({ action: 'deleteOrder', userId: currentUserId, orderId: orders[editingIndex].orderId });
   if(res.success) { closeSheet(); refreshList(); }
 }
