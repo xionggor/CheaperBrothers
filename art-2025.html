@@ -2,179 +2,250 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>订单管理系统</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<title>订单管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <style>
-/* ===== 通用 ===== */
-body {
-  margin: 0;
-  font-family: system-ui;
-  background: #f5f5f5;
-}
-
-/* ===== 登录注册 ===== */
-.auth-box {
-  max-width: 360px;
-  margin: 80px auto;
-  background: #fff;
-  padding: 24px;
-  border-radius: 14px;
-}
-.auth-box input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-}
-.auth-box button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 16px;
-}
-.link {
-  text-align: center;
-  margin-top: 10px;
-  color: #007bff;
-  cursor: pointer;
-}
-
-/* ===== 模板1原样保留 ===== */
+/* 完全保留你的原始样式 */
+html, body { margin: 0; padding: 0; overflow-x: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: #f5f5f5; }
 .container { max-width: 600px; margin: 0 auto; padding: 12px; }
-
 .post { position: relative; background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
 .post.refunded { filter: grayscale(1); opacity: 0.55; }
-
 .row { display: flex; justify-content: space-between; gap: 10px; }
 .info { font-size: 13px; line-height: 1.6; }
-
-.status-tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.status-tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; height: fit-content; }
 .unrefunded { background: #ff4d4f; color: #fff; }
 .refunded-tag { background: #d4edda; color: #155724; }
-
 .images { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; }
-.images img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; cursor: pointer; }
-
+.images img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; flex-shrink: 0; cursor: pointer; }
 .edit-btn { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 13px; cursor: pointer; }
+.add-btn { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); padding: 12px 26px; border-radius: 24px; background: #007bff; color: #fff; border: none; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; display: none; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 100; justify-content: center; align-items: center; padding: 10px; box-sizing: border-box; }
+.sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 16px; padding: 16px; max-height: 90%; overflow-y: auto; box-sizing: border-box; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+label { font-size:13px; color:#555; display:block; margin-top:14px; }
+input, select { width:100%; margin-top:6px; padding:10px; border-radius:8px; border:1px solid #ddd; font-size:14px; box-sizing:border-box; }
+.submit-btn, .delete-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 24px; border: none; font-size: 15px; cursor: pointer; }
+.submit-btn { background: #007bff; color: #fff; }
+.delete-btn { background: #dc3545; color: #fff; }
+.preview { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 200; }
+.preview img { max-width: 90%; max-height: 90%; border-radius: 8px; }
 
-.add-btn {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 26px;
-  border-radius: 24px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-}
-.logout-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  padding: 6px 12px;
-}
+/* 登录页样式 (与你的 UI 风格保持一致) */
+#auth-page { padding: 40px 20px; text-align: center; }
+.auth-card { background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 </style>
 </head>
-
 <body>
 
-<!-- 登录 -->
-<div class="auth-box" id="loginBox">
-  <h2>登录</h2>
-  <input id="loginUsername" placeholder="用户名">
-  <input id="loginPassword" type="password" placeholder="密码">
-  <button onclick="login()">登录</button>
-  <div class="link" onclick="showRegister()">没有账号？注册</div>
+<!-- 登录/注册界面 -->
+<div id="auth-page" class="container">
+  <div class="auth-card">
+    <h2 style="margin-top:0">订单系统登录</h2>
+    <input type="text" id="username" placeholder="用户名">
+    <input type="password" id="password" placeholder="密码">
+    <button class="submit-btn" onclick="handleAuth('login')">登录</button>
+    <button class="submit-btn" style="background:#28a745; margin-top:10px;" onclick="handleAuth('register')">注册新账号</button>
+  </div>
 </div>
 
-<!-- 注册 -->
-<div class="auth-box" id="registerBox" style="display:none;">
-  <h2>注册</h2>
-  <input id="regUsername" placeholder="用户名">
-  <input id="regPassword" type="password" placeholder="密码">
-  <button onclick="register()">注册</button>
-  <div class="link" onclick="showLogin()">返回登录</div>
-</div>
-
-<!-- 模板1主界面 -->
-<div id="app" style="display:none;">
-  <button class="logout-btn" onclick="logout()">退出</button>
+<!-- 主内容界面 -->
+<div id="main-page" style="display:none;">
   <div class="container" id="list"></div>
-  <button class="add-btn" onclick="alert('下一步接 Orders API')">➕ 新建订单</button>
+  <button class="add-btn" id="addBtn" onclick="openSheet()">➕ 新建订单</button>
 </div>
+
+<!-- 表单弹窗 -->
+<div class="overlay" id="overlay" onclick="closeSheet()">
+  <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
+    <h2 id="form-title">新建订单</h2>
+    <label>订单号</label><input id="orderNo" required>
+    <label>价格 (美元)</label><input id="price" type="number" step="0.01" required>
+    <label>自费金额 ($)</label><input id="selfPay" type="number" step="0.01" value="0">
+    <label>评论类型</label>
+    <select id="commentType"><option value="免评">免评</option><option value="点星">点星</option><option value="评论">评论</option></select>
+    <label>下单日期</label><input id="orderDate" type="date">
+    <label id="arrivalLabel" style="display:none;">到货日期</label>
+    <input id="arrivalDate" type="date" style="display:none;">
+    <label>订单截图</label><input id="imageFiles" type="file" multiple accept="image/*">
+    <button class="submit-btn" type="submit" id="subBtn">提交保存</button>
+    <button type="button" class="delete-btn" id="deleteBtn" onclick="deleteOrder()" style="display:none;">删除订单</button>
+  </form>
+</div>
+
+<!-- 图片预览 -->
+<div class="preview" id="preview" onclick="closePreview()"><img id="previewImg"></div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbynL5cgXPC0Lqbftc6hUIAi0dawiOpSksmqeHOs7RfhFkkKkQ8r4dktiBGz1u98dMs/exec';
+// ⚠️ 记得在这里填入你的 API 链接
+const API_URL = 'https://script.google.com/macros/s/AKfycby1MdA8vCH3FyMqqcasbtGPrL-AZo-E--StEivE6t_4wanBj5n_HCybEh1e_70ctj5I/exec';
 
-const loginBox = document.getElementById('loginBox');
-const registerBox = document.getElementById('registerBox');
-const app = document.getElementById('app');
+let orders = [], editingIndex = null, currentUserId = localStorage.getItem('order_uid');
 
-/* ===== 登录状态判断 ===== */
-if (localStorage.getItem('userId')) {
-  showApp();
+// 初始化
+window.addEventListener('DOMContentLoaded', () => {
+  if(currentUserId) showMainPage();
+});
+
+// 通用 API 调用
+async function apiCall(data) {
+  const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
+  return await res.json();
 }
 
-/* ===== 登录注册 ===== */
-function showRegister() {
-  loginBox.style.display = 'none';
-  registerBox.style.display = 'block';
+// 登录与注册
+async function handleAuth(action) {
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  if(!u || !p) return alert("请输入账号密码");
+  
+  const res = await apiCall({ action, username: u, password: p });
+  if(res.success) {
+    if(action === 'register') alert("注册成功，请点击登录");
+    else {
+      currentUserId = res.userId;
+      localStorage.setItem('order_uid', currentUserId);
+      showMainPage();
+    }
+  } else alert(res.message);
 }
 
-function showLogin() {
-  registerBox.style.display = 'none';
-  loginBox.style.display = 'block';
+function showMainPage() {
+  document.getElementById('auth-page').style.display = 'none';
+  document.getElementById('main-page').style.display = 'block';
+  document.getElementById('addBtn').style.display = 'block';
+  refreshList();
 }
 
-function login() {
-  fetch(API_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'login',
-      username: loginUsername.value,
-      password: loginPassword.value
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (!d.success) return alert(d.message);
-    localStorage.setItem('userId', d.userId);
-    localStorage.setItem('username', d.username);
-    showApp();
-  });
+async function refreshList() {
+  const listEl = document.getElementById('list');
+  listEl.innerHTML = '<p style="text-align:center; color:#999;">载入中...</p>';
+  const res = await apiCall({ action: 'getOrders', userId: currentUserId });
+  if(res.success) {
+    orders = res.orders;
+    listEl.innerHTML = orders.length ? '' : '<p style="text-align:center; color:#999;">暂无订单</p>';
+    orders.forEach((order, index) => renderOrder(order, index));
+  }
 }
 
-function register() {
-  fetch(API_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'register',
-      username: regUsername.value,
-      password: regPassword.value
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (!d.success) return alert(d.message);
-    localStorage.setItem('userId', d.userId);
-    localStorage.setItem('username', d.username);
-    showApp();
-  });
+function renderOrder(order, index) {
+  const listEl = document.getElementById('list');
+  const post = document.createElement('div');
+  post.className = 'post' + (order.refundStatus ? ' refunded' : '');
+  post.innerHTML = `
+    <div class="row">
+      <div class="info">
+        <div><b>订单号：${order.orderNo}</b></div>
+        <div>价格：$${order.price} · 自费 $${order.selfPay}</div>
+        <div>评论方式：${order.commentType}</div>
+        <div>下单日期：${order.orderDate}</div>
+        ${order.arrivalDate ? `<div>到货日期：${order.arrivalDate}</div>` : ''}
+      </div>
+      <div class="status-tag ${order.refundStatus ? 'refunded-tag' : 'unrefunded'}">
+        ${order.refundStatus ? '已退款' : '未退款'}
+      </div>
+    </div>
+    <div class="images">
+      ${order.imageUrl.map(src => `<img src="${src}" onclick="openPreview('${src}')">`).join('')}
+    </div>
+    <div class="edit-btn">修改</div>
+  `;
+
+  // 快捷切换退款状态
+  post.querySelector('.status-tag').onclick = async e => {
+    e.stopPropagation();
+    order.refundStatus = !order.refundStatus;
+    await apiCall({ action: 'saveOrder', userId: currentUserId, order: order });
+    refreshList();
+  };
+
+  post.querySelector('.edit-btn').onclick = () => openSheet(index);
+  listEl.appendChild(post);
 }
 
-function logout() {
-  localStorage.clear();
-  location.reload();
+function openSheet(editIndex = null) {
+  editingIndex = editIndex;
+  const overlay = document.getElementById('overlay');
+  const delBtn = document.getElementById('deleteBtn');
+  const arrivalLabel = document.getElementById('arrivalLabel');
+  const arrivalInput = document.getElementById('arrivalDate');
+
+  if(editingIndex !== null){
+    document.getElementById('form-title').textContent = '修改订单';
+    delBtn.style.display = 'block';
+    arrivalLabel.style.display = 'block';
+    arrivalInput.style.display = 'block';
+    const o = orders[editingIndex];
+    document.getElementById('orderNo').value = o.orderNo;
+    document.getElementById('price').value = o.price;
+    document.getElementById('selfPay').value = o.selfPay;
+    document.getElementById('commentType').value = o.commentType;
+    document.getElementById('orderDate').value = o.orderDate;
+    document.getElementById('arrivalDate').value = o.arrivalDate || "";
+  } else {
+    document.getElementById('form-title').textContent = '新建订单';
+    document.querySelector('form').reset();
+    delBtn.style.display = 'none';
+    arrivalLabel.style.display = 'none';
+    arrivalInput.style.display = 'none';
+    document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
+  }
+  overlay.style.display = 'flex';
 }
 
-function showApp() {
-  loginBox.style.display = 'none';
-  registerBox.style.display = 'none';
-  app.style.display = 'block';
+function closeSheet() { document.getElementById('overlay').style.display = 'none'; }
+
+async function deleteOrder() {
+  if(!confirm("确定删除此订单吗？")) return;
+  const res = await apiCall({ action: 'deleteOrder', userId: currentUserId, orderId: orders[editingIndex].orderId });
+  if(res.success) { closeSheet(); refreshList(); }
 }
+
+async function uploadToTelegraph(files) {
+  const urls = [];
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const res = await fetch('https://telegra.ph/upload', { method: 'POST', body: formData });
+      const b = await res.json();
+      if (b[0] && b[0].src) urls.push('https://telegra.ph' + b[0].src);
+    } catch (e) { console.error("上传失败", e); }
+  }
+  return urls;
+}
+
+async function submitOrder(e) {
+  e.preventDefault();
+  const subBtn = document.getElementById('subBtn');
+  subBtn.disabled = true;
+  subBtn.textContent = "保存中...";
+
+  const fileInput = document.getElementById('imageFiles');
+  let newImages = await uploadToTelegraph(fileInput.files);
+  
+  const orderData = {
+    orderId: editingIndex !== null ? orders[editingIndex].orderId : null,
+    orderNo: document.getElementById('orderNo').value,
+    price: document.getElementById('price').value,
+    selfPay: document.getElementById('selfPay').value,
+    commentType: document.getElementById('commentType').value,
+    orderDate: document.getElementById('orderDate').value,
+    arrivalDate: document.getElementById('arrivalDate').value,
+    refundStatus: editingIndex !== null ? orders[editingIndex].refundStatus : false,
+    imageUrl: newImages.length > 0 ? newImages : (editingIndex !== null ? orders[editingIndex].imageUrl : [])
+  };
+
+  const res = await apiCall({ action: 'saveOrder', userId: currentUserId, order: orderData });
+  if(res.success) {
+    closeSheet();
+    refreshList();
+  }
+  subBtn.disabled = false;
+  subBtn.textContent = "提交保存";
+}
+
+function openPreview(src) { document.getElementById('previewImg').src = src; document.getElementById('preview').style.display = 'flex'; }
+function closePreview() { document.getElementById('preview').style.display = 'none'; }
 </script>
-
 </body>
 </html>
