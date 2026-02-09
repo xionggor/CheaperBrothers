@@ -2,228 +2,178 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>订单管理</title>
+<title>订单管理系统</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <style>
-/* 完全保留你的原始样式 */
-html, body { margin: 0; padding: 0; overflow-x: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: #f5f5f5; }
-.container { max-width: 600px; margin: 0 auto; padding: 12px; }
-.post { position: relative; background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
-.post.refunded { filter: grayscale(1); opacity: 0.55; }
-.row { display: flex; justify-content: space-between; gap: 10px; }
-.info { font-size: 13px; line-height: 1.6; }
-.status-tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; height: fit-content; }
-.unrefunded { background: #ff4d4f; color: #fff; }
-.refunded-tag { background: #d4edda; color: #155724; }
-.images { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; }
-.images img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; flex-shrink: 0; cursor: pointer; }
-.edit-btn { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 13px; cursor: pointer; }
-.add-btn { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); padding: 12px 26px; border-radius: 24px; background: #007bff; color: #fff; border: none; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; display: none; }
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 100; justify-content: center; align-items: center; padding: 10px; box-sizing: border-box; }
-.sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 16px; padding: 16px; max-height: 90%; overflow-y: auto; box-sizing: border-box; animation: slideUp 0.25s ease; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-label { font-size:13px; color:#555; display:block; margin-top:14px; }
-input, select { width:100%; margin-top:6px; padding:10px; border-radius:8px; border:1px solid #ddd; font-size:14px; box-sizing:border-box; }
-.submit-btn, .delete-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 24px; border: none; font-size: 15px; cursor: pointer; }
-.submit-btn { background: #007bff; color: #fff; }
-.delete-btn { background: #dc3545; color: #fff; }
-.preview { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 200; }
-.preview img { max-width: 90%; max-height: 90%; border-radius: 8px; }
-
-/* 登录页样式 (与你的 UI 风格保持一致) */
-#auth-page { padding: 40px 20px; text-align: center; }
-.auth-card { background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  html, body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; }
+  .container { max-width: 600px; margin: 0 auto; padding: 12px; }
+  #authPage { padding-top: 60px; text-align: center; }
+  .auth-card { background: #fff; padding: 35px 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+  .post { position: relative; background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .post.refunded { filter: grayscale(1); opacity: 0.6; }
+  .row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .info { font-size: 14px; line-height: 1.7; }
+  .status-tag { font-size: 12px; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+  .unrefunded { background: #ff4d4f; color: #fff; }
+  .refunded-tag { background: #d4edda; color: #155724; }
+  .images { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; min-height: 50px; }
+  .images img { width: 85px; height: 85px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
+  .edit-btn { position: absolute; right: 15px; bottom: 15px; padding: 6px 15px; border-radius: 8px; background: #6c757d; color: #fff; font-size: 12px; cursor: pointer; }
+  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 100; justify-content: center; align-items: center; padding: 15px; }
+  .sheet { width: 100%; max-width: 450px; background: #fff; border-radius: 20px; padding: 25px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
+  label { font-size: 13px; color: #888; display: block; margin-top: 15px; }
+  input, select { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; font-size: 14px; }
+  .submit-btn { background: #007bff; color: #fff; width: 100%; padding: 14px; border: none; border-radius: 30px; margin-top: 25px; cursor: pointer; font-weight: bold; font-size: 16px; }
+  .delete-btn { background: #fff; color: #ff4d4f; width: 100%; padding: 10px; border: 1px solid #ff4d4f; border-radius: 30px; margin-top: 12px; cursor: pointer; font-size: 13px; }
+  .preview-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; z-index: 200; justify-content: center; align-items: center; }
+  .preview-modal img { max-width: 95%; max-height: 95%; border-radius: 8px; }
 </style>
 </head>
 <body>
 
-<!-- 登录/注册界面 -->
-<div id="auth-page" class="container">
+<div id="authPage" class="container">
   <div class="auth-card">
-    <h2 style="margin-top:0">订单系统登录</h2>
+    <h2 style="margin-top:0; color:#007bff;">订单管理系统</h2>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
-    <button class="submit-btn" onclick="handleAuth('login')">登录</button>
-    <button class="submit-btn" style="background:#28a745; margin-top:10px;" onclick="handleAuth('register')">注册新账号</button>
+    <button class="submit-btn" onclick="handleAuth('login')">登录系统</button>
+    <button class="submit-btn" style="background:#28a745; margin-top:12px;" onclick="handleAuth('register')">注册新账号</button>
   </div>
 </div>
 
-<!-- 主内容界面 -->
-<div id="main-page" style="display:none;">
-  <div class="container" id="list"></div>
+<div id="mainPage" style="display:none;">
+  <div class="container" id="list" style="padding-bottom: 100px;"></div>
   <button class="add-btn" id="addBtn" onclick="openSheet()">➕ 新建订单</button>
 </div>
 
-<!-- 表单弹窗 -->
 <div class="overlay" id="overlay" onclick="closeSheet()">
   <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
-    <h2 id="form-title">新建订单</h2>
-    <label>订单号</label><input id="orderNo" required>
-    <label>价格 (美元)</label><input id="price" type="number" step="0.01" required>
+    <h3 id="formTitle" style="margin-top:0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">订单详情</h3>
+    <label>订单号</label><input id="orderNo" placeholder="输入订单号" required>
+    <label>价格 ($)</label><input id="price" type="number" step="0.01" required>
     <label>自费金额 ($)</label><input id="selfPay" type="number" step="0.01" value="0">
     <label>评论类型</label>
     <select id="commentType"><option value="免评">免评</option><option value="点星">点星</option><option value="评论">评论</option></select>
     <label>下单日期</label><input id="orderDate" type="date">
     <label id="arrivalLabel" style="display:none;">到货日期</label>
     <input id="arrivalDate" type="date" style="display:none;">
-    <label>订单截图</label><input id="imageFiles" type="file" multiple accept="image/*">
-    <button class="submit-btn" type="submit" id="subBtn">提交保存</button>
-    <button type="button" class="delete-btn" id="deleteBtn" onclick="deleteOrder()" style="display:none;">删除订单</button>
+    
+    <label style="color:#007bff; font-weight:bold;">🖼️ 订单截图 (直接保存到表格)</label>
+    <input id="imageFiles" type="file" multiple accept="image/*" onchange="previewLocal()">
+    <div id="localPreview" class="images"></div>
+    
+    <button class="submit-btn" type="submit" id="subBtn">保存并同步</button>
+    <button type="button" class="delete-btn" id="deleteBtn" onclick="deleteOrder()" style="display:none;">删除此订单</button>
   </form>
 </div>
 
-<!-- 图片预览 -->
-<div class="preview" id="preview" onclick="closePreview()"><img id="previewImg"></div>
+<div class="preview-modal" id="imgPreview" onclick="this.style.display='none'"><img id="fullImg"></div>
 
 <script>
-// ⚠️ 记得在这里填入你的 API 链接
-const API_URL = 'https://script.google.com/macros/s/AKfycby1MdA8vCH3FyMqqcasbtGPrL-AZo-E--StEivE6t_4wanBj5n_HCybEh1e_70ctj5I/exec';
-
+const API_URL = 'https://script.google.com/macros/s/AKfycbwV2k-25S-EJelFrPOxuUyEWrr8TFEcklbwSzYdCAayIKp8aCLPXYc_7-yU00r1u1A8/exec';
 let orders = [], editingIndex = null, currentUserId = localStorage.getItem('order_uid');
 
-// 初始化
-window.addEventListener('DOMContentLoaded', () => {
-  if(currentUserId) showMainPage();
-});
+window.onload = () => { if(currentUserId) showMain(); };
 
-// 通用 API 调用
-async function apiCall(data) {
-  const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
-  return await res.json();
+async function api(data) {
+  try {
+    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
+    return await res.json();
+  } catch (e) {
+    alert("网络请求失败，请检查网络并重试");
+    return {success: false};
+  }
 }
 
-// 登录与注册
 async function handleAuth(action) {
-  const u = document.getElementById('username').value;
-  const p = document.getElementById('password').value;
-  if(!u || !p) return alert("请输入账号密码");
-  
-  const res = await apiCall({ action, username: u, password: p });
+  const u = document.getElementById('username').value, p = document.getElementById('password').value;
+  if(!u || !p) return alert("请完整填写用户名和密码");
+  const res = await api({ action, username: u, password: p });
   if(res.success) {
-    if(action === 'register') alert("注册成功，请点击登录");
-    else {
-      currentUserId = res.userId;
-      localStorage.setItem('order_uid', currentUserId);
-      showMainPage();
-    }
+    if(action === 'register') alert("注册成功，请点击登录进入系统");
+    else { currentUserId = res.userId; localStorage.setItem('order_uid', currentUserId); showMain(); }
   } else alert(res.message);
 }
 
-function showMainPage() {
-  document.getElementById('auth-page').style.display = 'none';
-  document.getElementById('main-page').style.display = 'block';
-  document.getElementById('addBtn').style.display = 'block';
+function showMain() {
+  document.getElementById('authPage').style.display='none';
+  document.getElementById('mainPage').style.display='block';
   refreshList();
 }
 
 async function refreshList() {
   const listEl = document.getElementById('list');
-  listEl.innerHTML = '<p style="text-align:center; color:#999;">载入中...</p>';
-  const res = await apiCall({ action: 'getOrders', userId: currentUserId });
+  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">正在获取云端数据...</p>';
+  const res = await api({ action: 'getOrders', userId: currentUserId });
   if(res.success) {
     orders = res.orders;
-    listEl.innerHTML = orders.length ? '' : '<p style="text-align:center; color:#999;">暂无订单</p>';
-    orders.forEach((order, index) => renderOrder(order, index));
+    listEl.innerHTML = orders.length ? '' : '<p style="text-align:center; color:#999; margin-top:50px;">目前还没有订单记录</p>';
+    orders.forEach((o, i) => renderOrder(o, i));
   }
 }
 
-function renderOrder(order, index) {
-  const listEl = document.getElementById('list');
+function renderOrder(o, i) {
   const post = document.createElement('div');
-  post.className = 'post' + (order.refundStatus ? ' refunded' : '');
+  post.className = 'post' + (o.refundStatus ? ' refunded' : '');
   post.innerHTML = `
     <div class="row">
       <div class="info">
-        <div><b>订单号：${order.orderNo}</b></div>
-        <div>价格：$${order.price} · 自费 $${order.selfPay}</div>
-        <div>评论方式：${order.commentType}</div>
-        <div>下单日期：${order.orderDate}</div>
-        ${order.arrivalDate ? `<div>到货日期：${order.arrivalDate}</div>` : ''}
+        <div><b>单号：${o.orderNo}</b></div>
+        <div>价格：$${o.price} · 自费：$${o.selfPay}</div>
+        <div>类型：${o.commentType} · 下单：${o.orderDate}</div>
+        ${o.arrivalDate ? `<div>到货：${o.arrivalDate}</div>` : ''}
       </div>
-      <div class="status-tag ${order.refundStatus ? 'refunded-tag' : 'unrefunded'}">
-        ${order.refundStatus ? '已退款' : '未退款'}
-      </div>
+      <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">${o.refundStatus ? '已退款' : '未退款'}</div>
     </div>
-    <div class="images">
-      ${order.imageUrl.map(src => `<img src="${src}" onclick="openPreview('${src}')">`).join('')}
-    </div>
-    <div class="edit-btn">修改</div>
+    <div class="images">${o.imageUrl.map(src => `<img src="${src}" onclick="showFull('${src}')">`).join('')}</div>
+    <div class="edit-btn" onclick="openSheet(${i})">编辑</div>
   `;
-
-  // 快捷切换退款状态
-  post.querySelector('.status-tag').onclick = async e => {
+  post.querySelector('.status-tag').onclick = async (e) => {
     e.stopPropagation();
-    order.refundStatus = !order.refundStatus;
-    await apiCall({ action: 'saveOrder', userId: currentUserId, order: order });
+    o.refundStatus = !o.refundStatus;
+    await api({ action: 'saveOrder', userId: currentUserId, order: o });
     refreshList();
   };
-
-  post.querySelector('.edit-btn').onclick = () => openSheet(index);
-  listEl.appendChild(post);
+  document.getElementById('list').appendChild(post);
 }
 
-function openSheet(editIndex = null) {
-  editingIndex = editIndex;
-  const overlay = document.getElementById('overlay');
-  const delBtn = document.getElementById('deleteBtn');
-  const arrivalLabel = document.getElementById('arrivalLabel');
-  const arrivalInput = document.getElementById('arrivalDate');
-
-  if(editingIndex !== null){
-    document.getElementById('form-title').textContent = '修改订单';
-    delBtn.style.display = 'block';
-    arrivalLabel.style.display = 'block';
-    arrivalInput.style.display = 'block';
-    const o = orders[editingIndex];
-    document.getElementById('orderNo').value = o.orderNo;
-    document.getElementById('price').value = o.price;
-    document.getElementById('selfPay').value = o.selfPay;
-    document.getElementById('commentType').value = o.commentType;
-    document.getElementById('orderDate').value = o.orderDate;
-    document.getElementById('arrivalDate').value = o.arrivalDate || "";
-  } else {
-    document.getElementById('form-title').textContent = '新建订单';
-    document.querySelector('form').reset();
-    delBtn.style.display = 'none';
-    arrivalLabel.style.display = 'none';
-    arrivalInput.style.display = 'none';
-    document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
-  }
-  overlay.style.display = 'flex';
-}
-
-function closeSheet() { document.getElementById('overlay').style.display = 'none'; }
-
-async function deleteOrder() {
-  if(!confirm("确定删除此订单吗？")) return;
-  const res = await apiCall({ action: 'deleteOrder', userId: currentUserId, orderId: orders[editingIndex].orderId });
-  if(res.success) { closeSheet(); refreshList(); }
-}
-
-async function uploadToTelegraph(files) {
-  const urls = [];
+// 图片压缩逻辑 (重点：不再依赖外部图床)
+async function processImages(files) {
+  const results = [];
   for (let file of files) {
-    const formData = new FormData();
-    formData.append('file', file);
-    try {
-      const res = await fetch('https://telegra.ph/upload', { method: 'POST', body: formData });
-      const b = await res.json();
-      if (b[0] && b[0].src) urls.push('https://telegra.ph' + b[0].src);
-    } catch (e) { console.error("上传失败", e); }
+    const base64 = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height, max = 800;
+          if (w > max) { h = Math.round((h * max) / w); w = max; }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.6)); // 压缩质量 0.6
+        };
+      };
+    });
+    results.push(base64);
   }
-  return urls;
+  return results;
 }
 
 async function submitOrder(e) {
   e.preventDefault();
-  const subBtn = document.getElementById('subBtn');
-  subBtn.disabled = true;
-  subBtn.textContent = "保存中...";
-
-  const fileInput = document.getElementById('imageFiles');
-  let newImages = await uploadToTelegraph(fileInput.files);
+  const btn = document.getElementById('subBtn');
+  btn.disabled = true; btn.textContent = "图片同步中...";
   
-  const orderData = {
+  const files = document.getElementById('imageFiles').files;
+  let imgData = [];
+  if(files.length > 0) imgData = await processImages(files);
+  else if(editingIndex !== null) imgData = orders[editingIndex].imageUrl;
+
+  const data = {
     orderId: editingIndex !== null ? orders[editingIndex].orderId : null,
     orderNo: document.getElementById('orderNo').value,
     price: document.getElementById('price').value,
@@ -232,20 +182,56 @@ async function submitOrder(e) {
     orderDate: document.getElementById('orderDate').value,
     arrivalDate: document.getElementById('arrivalDate').value,
     refundStatus: editingIndex !== null ? orders[editingIndex].refundStatus : false,
-    imageUrl: newImages.length > 0 ? newImages : (editingIndex !== null ? orders[editingIndex].imageUrl : [])
+    imageUrl: imgData
   };
 
-  const res = await apiCall({ action: 'saveOrder', userId: currentUserId, order: orderData });
-  if(res.success) {
-    closeSheet();
-    refreshList();
-  }
-  subBtn.disabled = false;
-  subBtn.textContent = "提交保存";
+  btn.textContent = "正在保存数据...";
+  const res = await api({ action: 'saveOrder', userId: currentUserId, order: data });
+  if(res.success) { closeSheet(); refreshList(); }
+  btn.disabled = false; btn.textContent = "保存并同步";
 }
 
-function openPreview(src) { document.getElementById('previewImg').src = src; document.getElementById('preview').style.display = 'flex'; }
-function closePreview() { document.getElementById('preview').style.display = 'none'; }
+function openSheet(idx = null) {
+  editingIndex = idx;
+  document.getElementById('overlay').style.display='flex';
+  document.getElementById('localPreview').innerHTML='';
+  document.getElementById('imageFiles').value='';
+  if(idx !== null) {
+    const o = orders[idx];
+    document.getElementById('formTitle').textContent='修改订单信息';
+    document.getElementById('orderNo').value=o.orderNo;
+    document.getElementById('price').value=o.price;
+    document.getElementById('selfPay').value=o.selfPay;
+    document.getElementById('commentType').value=o.commentType;
+    document.getElementById('orderDate').value=o.orderDate;
+    document.getElementById('arrivalDate').value=o.arrivalDate || '';
+    document.getElementById('arrivalDate').style.display='block';
+    document.getElementById('arrivalLabel').style.display='block';
+    document.getElementById('deleteBtn').style.display='block';
+  } else {
+    document.getElementById('formTitle').textContent='新建订单';
+    document.querySelector('form').reset();
+    document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('arrivalDate').style.display='none';
+    document.getElementById('arrivalLabel').style.display='none';
+    document.getElementById('deleteBtn').style.display='none';
+  }
+}
+
+function closeSheet() { document.getElementById('overlay').style.display='none'; }
+function previewLocal() {
+  const div = document.getElementById('localPreview'); div.innerHTML='';
+  [...document.getElementById('imageFiles').files].forEach(f => {
+    const img = document.createElement('img'); img.src = URL.createObjectURL(f); div.appendChild(img);
+  });
+}
+function showFull(s) { document.getElementById('fullImg').src=s; document.getElementById('imgPreview').style.display='flex'; }
+
+async function deleteOrder() {
+  if(!confirm("确定要删除这条订单记录吗？")) return;
+  const res = await api({ action: 'deleteOrder', userId: currentUserId, orderId: orders[editingIndex].orderId });
+  if(res.success) { closeSheet(); refreshList(); }
+}
 </script>
 </body>
 </html>
