@@ -13,32 +13,31 @@
   .auth-card { background: #fff; padding: 35px 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
   
   /* 顶部导航条 */
-  .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px; margin-bottom: 10px; }
-  .header h2 { margin: 0; font-size: 20px; color: #007bff; }
-  .logout-link { color: #ff4d4f; font-size: 14px; cursor: pointer; text-decoration: none; font-weight: bold; }
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 5px; margin-bottom: 10px; }
+  .header h2 { margin: 0; font-size: 18px; color: #007bff; }
+  .logout-link { color: #999; font-size: 13px; cursor: pointer; text-decoration: underline; }
 
   /* 订单卡片样式 */
-  .post { position: relative; background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; }
-  .post.refunded { filter: grayscale(1); opacity: 0.55; background: #fafafa; }
+  .post { position: relative; background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; }
+  .post.refunded { filter: grayscale(1); opacity: 0.5; background: #fafafa; }
   
-  /* 三行并列布局核心 CSS */
-  .info { font-size: 13px; line-height: 1.8; flex: 1; }
-  .info-line { display: flex; justify-content: space-between; border-bottom: 1px dashed #f0f0f0; padding: 2px 0; }
-  .info-line:last-child { border-bottom: none; }
-  .label-text { color: #888; margin-right: 4px; }
-  .value-text { font-weight: 500; color: #333; }
+  /* 左对齐三行布局 */
+  .info { font-size: 13px; line-height: 1.6; }
+  .info-row { display: flex; gap: 15px; margin-bottom: 2px; }
+  .info-row span { white-space: nowrap; }
+  .label-text { color: #888; margin-right: 3px; }
 
   /* 状态标签 */
-  .status-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-left: 10px; height: fit-content; }
+  .status-tag { position: absolute; top: 12px; right: 12px; font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; font-weight: bold; }
   .unrefunded { background: #ff4d4f; color: #fff; }
   .refunded-tag { background: #d4edda; color: #155724; }
   
-  /* 图片列表 */
-  .images { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
-  .images img { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
+  /* 缩小图片尺寸 */
+  .images { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; padding-bottom: 5px; }
+  .images img { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #eee; border: 1px solid #f0f0f0; }
   
-  .edit-btn { position: absolute; right: 15px; bottom: 12px; padding: 5px 12px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 12px; cursor: pointer; }
-  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; cursor: pointer; }
+  .edit-btn { position: absolute; right: 12px; bottom: 10px; padding: 4px 10px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 11px; cursor: pointer; }
+  .add-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 40px; border-radius: 40px; background: #007bff; color: #fff; border: none; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); z-index: 99; cursor: pointer; }
   
   /* 弹窗样式 */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 100; justify-content: center; align-items: center; padding: 15px; }
@@ -54,22 +53,22 @@
 </head>
 <body>
 
-<!-- 登录界面 -->
+<!-- 登录/注册 -->
 <div id="authPage" class="container">
   <div class="auth-card">
     <h2 style="margin-top:0; color:#007bff;">订单管理系统</h2>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
-    <button class="submit-btn" onclick="handleAuth('login')">登录系统</button>
-    <button class="submit-btn" style="background:#28a745; margin-top:12px;" onclick="handleAuth('register')">注册新账号</button>
+    <button class="submit-btn" onclick="handleAuth('login')">登录</button>
+    <button class="submit-btn" style="background:#28a745; margin-top:10px;" onclick="handleAuth('register')">注册</button>
   </div>
 </div>
 
-<!-- 主界面 -->
+<!-- 主页列表 -->
 <div id="mainPage" style="display:none;">
   <div class="container">
     <div class="header">
-      <h2>我的订单</h2>
+      <h2>订单列表</h2>
       <span class="logout-link" onclick="logout()">退出登录</span>
     </div>
     <div id="list" style="padding-bottom: 100px;"></div>
@@ -77,11 +76,11 @@
   <button class="add-btn" id="addBtn" onclick="openSheet()">➕ 新建订单</button>
 </div>
 
-<!-- 订单详情弹窗 -->
+<!-- 弹窗表单 -->
 <div class="overlay" id="overlay" onclick="closeSheet()">
   <form class="sheet" onsubmit="submitOrder(event)" onclick="event.stopPropagation()">
     <h3 id="formTitle" style="margin-top:0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">订单详情</h3>
-    <label>订单号</label><input id="orderNo" placeholder="输入订单号" required>
+    <label>订单号</label><input id="orderNo" required>
     <label>价格 ($)</label><input id="price" type="number" step="0.01" required>
     <label>自费金额 ($)</label><input id="selfPay" type="number" step="0.01" value="0">
     <label>评论类型</label>
@@ -90,16 +89,15 @@
     <label id="arrivalLabel" style="display:none;">到货日期</label>
     <input id="arrivalDate" type="date" style="display:none;">
     
-    <label style="color:#007bff; font-weight:bold;">🖼️ 订单截图</label>
+    <label style="color:#007bff; font-weight:bold;">🖼️ 上传图片</label>
     <input id="imageFiles" type="file" multiple accept="image/*" onchange="previewLocal()">
     <div id="localPreview" class="images"></div>
     
-    <button class="submit-btn" type="submit" id="subBtn">保存并同步</button>
+    <button class="submit-btn" type="submit" id="subBtn">保存订单</button>
     <button type="button" class="delete-btn" id="deleteBtn" onclick="deleteOrder()" style="display:none;">删除此订单</button>
   </form>
 </div>
 
-<!-- 图片大图预览 -->
 <div class="preview-modal" id="imgPreview" onclick="this.style.display='none'"><img id="fullImg"></div>
 
 <script>
@@ -118,13 +116,13 @@ async function handleAuth(action) {
   if(!u || !p) return alert("请完整填写");
   const res = await api({ action, username: u, password: p });
   if(res.success) {
-    if(action === 'register') alert("注册成功，请登录");
+    if(action === 'register') alert("注册成功");
     else { currentUserId = res.userId; localStorage.setItem('order_uid', currentUserId); showMain(); }
   } else alert(res.message);
 }
 
 function logout() {
-  if(!confirm("确定退出登录吗？")) return;
+  if(!confirm("确定退出？")) return;
   localStorage.removeItem('order_uid');
   location.reload();
 }
@@ -137,7 +135,7 @@ function showMain() {
 
 async function refreshList() {
   const listEl = document.getElementById('list');
-  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">数据同步中...</p>';
+  listEl.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">读取中...</p>';
   const res = await api({ action: 'getOrders', userId: currentUserId });
   if(res.success) {
     orders = res.orders;
@@ -146,29 +144,27 @@ async function refreshList() {
   }
 }
 
-// 核心修改：三行并列布局渲染逻辑
+// 核心渲染逻辑：左对齐三行
 function renderOrder(o, i) {
   const post = document.createElement('div');
   post.className = 'post' + (o.refundStatus ? ' refunded' : '');
   post.innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-      <div class="info">
-        <div class="info-line">
-          <span><span class="label-text">单号:</span><span class="value-text">${o.orderNo}</span></span>
-          <span><span class="label-text">类型:</span><span class="value-text">${o.commentType}</span></span>
-        </div>
-        <div class="info-line">
-          <span><span class="label-text">价格:</span><span class="value-text">$${o.price}</span></span>
-          <span><span class="label-text">自费:</span><span class="value-text">$${o.selfPay}</span></span>
-        </div>
-        <div class="info-line">
-          <span><span class="label-text">下单:</span><span class="value-text">${o.orderDate}</span></span>
-          <span><span class="label-text">到货:</span><span class="value-text">${o.arrivalDate || '-'}</span></span>
-        </div>
+    <div class="info">
+      <div class="info-row">
+        <span><span class="label-text">单号:</span>${o.orderNo}</span>
+        <span><span class="label-text">类型:</span>${o.commentType}</span>
       </div>
-      <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
-        ${o.refundStatus ? '已退款' : '未退款'}
+      <div class="info-row">
+        <span><span class="label-text">价格:</span>$${o.price}</span>
+        <span><span class="label-text">自费:</span>$${o.selfPay}</span>
       </div>
+      <div class="info-row">
+        <span><span class="label-text">下单:</span>${o.orderDate}</span>
+        <span><span class="label-text">到货:</span>${o.arrivalDate || '-'}</span>
+      </div>
+    </div>
+    <div class="status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}">
+      ${o.refundStatus ? '已退款' : '未退款'}
     </div>
     <div class="images">${o.imageUrl.map(src => `<img src="${src}" onclick="showFull('${src}')">`).join('')}</div>
     <div class="edit-btn" onclick="openSheet(${i})">编辑</div>
@@ -183,11 +179,10 @@ function renderOrder(o, i) {
     tag.className = `status-tag ${o.refundStatus ? 'refunded-tag' : 'unrefunded'}`;
     await api({ action: 'saveOrder', userId: currentUserId, order: o });
   };
-  
   document.getElementById('list').appendChild(post);
 }
 
-// 图片本地压缩
+// 本地图片压缩 (Base64)
 async function processImages(files) {
   const results = [];
   for (let file of files) {
@@ -216,7 +211,6 @@ async function submitOrder(e) {
   e.preventDefault();
   const btn = document.getElementById('subBtn');
   btn.disabled = true; btn.textContent = "处理中...";
-  
   const files = document.getElementById('imageFiles').files;
   let imgData = [];
   if(files.length > 0) imgData = await processImages(files);
@@ -236,14 +230,13 @@ async function submitOrder(e) {
 
   const res = await api({ action: 'saveOrder', userId: currentUserId, order: data });
   if(res.success) { closeSheet(); refreshList(); }
-  btn.disabled = false; btn.textContent = "保存并同步";
+  btn.disabled = false; btn.textContent = "保存订单";
 }
 
 function openSheet(idx = null) {
   editingIndex = idx;
   document.getElementById('overlay').style.display='flex';
   document.getElementById('localPreview').innerHTML='';
-  document.getElementById('imageFiles').value='';
   if(idx !== null) {
     const o = orders[idx];
     document.getElementById('formTitle').textContent='编辑订单';
@@ -274,7 +267,6 @@ function previewLocal() {
   });
 }
 function showFull(s) { document.getElementById('fullImg').src=s; document.getElementById('imgPreview').style.display='flex'; }
-
 async function deleteOrder() {
   if(!confirm("确定删除？")) return;
   const res = await api({ action: 'deleteOrder', userId: currentUserId, orderId: orders[editingIndex].orderId });
