@@ -25,7 +25,6 @@ body {
   overflow-x: hidden;
 }
 
-/* 强制字体加载 */
 #font-loader {
   font-family: "Manufacturing Consent", system-ui;
   font-weight: 400;
@@ -47,7 +46,7 @@ canvas {
   max-width: 100%;
 }
 
-/* 分类标签 (极细 Alumni Sans Pinstripe) */
+/* 分类标签 (Alumni Sans Pinstripe) */
 .categories {
   display: flex;
   gap: 25px;
@@ -74,15 +73,15 @@ canvas {
 }
 
 /* ========================== */
-/* SHOP GRID (无边框设计) */
+/* 标准化 SHOP GRID */
 /* ========================== */
 .shop-grid {
   width: 90%;
   max-width: 1200px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 35px 20px;
-  margin-bottom: 50px;
+  grid-template-columns: repeat(4, 1fr); /* 严格一行4格 */
+  gap: 40px 20px;
+  margin-bottom: 80px;
 }
 
 .product-card {
@@ -91,6 +90,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* 填充网格单元 */
   opacity: 0;
   transform: translateY(10px);
   animation: fadeIn 0.5s forwards;
@@ -102,22 +102,29 @@ canvas {
 
 .image-wrapper {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: #000; /* 纯黑背景 */
+  aspect-ratio: 1 / 1; /* 强制正方形 */
+  background-color: transparent; /* 移除可能存在的灰色/白色背景 */
   overflow: hidden;
-  border: none; /* 彻底移除白框/边框 */
+  border: none !important; /* 彻底移除白框 */
+  outline: none !important;
 }
 
 .image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* 移除图片下方基线空隙 */
 }
 
+/* 固定高度的信息区，确保整齐划一 */
 .product-info {
   text-align: center;
-  margin-top: 8px;
+  margin-top: 12px;
   width: 100%;
+  height: 60px; /* 固定高度，确保对齐 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .product-name {
@@ -128,21 +135,18 @@ canvas {
   line-height: 0.9;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .product-price {
   font-family: "Alumni Sans Pinstripe", sans-serif;
   font-size: 1rem;
   opacity: 0.4;
-  margin-top: 1px;
+  margin-top: 4px;
   display: block;
 }
 
 /* ========================== */
-/* NAV (100% 还原主页源码 V7) */
+/* NAV (100% 还原主页 V7 源码) */
 /* ========================== */
 :root {
     --nav-bg: #ffffff; 
@@ -165,24 +169,44 @@ canvas {
 }
 
 .nav-trigger {
-    width: 26px; height: 26px; background-color: transparent; border-radius: 4px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    width: 26px; 
+    height: 26px;
+    background-color: transparent; 
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #fuzzy-nav-icon { width: 100%; height: 100%; }
 
 .menu-list {
-    margin-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 210px; pointer-events: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px; 
+    width: 210px; 
+    pointer-events: none;
 }
 
 .menu-bar {
-    background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
-    text-decoration: none; cursor: pointer; transform: translateY(-15px); opacity: 0;
+    background-color: var(--nav-bg);
+    border-radius: 3px;
+    padding: 1px 12px; 
+    color: var(--nav-text);
+    text-decoration: none; 
+    cursor: pointer;
+    transform: translateY(-15px); 
+    opacity: 0;
     transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
-    display: flex; flex-direction: column; justify-content: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* 菜单展开/关闭阶梯动画 */
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
 .menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
 .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
@@ -197,8 +221,16 @@ canvas {
 .nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
 
 .bar-title {
-    font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
-    letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
+    font-family: var(--primary-font);
+    font-size: 2.6rem; 
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    line-height: 0.8; 
+    margin: 0;
+    white-space: nowrap;
 }
 
 .dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
@@ -209,10 +241,22 @@ canvas {
 .sub-list { list-style: none; padding: 0; margin: 0; }
 .sub-item { margin: 6px 0; }
 .sub-item a {
-    text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
-    font-size: 1.3rem; display: block; opacity: 0.8; text-transform: uppercase;
+    text-decoration: none;
+    color: var(--nav-text);
+    font-family: var(--secondary-font);
+    font-size: 1.3rem; 
+    display: block;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
-.sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
+.sub-item a::before {
+    content: "└ ";
+    font-family: sans-serif;
+    margin-right: 6px;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
 
 /* ========================== */
 /* FOOTER (完全复刻主页) */
@@ -232,11 +276,11 @@ footer {
 
 footer a { color: inherit; text-decoration: none; }
 
-/* 响应式 */
+/* 响应式适配 */
 @media (max-width: 600px) {
-    .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 25px 15px; width: 94%; }
-    .categories { gap: 15px; }
+    .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 15px; width: 94%; }
     .cat-item { font-size: 1.2rem; }
+    .product-info { height: 50px; }
 }
 </style>
 </head>
@@ -272,7 +316,6 @@ footer a { color: inherit; text-decoration: none; }
 </div>
 
 <div class="header-section">
-  <!-- 闪烁 SHOP (Manufacturing Consent 字体) -->
   <canvas id="fuzzy-shop-title"></canvas>
   <div class="categories">
     <div class="cat-item active" onclick="updateShop('new', event)">New 2026</div>
@@ -302,6 +345,7 @@ const shopData = {
     ]
 };
 
+// 混合 New 2026
 shopData.new = [...shopData.apparel, ...shopData.acc].sort(() => Math.random() - 0.5);
 
 function updateShop(category, event) {
@@ -325,7 +369,7 @@ function updateShop(category, event) {
 window.onload = () => { updateShop('new'); };
 
 /* ========================== */
-/* FUZZY TEXT (完全复刻主页)  */
+/* FUZZY TEXT (主页完全一致)  */
 /* ========================== */
 class FuzzyText {
   constructor(canvasId, options = {}) {
@@ -390,7 +434,7 @@ new FuzzyText('fuzzy-shop-title', { fontFamily: "Manufacturing Consent", text: "
 new FuzzyText('fuzzy-nav-icon', { fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false });
 
 /* ========================== */
-/* NAV LOGIC (完全复刻主页)    */
+/* NAV LOGIC */
 /* ========================== */
 const wrapper = document.getElementById('navWrapper');
 const trigger = document.getElementById('navTrigger');
