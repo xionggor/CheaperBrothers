@@ -11,6 +11,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 
 <style>
+/* ========================== */
+/* 基础页面样式 (参考主页/Shop) */
+/* ========================== */
 body {
   margin: 0;
   background-color: #000;
@@ -19,6 +22,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #font-loader {
@@ -26,7 +30,9 @@ body {
   position: absolute; opacity: 0; pointer-events: none;
 }
 
-/* --- NAVIGATION (V7 严格复刻) --- */
+/* ========================== */
+/* NAV (100% 还原主页源码 V7) */
+/* ========================== */
 :root {
     --nav-bg: #ffffff; 
     --nav-text: #000000;
@@ -65,7 +71,6 @@ body {
     overflow: hidden; display: flex; flex-direction: column; justify-content: center;
 }
 
-/* 菜单延迟动画 */
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
 .menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
 .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
@@ -82,6 +87,7 @@ body {
 .bar-title {
     font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
     letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
+    white-space: nowrap;
 }
 
 .dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
@@ -96,18 +102,20 @@ body {
 }
 .sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
 
-/* --- ABOUT CONTENT (参考你提供的代码) --- */
+/* ========================== */
+/* ABOUT CONTENT (自适应调整) */
+/* ========================== */
 .about-container {
   width: 90%;
   max-width: 900px;
-  margin: 20vh auto 0 auto;
+  margin: 18vh auto 0 auto;
   text-align: center;
   flex: 1;
 }
 
 #fuzzy-about {
   display: block;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 50px auto;
 }
 
 .about-title {
@@ -128,24 +136,55 @@ body {
   opacity: 0.75;
 }
 
-/* --- FOOTER --- */
+/* ========================== */
+/* FOOTER (完全复刻主页) */
+/* ========================== */
 footer {
+  margin-top: 50px;
+  padding-bottom: 30px; 
   font-family: "Noto Serif TC", serif;
+  font-weight: 400;
   font-size: 0.9rem;
+  color: #ffffff;
   opacity: 0.8;
   letter-spacing: 1px;
   text-align: center;
-  padding-bottom: 30px;
+  width: 100%;
 }
+
 footer a { color: inherit; text-decoration: none; }
 
+/* ========================== */
+/* 移动端适配 */
+/* ========================== */
+@media (max-width: 600px) {
+    .about-container {
+        margin-top: 15vh; /* 减少顶部边距 */
+        width: 94%;
+    }
+
+    .about-title {
+        font-size: 1.4rem; /* 缩小二级标题 */
+        margin-bottom: 20px;
+    }
+
+    .about-text {
+        font-size: 1rem; /* 缩小正文 */
+        line-height: 1.8;
+        padding: 0 10px;
+    }
+
+    footer {
+        font-size: 0.75rem;
+    }
+}
 </style>
 </head>
 <body>
 
 <div id="font-loader">Force Font Load</div>
 
-<!-- NAV -->
+<!-- 导航 -->
 <div class="nav-wrapper" id="navWrapper">
     <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
     <div class="menu-list">
@@ -172,7 +211,7 @@ footer a { color: inherit; text-decoration: none; }
     </div>
 </div>
 
-<!-- ABOUT SECTION -->
+<!-- 关于内容区 -->
 <div class="about-container">
   <canvas id="fuzzy-about"></canvas>
 
@@ -189,7 +228,7 @@ footer a { color: inherit; text-decoration: none; }
 </footer>
 
 <script>
-/* --- Fuzzy Text Class --- */
+/* --- Fuzzy Text Class (带自适应逻辑) --- */
 class FuzzyText {
   constructor(canvasId, options = {}) {
     this.canvas = document.getElementById(canvasId);
@@ -223,19 +262,24 @@ class FuzzyText {
   }
   resize() {
     const isSmallIcon = this.canvas.id === 'fuzzy-nav-icon';
+    // 手机端将字号缩小到 0.6 倍
     const responsiveSize = (window.innerWidth < 600 && !isSmallIcon) ? this.fontSize * 0.6 : this.fontSize;
+    
     this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     const metrics = this.offCtx.measureText(this.text);
     this.offscreen.width = Math.ceil(metrics.width) + 10;
     this.offscreen.height = Math.ceil(responsiveSize * 1.5);
+    
     this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
     this.offCtx.fillText(this.text, 5, this.offscreen.height / 2);
+    
     this.width = this.offscreen.width + this.fuzzRange * 2;
     this.height = this.offscreen.height;
     this.canvas.width = this.width;
     this.canvas.height = this.height;
+    
     if(isSmallIcon) { this.canvas.style.width = '35px'; this.canvas.style.height = '35px'; }
   }
   animate() {
@@ -249,10 +293,11 @@ class FuzzyText {
   }
 }
 
+// 初始化
 new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 160, baseIntensity: 0.15, hoverIntensity: 0.5 });
 new FuzzyText('fuzzy-nav-icon', { fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false });
 
-/* --- NAV LOGIC --- */
+/* --- NAV LOGIC (主页复刻) --- */
 const wrapper = document.getElementById('navWrapper');
 const trigger = document.getElementById('navTrigger');
 trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
