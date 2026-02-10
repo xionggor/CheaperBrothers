@@ -49,7 +49,7 @@ canvas {
 .categories {
   display: flex;
   gap: 25px;
-  margin-top: 25px; /* 增加间距防止误触 */
+  margin-top: 25px;
   margin-bottom: 50px;
 }
 
@@ -72,7 +72,7 @@ canvas {
 }
 
 /* ========================== */
-/* SHOP GRID (4列/2列) */
+/* SHOP GRID (适应手机一行两格) */
 /* ========================== */
 .shop-grid {
   width: 90%;
@@ -101,9 +101,15 @@ canvas {
 .image-wrapper {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background-color: #1a1a1a;
+  background-color: #000;
   overflow: hidden;
-  border: 1px solid #222;
+  border: 1px solid #1a1a1a;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-info {
@@ -134,7 +140,7 @@ canvas {
 }
 
 /* ========================== */
-/* NAV (100% 还原主页源码 V7) */
+/* NAV (严格复刻主页源码 V7) */
 /* ========================== */
 :root {
     --nav-bg: #ffffff; 
@@ -157,45 +163,23 @@ canvas {
 }
 
 .nav-trigger {
-    width: 26px; 
-    height: 26px;
-    background-color: transparent; 
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 26px; height: 26px; background-color: transparent; border-radius: 4px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 
 #fuzzy-nav-icon { width: 100%; height: 100%; }
 
 .menu-list {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px; 
-    width: 210px; 
-    pointer-events: none;
+    margin-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 210px; pointer-events: none;
 }
 
 .menu-bar {
-    background-color: var(--nav-bg);
-    border-radius: 3px;
-    padding: 1px 12px; 
-    color: var(--nav-text);
-    text-decoration: none; 
-    cursor: pointer;
-    transform: translateY(-15px); 
-    opacity: 0;
+    background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
+    text-decoration: none; cursor: pointer; transform: translateY(-15px); opacity: 0;
     transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: flex; flex-direction: column; justify-content: center;
 }
 
-/* 关闭时的延迟顺序 */
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
 .menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
 .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
@@ -204,72 +188,28 @@ canvas {
 .nav-wrapper.active .menu-list { pointer-events: auto; }
 .nav-wrapper.active .menu-bar { transform: translateY(0); opacity: 1; }
 
-/* 开启时的延迟顺序 */
 .nav-wrapper.active .menu-bar:nth-child(1) { transition-delay: 0s; }
 .nav-wrapper.active .menu-bar:nth-child(2) { transition-delay: var(--nav-delay); }
 .nav-wrapper.active .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 2); }
 .nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
 
 .bar-title {
-    font-family: var(--primary-font);
-    font-size: 2.6rem; 
-    font-weight: 400;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    line-height: 0.8; 
-    margin: 0;
-    white-space: nowrap;
+    font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
+    letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
 }
 
-.dot {
-    width: 8px; 
-    height: 8px;
-    background-color: var(--nav-text);
-    border-radius: 50%;
-    margin-right: 10px;
-    flex-shrink: 0; 
-}
+.dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
 
-.sub-content {
-    max-height: 0;
-    opacity: 0;
-    transition: all 0.4s ease;
-    padding-left: 18px; 
-}
-
-.menu-bar.expanded .sub-content {
-    max-height: 200px;
-    opacity: 1;
-    margin-top: 10px;
-    padding-bottom: 12px;
-}
+.sub-content { max-height: 0; opacity: 0; transition: all 0.4s ease; padding-left: 18px; }
+.menu-bar.expanded .sub-content { max-height: 200px; opacity: 1; margin-top: 10px; padding-bottom: 12px; }
 
 .sub-list { list-style: none; padding: 0; margin: 0; }
 .sub-item { margin: 6px 0; }
 .sub-item a {
-    text-decoration: none;
-    color: var(--nav-text);
-    font-family: var(--secondary-font);
-    font-size: 1.3rem; 
-    display: block;
-    opacity: 0.8;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transition: opacity 0.2s;
+    text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
+    font-size: 1.3rem; display: block; opacity: 0.8; text-transform: uppercase;
 }
-
-.sub-item a::before {
-    content: "└ ";
-    font-family: sans-serif;
-    margin-right: 6px;
-    font-size: 0.8rem;
-    vertical-align: middle;
-}
-
-.sub-item a:hover { opacity: 1; }
+.sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
 
 /* ========================== */
 /* FOOTER (完全复刻主页) */
@@ -287,21 +227,11 @@ footer {
   width: 100%;
 }
 
-footer a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.3s;
-}
+footer a { color: inherit; text-decoration: none; }
 
-footer a:hover { opacity: 1; }
-
-/* 响应式适配 */
+/* 响应式 */
 @media (max-width: 600px) {
-    .shop-grid {
-        grid-template-columns: repeat(2, 1fr); /* 一行两个 */
-        gap: 25px 15px;
-        width: 94%;
-    }
+    .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 25px 15px; width: 94%; }
     .categories { gap: 15px; }
     .cat-item { font-size: 1.2rem; }
     .product-name { font-size: 1.3rem; }
@@ -310,13 +240,9 @@ footer a:hover { opacity: 1; }
 </head>
 <body>
 
-<div id="font-loader">Force Font Load</div>
-
-<!-- 导航 (完全还原主页) -->
+<!-- 导航 -->
 <div class="nav-wrapper" id="navWrapper">
-    <div class="nav-trigger" id="navTrigger">
-        <canvas id="fuzzy-nav-icon"></canvas>
-    </div>
+    <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
     <div class="menu-list">
         <div class="menu-bar" onclick="toggleAccordion(event, this)">
             <div class="bar-title"><div class="dot"></div>Events</div>
@@ -350,44 +276,29 @@ footer a:hover { opacity: 1; }
   </div>
 </div>
 
-<div class="shop-grid" id="productContainer">
-    <!-- JS 动态生成 -->
-</div>
+<div class="shop-grid" id="productContainer"></div>
 
-<footer>
-    <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
-</footer>
+<footer><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
 
 <script>
 /* ========================== */
-/* 商品数据 */
+/* 商品数据配置 */
 /* ========================== */
 const shopData = {
-    new: [
-        { name: "Cyber Frame V1", price: "$120.00" },
-        { name: "Archive Case", price: "$65.00" },
-        { name: "Protocol Hat", price: "$35.00" },
-        { name: "Limited Badge", price: "$45.00" },
-        { name: "Data Print", price: "$150.00" },
-        { name: "Future Wallet", price: "$80.00" }
-    ],
     apparel: [
-        { name: "Heavy Tee V1", price: "$55.00" },
-        { name: "Boxy Hoodie", price: "$95.00" },
-        { name: "Cargo Pants", price: "$110.00" },
-        { name: "Logo Socks", price: "$15.00" },
-        { name: "Tank Top", price: "$40.00" },
-        { name: "Windbreaker", price: "$130.00" }
+        { name: "Cheaper Brothers Sticker", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMMaYtq03RWauGhNf8eUiY4mr5DQUYAAqQLaxs0_2FEc193FIxlGREBAAMCAAN4AAM6BA.jpg" },
+        { name: "Cheaper Brothers Sticker", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMNaYtq4WAFO-Rf057S5Q7FpNtKNv4AAqULaxs0_2FE2PrwRSahoOoBAAMCAAN4AAM6BA.jpg" },
+        { name: "Cheaper Brothers Sticker *2024", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMOaYtrNMs8jYVOgO_8iXKr18AJmXkAAqYLaxs0_2FEZQPb9fCm7ZgBAAMCAAN4AAM6BA.jpg" }
     ],
     acc: [
-        { name: "Metal Ring", price: "$75.00" },
-        { name: "Leather Belt", price: "$65.00" },
-        { name: "Card Holder", price: "$30.00" },
-        { name: "Key Chain", price: "$20.00" },
-        { name: "Tote Bag", price: "$25.00" },
-        { name: "Sticker Pack", price: "$10.00" }
+        { name: "Cheaper Brand Poker Chip", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMJaYtqKxjZAfhvxXEcybjYfQNtmrUAAqELaxs0_2FEqDynOQ5u4u0BAAMCAAN4AAM6BA.jpg" },
+        { name: "Cheaper Brand Poker Chip", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMKaYtqfOW7Af15MhVjGcCJQd0_z_gAAqILaxs0_2FEyz6s3TjbySYBAAMCAAN4AAM6BA.jpg" },
+        { name: "Cheaper Brand Poker Chip", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMLaYtqhjfeTuRn82RaXIl1e-Ld80IAAqMLaxs0_2FErDf7VBeF9I0BAAMCAAN4AAM6BA.jpg" }
     ]
 };
+
+// 动态计算 New 2026 (合并并随机排序)
+shopData.new = [...shopData.apparel, ...shopData.acc].sort(() => Math.random() - 0.5);
 
 function updateShop(category, event) {
     const container = document.getElementById('productContainer');
@@ -405,7 +316,7 @@ function updateShop(category, event) {
         card.className = "product-card";
         card.style.animationDelay = `${index * 0.05}s`;
         card.innerHTML = `
-            <div class="image-wrapper"></div>
+            <div class="image-wrapper"><img src="${item.img}" alt=""></div>
             <div class="product-info">
                 <h3 class="product-name">${item.name}</h3>
                 <span class="product-price">${item.price}</span>
@@ -418,7 +329,7 @@ function updateShop(category, event) {
 window.onload = () => { updateShop('new'); };
 
 /* ========================== */
-/* FUZZY TEXT (主页完全一致)  */
+/* FUZZY TEXT (主页类) */
 /* ========================== */
 class FuzzyText {
   constructor(canvasId, options = {}) {
@@ -432,7 +343,6 @@ class FuzzyText {
     this.baseIntensity = options.baseIntensity || 0.18;
     this.hoverIntensity = options.hoverIntensity || 0.5;
     this.fuzzRange = options.fuzzRange || 30;
-    this.enableHover = options.enableHover !== false;
     this.ctx = this.canvas.getContext('2d');
     this.offscreen = document.createElement('canvas');
     this.offCtx = this.offscreen.getContext('2d');
@@ -444,21 +354,18 @@ class FuzzyText {
   async init() {
     await document.fonts.ready;
     setTimeout(() => { this.resize(); this.animate(); }, 100);
-    if (this.enableHover) {
-      this.canvas.addEventListener('mousemove', () => this.isHovering = true);
-      this.canvas.addEventListener('mouseleave', () => this.isHovering = false);
-    }
+    this.canvas.addEventListener('mousemove', () => this.isHovering = true);
+    this.canvas.addEventListener('mouseleave', () => this.isHovering = false);
     window.addEventListener('resize', this.resize);
   }
   resize() {
     const isSmallIcon = this.canvas.id === 'fuzzy-nav-icon';
     const responsiveSize = (window.innerWidth < 600 && !isSmallIcon) ? this.fontSize * 0.6 : this.fontSize;
-    const fontString = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
-    this.offCtx.font = fontString;
+    this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     const metrics = this.offCtx.measureText(this.text);
     this.offscreen.width = Math.ceil(metrics.width) + 10;
     this.offscreen.height = Math.ceil(responsiveSize * 1.5);
-    this.offCtx.font = fontString;
+    this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
     this.offCtx.fillText(this.text, 5, this.offscreen.height / 2);
@@ -479,37 +386,22 @@ class FuzzyText {
   }
 }
 
-new FuzzyText('fuzzy-shop-title', { 
-    fontFamily: "Manufacturing Consent", text: "SHOP", fontSize: 80, baseIntensity: 0.15, hoverIntensity: 0.5 
-});
-new FuzzyText('fuzzy-nav-icon', { 
-    fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false 
-});
+new FuzzyText('fuzzy-shop-title', { fontFamily: "Manufacturing Consent", text: "SHOP", fontSize: 80, baseIntensity: 0.15, hoverIntensity: 0.5 });
+new FuzzyText('fuzzy-nav-icon', { fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false });
 
 /* ========================== */
-/* NAV LOGIC (完全还原主页源码) */
+/* NAV LOGIC */
 /* ========================== */
 const wrapper = document.getElementById('navWrapper');
 const trigger = document.getElementById('navTrigger');
-
 trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
-wrapper.addEventListener('mouseleave', () => {
-    wrapper.classList.remove('active');
-    document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
-});
-trigger.addEventListener('click', (e) => {
-    e.stopPropagation();
-    wrapper.classList.toggle('active');
-});
-
+wrapper.addEventListener('mouseleave', () => { wrapper.classList.remove('active'); document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded')); });
+trigger.addEventListener('click', (e) => { e.stopPropagation(); wrapper.classList.toggle('active'); });
 function toggleAccordion(event, element) {
     if (event.target.tagName === 'A') return;
     const subContent = element.querySelector('.sub-content');
     if (!subContent) return; 
-    if (element.classList.contains('expanded')) {
-        element.classList.remove('expanded');
-        return;
-    }
+    if (element.classList.contains('expanded')) { element.classList.remove('expanded'); return; }
     document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
     element.classList.add('expanded');
 }
