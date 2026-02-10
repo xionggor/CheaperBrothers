@@ -45,13 +45,12 @@ canvas {
   max-width: 100%;
 }
 
-/* 分类标签 (优化间距和触控) */
+/* 分类标签 (极细风格) */
 .categories {
   display: flex;
   gap: 25px;
-  margin-top: 15px; /* 增加与 SHOP 标题的间距，防止重叠 */
+  margin-top: 25px; /* 增加间距防止误触 */
   margin-bottom: 50px;
-  padding: 10px; /* 增加容器范围 */
 }
 
 .cat-item {
@@ -63,7 +62,7 @@ canvas {
   opacity: 0.2;
   transition: opacity 0.4s ease;
   text-transform: uppercase;
-  padding: 5px; /* 增大点击热区 */
+  padding: 5px; 
 }
 
 .cat-item.active {
@@ -73,15 +72,15 @@ canvas {
 }
 
 /* ========================== */
-/* SHOP GRID (PC/手机自适应) */
+/* SHOP GRID (4列/2列) */
 /* ========================== */
 .shop-grid {
   width: 90%;
   max-width: 1200px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 电脑 4 列 */
+  grid-template-columns: repeat(4, 1fr);
   gap: 35px 20px;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 }
 
 .product-card {
@@ -135,7 +134,7 @@ canvas {
 }
 
 /* ========================== */
-/* NAV (严格复刻主页代码) */
+/* NAV (100% 还原主页源码 V7) */
 /* ========================== */
 :root {
     --nav-bg: #ffffff; 
@@ -154,27 +153,49 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    padding-bottom: 40px; 
 }
 
 .nav-trigger {
-    width: 26px; height: 26px;
-    background-color: transparent; border-radius: 4px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    width: 26px; 
+    height: 26px;
+    background-color: transparent; 
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #fuzzy-nav-icon { width: 100%; height: 100%; }
 
 .menu-list {
-    margin-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 210px; pointer-events: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px; 
+    width: 210px; 
+    pointer-events: none;
 }
 
 .menu-bar {
-    background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
-    text-decoration: none; transform: translateY(-15px); opacity: 0;
+    background-color: var(--nav-bg);
+    border-radius: 3px;
+    padding: 1px 12px; 
+    color: var(--nav-text);
+    text-decoration: none; 
+    cursor: pointer;
+    transform: translateY(-15px); 
+    opacity: 0;
     transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
-    display: flex; flex-direction: column; justify-content: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
+/* 关闭时的延迟顺序 */
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
 .menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
 .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
@@ -183,68 +204,107 @@ canvas {
 .nav-wrapper.active .menu-list { pointer-events: auto; }
 .nav-wrapper.active .menu-bar { transform: translateY(0); opacity: 1; }
 
+/* 开启时的延迟顺序 */
+.nav-wrapper.active .menu-bar:nth-child(1) { transition-delay: 0s; }
+.nav-wrapper.active .menu-bar:nth-child(2) { transition-delay: var(--nav-delay); }
+.nav-wrapper.active .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 2); }
+.nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
+
 .bar-title {
-    font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
-    letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
+    font-family: var(--primary-font);
+    font-size: 2.6rem; 
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    line-height: 0.8; 
+    margin: 0;
+    white-space: nowrap;
 }
 
-.dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; }
+.dot {
+    width: 8px; 
+    height: 8px;
+    background-color: var(--nav-text);
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0; 
+}
 
-.sub-content { max-height: 0; opacity: 0; transition: all 0.4s ease; padding-left: 18px; }
-.menu-bar.expanded .sub-content { max-height: 200px; opacity: 1; margin-top: 10px; padding-bottom: 12px; }
+.sub-content {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    padding-left: 18px; 
+}
 
+.menu-bar.expanded .sub-content {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 10px;
+    padding-bottom: 12px;
+}
+
+.sub-list { list-style: none; padding: 0; margin: 0; }
+.sub-item { margin: 6px 0; }
 .sub-item a {
-    text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
-    font-size: 1.3rem; display: block; opacity: 0.8; text-transform: uppercase;
+    text-decoration: none;
+    color: var(--nav-text);
+    font-family: var(--secondary-font);
+    font-size: 1.3rem; 
+    display: block;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: opacity 0.2s;
 }
+
+.sub-item a::before {
+    content: "└ ";
+    font-family: sans-serif;
+    margin-right: 6px;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
+
+.sub-item a:hover { opacity: 1; }
 
 /* ========================== */
-/* FOOTER (参考 PokerTracker) */
+/* FOOTER (完全复刻主页) */
 /* ========================== */
 footer {
-    margin: 60px 0 30px 0;
-    font-family: "Noto Serif TC", serif;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    opacity: 0.4;
-    text-align: center;
+  margin-top: 50px;
+  padding-bottom: 30px; 
+  font-family: "Noto Serif TC", serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.8;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 100%;
 }
 
-footer a { color: inherit; text-decoration: none; }
+footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
 
-/* ========================== */
-/* 移动端适配 (600px 以下) */
-/* ========================== */
+footer a:hover { opacity: 1; }
+
+/* 响应式适配 */
 @media (max-width: 600px) {
-    /* 商店一行两个 */
     .shop-grid {
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: repeat(2, 1fr); /* 一行两个 */
         gap: 25px 15px;
         width: 94%;
     }
-
-    /* 缩小标签和商品文字，防止拥挤 */
-    .categories {
-        gap: 12px;
-        margin-bottom: 30px;
-    }
-
-    .cat-item {
-        font-size: 1.1rem;
-        letter-spacing: 1px;
-    }
-
-    .product-name {
-        font-size: 1.3rem;
-    }
-
-    .product-price {
-        font-size: 0.8rem;
-    }
-
-    .header-section {
-        margin-top: 15vh; /* 增加手机顶部的距离，防止与导航冲突 */
-    }
+    .categories { gap: 15px; }
+    .cat-item { font-size: 1.2rem; }
+    .product-name { font-size: 1.3rem; }
 }
 </style>
 </head>
@@ -252,7 +312,7 @@ footer a { color: inherit; text-decoration: none; }
 
 <div id="font-loader">Force Font Load</div>
 
-<!-- 导航 -->
+<!-- 导航 (完全还原主页) -->
 <div class="nav-wrapper" id="navWrapper">
     <div class="nav-trigger" id="navTrigger">
         <canvas id="fuzzy-nav-icon"></canvas>
@@ -282,7 +342,6 @@ footer a { color: inherit; text-decoration: none; }
 </div>
 
 <div class="header-section">
-  <!-- 闪烁标题 SHOP -->
   <canvas id="fuzzy-shop-title"></canvas>
   <div class="categories">
     <div class="cat-item active" onclick="updateShop('new', event)">New 2026</div>
@@ -292,7 +351,7 @@ footer a { color: inherit; text-decoration: none; }
 </div>
 
 <div class="shop-grid" id="productContainer">
-    <!-- JS 加载商品 -->
+    <!-- JS 动态生成 -->
 </div>
 
 <footer>
@@ -334,7 +393,6 @@ function updateShop(category, event) {
     const container = document.getElementById('productContainer');
     const items = shopData[category];
     
-    // 更新选中状态
     if(event) {
         document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
         event.currentTarget.classList.add('active');
@@ -345,7 +403,7 @@ function updateShop(category, event) {
         const card = document.createElement('a');
         card.href = "#";
         card.className = "product-card";
-        card.style.animationDelay = `${index * 0.04}s`;
+        card.style.animationDelay = `${index * 0.05}s`;
         card.innerHTML = `
             <div class="image-wrapper"></div>
             <div class="product-info">
@@ -357,11 +415,10 @@ function updateShop(category, event) {
     });
 }
 
-// 初始加载
 window.onload = () => { updateShop('new'); };
 
 /* ========================== */
-/* FUZZY TEXT (复刻主页逻辑)  */
+/* FUZZY TEXT (主页完全一致)  */
 /* ========================== */
 class FuzzyText {
   constructor(canvasId, options = {}) {
@@ -430,7 +487,7 @@ new FuzzyText('fuzzy-nav-icon', {
 });
 
 /* ========================== */
-/* NAV LOGIC (复刻主页逻辑)    */
+/* NAV LOGIC (完全还原主页源码) */
 /* ========================== */
 const wrapper = document.getElementById('navWrapper');
 const trigger = document.getElementById('navTrigger');
