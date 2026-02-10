@@ -5,33 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About - Cheaper Brothers</title>
 
-<!-- 引入字体 -->
+<!-- 引入主页所有字体 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 
 <style>
 /* ========================== */
-/* 基础页面样式 (参考主页/Shop) */
+/* 基础页面样式 (完全抄主页) */
 /* ========================== */
 body {
   margin: 0;
-  background-color: #000;
-  color: #fff;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-tap-highlight-color: transparent;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  overflow: hidden;
+  color: #fff;
 }
 
 #font-loader {
   font-family: "Manufacturing Consent", system-ui;
-  position: absolute; opacity: 0; pointer-events: none;
+  font-weight: 400;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ========================== */
-/* NAV (100% 还原主页源码 V7) */
+/* ABOUT 内容区 (核心修改) */
+/* ========================== */
+.about-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 90%;
+  max-width: 800px;
+  z-index: 1;
+}
+
+canvas {
+  cursor: pointer;
+  max-width: 100%;
+}
+
+/* 第一段: Who The Hell Are We (Alumni 极细) */
+.about-subtitle {
+  font-family: "Alumni Sans Pinstripe", sans-serif;
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  line-height: 1;
+}
+
+/* 第二、三段: 宣言内容 (Noto Serif TC 宋体) */
+.about-body {
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(0.9rem, 4vw, 1.15rem);
+  line-height: 2;
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+/* ========================== */
+/* NAV (完全抄主页 V7) */
 /* ========================== */
 :root {
     --nav-bg: #ffffff; 
@@ -50,11 +94,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    padding-bottom: 40px; 
 }
 
 .nav-trigger {
-    width: 26px; height: 26px; background-color: transparent; border-radius: 4px;
+    width: 26px; height: 26px;
+    background-color: transparent; border-radius: 4px;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 
@@ -68,7 +112,7 @@ body {
     background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
     text-decoration: none; cursor: pointer; transform: translateY(-15px); opacity: 0;
     transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden; display: flex; flex-direction: column; justify-content: center;
+    display: flex; flex-direction: column; justify-content: center;
 }
 
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
@@ -87,7 +131,6 @@ body {
 .bar-title {
     font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
     letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
-    white-space: nowrap;
 }
 
 .dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
@@ -95,6 +138,7 @@ body {
 .sub-content { max-height: 0; opacity: 0; transition: all 0.4s ease; padding-left: 18px; }
 .menu-bar.expanded .sub-content { max-height: 200px; opacity: 1; margin-top: 10px; padding-bottom: 12px; }
 
+.sub-list { list-style: none; padding: 0; margin: 0; }
 .sub-item { margin: 6px 0; }
 .sub-item a {
     text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
@@ -103,45 +147,11 @@ body {
 .sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
 
 /* ========================== */
-/* ABOUT CONTENT (自适应调整) */
-/* ========================== */
-.about-container {
-  width: 90%;
-  max-width: 900px;
-  margin: 18vh auto 0 auto;
-  text-align: center;
-  flex: 1;
-}
-
-#fuzzy-about {
-  display: block;
-  margin: 0 auto 50px auto;
-}
-
-.about-title {
-  font-family: "Alumni Sans Pinstripe", sans-serif;
-  font-size: 2rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  opacity: 0.9;
-  margin-bottom: 30px;
-}
-
-.about-text {
-  font-family: "Noto Serif TC", serif;
-  font-size: 1.2rem;
-  line-height: 2;
-  max-width: 720px;
-  margin: 0 auto;
-  opacity: 0.75;
-}
-
-/* ========================== */
-/* FOOTER (完全复刻主页) */
+/* FOOTER (完全抄主页) */
 /* ========================== */
 footer {
-  margin-top: 50px;
-  padding-bottom: 30px; 
+  position: absolute;
+  bottom: 30px;
   font-family: "Noto Serif TC", serif;
   font-weight: 400;
   font-size: 0.9rem;
@@ -153,31 +163,6 @@ footer {
 }
 
 footer a { color: inherit; text-decoration: none; }
-
-/* ========================== */
-/* 移动端适配 */
-/* ========================== */
-@media (max-width: 600px) {
-    .about-container {
-        margin-top: 15vh; /* 减少顶部边距 */
-        width: 94%;
-    }
-
-    .about-title {
-        font-size: 1.4rem; /* 缩小二级标题 */
-        margin-bottom: 20px;
-    }
-
-    .about-text {
-        font-size: 1rem; /* 缩小正文 */
-        line-height: 1.8;
-        padding: 0 10px;
-    }
-
-    footer {
-        font-size: 0.75rem;
-    }
-}
 </style>
 </head>
 <body>
@@ -211,24 +196,22 @@ footer a { color: inherit; text-decoration: none; }
     </div>
 </div>
 
-<!-- 关于内容区 -->
-<div class="about-container">
+<!-- ABOUT 核心内容区 -->
+<div class="about-main">
   <canvas id="fuzzy-about"></canvas>
-
-  <div class="about-title">Who The Hell Are We</div>
-
-  <div class="about-text">
+  <div class="about-subtitle">Who The Hell Are We</div>
+  <div class="about-body">
     Cheaper Brothers is not a brand. It's an attitude towards life.<br>
     Born from low budgets, high confidence, and zero market research.
   </div>
 </div>
 
-<footer>
-    <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
-</footer>
+<footer><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
 
 <script>
-/* --- Fuzzy Text Class (带自适应逻辑) --- */
+/* ========================== */
+/* FUZZY TEXT (完全抄主页类)  */
+/* ========================== */
 class FuzzyText {
   constructor(canvasId, options = {}) {
     this.canvas = document.getElementById(canvasId);
@@ -262,24 +245,19 @@ class FuzzyText {
   }
   resize() {
     const isSmallIcon = this.canvas.id === 'fuzzy-nav-icon';
-    // 手机端将字号缩小到 0.6 倍
     const responsiveSize = (window.innerWidth < 600 && !isSmallIcon) ? this.fontSize * 0.6 : this.fontSize;
-    
     this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     const metrics = this.offCtx.measureText(this.text);
     this.offscreen.width = Math.ceil(metrics.width) + 10;
     this.offscreen.height = Math.ceil(responsiveSize * 1.5);
-    
     this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
     this.offCtx.fillStyle = this.color;
     this.offCtx.textBaseline = 'middle';
     this.offCtx.fillText(this.text, 5, this.offscreen.height / 2);
-    
     this.width = this.offscreen.width + this.fuzzRange * 2;
     this.height = this.offscreen.height;
     this.canvas.width = this.width;
     this.canvas.height = this.height;
-    
     if(isSmallIcon) { this.canvas.style.width = '35px'; this.canvas.style.height = '35px'; }
   }
   animate() {
@@ -293,11 +271,12 @@ class FuzzyText {
   }
 }
 
-// 初始化
-new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 160, baseIntensity: 0.15, hoverIntensity: 0.5 });
+new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 140, baseIntensity: 0.15, hoverIntensity: 0.5 });
 new FuzzyText('fuzzy-nav-icon', { fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false });
 
-/* --- NAV LOGIC (主页复刻) --- */
+/* ========================== */
+/* NAV LOGIC (完全抄主页逻辑)    */
+/* ========================== */
 const wrapper = document.getElementById('navWrapper');
 const trigger = document.getElementById('navTrigger');
 trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
