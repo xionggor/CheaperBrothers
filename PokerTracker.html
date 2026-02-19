@@ -16,26 +16,18 @@
         --bar-active-bg: #ff0000;
         --text-dark: #000;
         --text-light: #fff;
-        --loss-color: #ff1744;   /* 亏损红 */
-        --profit-color: #00c853; /* 盈利绿 */
+        --loss-color: #ff1744;
+        --profit-color: #00c853;
         --heavy-font: "Chiron Hei HK", sans-serif;
         --num-font: "Bebas Neue", sans-serif;
         --body-font: "Helvetica Neue", Arial, sans-serif;
     }
 
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
+    input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
 
     body {
         margin: 0;
@@ -50,12 +42,7 @@
         -webkit-font-smoothing: antialiased;
     }
 
-    header {
-        width: 100%;
-        max-width: 500px;
-        text-align: left;
-        margin-bottom: 30px;
-    }
+    header { width: 100%; max-width: 500px; text-align: left; margin-bottom: 30px; }
 
     h1 {
         font-family: var(--heavy-font);
@@ -79,16 +66,9 @@
         opacity: 0.9;
     }
 
-    .container {
-        width: 100%;
-        max-width: 500px;
-    }
+    .container { width: 100%; max-width: 500px; }
 
-    .settings-area {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 25px;
-    }
+    .settings-area { display: flex; flex-direction: column; margin-bottom: 25px; }
 
     .settings-bar {
         display: flex;
@@ -146,12 +126,7 @@
         text-align: right;
     }
 
-    .input-group {
-        display: flex;
-        width: 100%;
-        margin-bottom: 30px;
-        height: 45px;
-    }
+    .input-group { display: flex; width: 100%; margin-bottom: 30px; height: 45px; }
 
     .input-group input {
         flex: 1;
@@ -176,11 +151,7 @@
         cursor: pointer;
     }
 
-    .player-list {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
+    .player-list { display: flex; flex-direction: column; gap: 4px; }
 
     .player-bar {
         background-color: var(--bar-bg);
@@ -193,17 +164,9 @@
         cursor: pointer;
     }
 
-    .player-bar.active {
-        background-color: var(--bar-active-bg);
-        color: var(--text-light);
-    }
+    .player-bar.active { background-color: var(--bar-active-bg); color: var(--text-light); }
 
-    .bar-main {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
+    .bar-main { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
     .player-name {
         font-family: var(--heavy-font);
@@ -213,11 +176,7 @@
         line-height: 1;
     }
 
-    .player-total {
-        font-family: var(--num-font);
-        font-size: 2rem;
-        line-height: 0.9;
-    }
+    .player-total { font-family: var(--num-font); font-size: 2rem; line-height: 0.9; }
 
     .settle-row {
         margin-top: 8px;
@@ -243,12 +202,7 @@
     }
     .player-bar.active .cash-input { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff !important; }
 
-    .result-display {
-        font-family: var(--num-font);
-        font-size: 1.1rem;
-        letter-spacing: 0.5px;
-        text-align: right;
-    }
+    .result-display { font-family: var(--num-font); font-size: 1.1rem; text-align: right; }
     .status-loss { color: var(--loss-color); font-weight: 900; }
     .status-profit { color: var(--profit-color); font-weight: 900; }
 
@@ -261,13 +215,7 @@
         padding-top: 6px;
     }
 
-    .player-bar.active .bar-sub { border-top-color: rgba(255,255,255,0.2); }
-
-    .controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    .controls { display: flex; align-items: center; gap: 10px; }
 
     .btn-step {
         width: 24px;
@@ -282,11 +230,6 @@
         cursor: pointer;
     }
 
-    .unit-display {
-        font-family: var(--num-font);
-        font-size: 1rem;
-    }
-
     .remove-link {
         font-size: 0.6rem;
         text-transform: uppercase;
@@ -299,11 +242,7 @@
         font-weight: 900;
     }
 
-    .settlement-summary-section {
-        margin-top: 40px;
-        width: 100%;
-        display: none;
-    }
+    .settlement-summary-section { margin-top: 40px; width: 100%; display: none; }
 
     .summary-title {
         font-family: var(--heavy-font);
@@ -324,11 +263,7 @@
         border-radius: 2px;
     }
 
-    .bill-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    .bill-header { display: flex; justify-content: space-between; align-items: center; }
 
     .bill-name { font-family: var(--heavy-font); font-weight: 900; font-size: 1.2rem; }
     .bill-tag { font-size: 0.6rem; opacity: 0.5; margin-left: 5px; }
@@ -376,14 +311,7 @@
     .btn-ghost.active { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); }
     .btn-generate { background: #fff; color: #000; border: none; }
 
-    footer {
-        margin: 60px 0 30px 0;
-        font-size: 0.65rem;
-        letter-spacing: 2px;
-        opacity: 0.4;
-        text-align: center;
-    }
-    
+    footer { margin: 60px 0 30px 0; font-size: 0.65rem; letter-spacing: 2px; opacity: 0.4; text-align: center; }
     footer a { color: inherit; text-decoration: none; }
 </style>
 </head>
@@ -440,11 +368,8 @@
                 const data = await response.json();
                 if (data && data.rates && data.rates.USD) {
                     usdRate = (1 / data.rates.USD).toFixed(2);
-                    console.log("汇率同步成功: 1 USD =", usdRate, "CNY");
                 }
-            } catch (error) {
-                console.warn("使用默认汇率:", usdRate);
-            }
+            } catch (error) { console.warn("Using default rate."); }
         }
 
         window.onload = function() {
@@ -512,8 +437,9 @@
                 let settle = Math.min(d.amount, c.amount);
 
                 if (settle > 0) {
-                    d.trans.push({ to: c.name, val: settle, type: 'PAY' });
-                    c.trans.push({ from: d.name, val: settle, type: 'REC' });
+                    // 统一使用 target 属性，避免 undefined
+                    d.trans.push({ target: c.name, val: settle, type: 'PAY' });
+                    c.trans.push({ target: d.name, val: settle, type: 'REC' });
                     d.amount -= settle;
                     c.amount -= settle;
                 }
@@ -536,16 +462,14 @@
                 bar.className = 'settle-bill-bar';
                 bar.onclick = () => bar.classList.toggle('open');
 
-                // 计算美金初值
                 const initialUsd = (item.initial / usdRate).toFixed(2);
-                
-                // 重点修改：如果是输家（debtor），金额显示负号；赢家（creditor）显示正号
                 const sign = isDebtor ? '-' : '+';
                 const usdSign = isDebtor ? '-' : '';
 
                 let details = item.trans.map(t => {
                     const tUsd = (t.val / usdRate).toFixed(2);
-                    const label = t.type === 'PAY' ? `PAY TO ${t.to}` : `FROM ${t.to}`;
+                    // 修复：这里直接使用 t.target
+                    const label = t.type === 'PAY' ? `PAY TO ${t.target}` : `FROM ${t.target}`;
                     return `
                         <div class="instruction-row">
                             <span>${label}</span>
