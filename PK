@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的多人德州扑克</title>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: sans-serif; text-align: center; }
+        #game-table { 
+            width: 300px; height: 300px; background: #076324; 
+            border: 10px solid #3d2b1f; border-radius: 50%; 
+            margin: 50px auto; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #pot { font-size: 24px; font-weight: bold; }
+        .controls { margin-top: 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: gold; border: none; border-radius: 5px; }
+        #players-list { margin-top: 30px; display: flex; justify-content: center; gap: 10px; }
+        .player-tag { padding: 5px 10px; background: #444; border-radius: 15px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <h1>多人实时同步测试</h1>
+    
+    <div id="game-table">
+        <div id="pot">底池: $0</div>
+    </div>
+
+    <div class="controls">
+        <button onclick="addMoney()">下注 $100</button>
+        <button onclick="resetPot()" style="background: #ff4444; color: white;">重置</button>
+    </div>
+
+    <h3>当前在线玩家:</h3>
+    <div id="players-list"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/playroomkit/dist/playroomkit.js"></script>
+    
+    <script>
+        // 1. 初始化多人模式
+        async function init() {
+            await Playroom.insertCoin(); // 这行代码会自动处理房间、UI和链接
+            
+            // 2. 监听玩家加入并更新列表
+            Playroom.onPlayerJoin(updatePlayerList);
+            
+            // 3. 监听底池变化 (核心同步逻辑)
+            Playroom.onStateChange("pot", (newPot) => {
+                document.getElementById("pot").innerText = `底池: $${newPot || 0}`;
+            });
+        }
+
+        // 下注逻辑
+        function addMoney() {
+            const currentPot = Playroom.getState("pot") || 0;
+            Playroom.setState("pot", currentPot + 100, true); // true 表示同步给所有人
+        }
+
+        // 重置逻辑
+        function resetPot() {
+            Playroom.setState("pot", 0, true);
+        }
+
+        // 更新 UI 上的玩家列表
+        function updatePlayerList() {
+            const players = Playroom.getPlayers();
+            const listEl = document.getElementById("players-list");
+            listEl.innerHTML = "";
+            players.forEach(p => {
+                const profile = p.getProfile();
+                listEl.innerHTML += `<div class="player-tag" style="color:${profile.color}">${profile.name}</div>`;
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
