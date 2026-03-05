@@ -5,248 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop - Cheaper Brothers</title>
 
-<!-- 引入主页相同字体 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
 
 <style>
-/* ========================== */
-/* 基础页面样式 (参考主页) */
-/* ========================== */
-body {
-  margin: 0;
-  background-color: #000;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
-  /* 消除手机端点击高亮蓝框 */
-  -webkit-tap-highlight-color: transparent;
-}
+/* SHOP 独有样式 */
+body { margin: 0; background-color: #000; color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+.header-section { margin-top: 10vh; margin-bottom: 2vh; display: flex; flex-direction: column; align-items: center; }
+canvas { cursor: pointer; max-width: 100%; }
+.categories { display: flex; gap: 25px; margin-top: 25px; margin-bottom: 50px; }
+.cat-item { font-family: "Alumni Sans Pinstripe", sans-serif; font-size: 1.6rem; font-weight: 400; letter-spacing: 2px; cursor: pointer; opacity: 0.2; transition: opacity 0.4s ease; text-transform: uppercase; padding: 5px; }
+.cat-item.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+.shop-grid { width: 90%; max-width: 1200px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 20px; margin-bottom: 80px; }
+.product-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; width: 100%; opacity: 0; transform: translateY(10px); animation: fadeIn 0.5s forwards; outline: none; }
+@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+.image-wrapper { width: 100%; aspect-ratio: 1 / 1; background-color: #000; overflow: hidden; border: none !important; outline: none !important; display: flex; align-items: center; justify-content: center; }
+.image-wrapper img { width: 101%; height: 101%; object-fit: cover; display: block; border: 0; outline: none; image-rendering: -webkit-optimize-contrast; }
+.product-info { text-align: center; margin-top: 12px; width: 100%; height: 60px; display: flex; flex-direction: column; justify-content: flex-start; }
+.product-name { font-family: "Alumni Sans Pinstripe", sans-serif; font-size: 1.6rem; font-weight: 400; margin: 0; line-height: 0.9; letter-spacing: 0.5px; text-transform: uppercase; }
+.product-price { font-family: "Alumni Sans Pinstripe", sans-serif; font-size: 1rem; opacity: 0.4; margin-top: 4px; display: block; }
 
-#font-loader {
-  font-family: "Manufacturing Consent", system-ui;
-  font-weight: 400;
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.header-section {
-  margin-top: 10vh;
-  margin-bottom: 2vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-canvas {
-  cursor: pointer;
-  max-width: 100%;
-}
-
-.categories {
-  display: flex;
-  gap: 25px;
-  margin-top: 25px;
-  margin-bottom: 50px;
-}
-
-.cat-item {
-  font-family: "Alumni Sans Pinstripe", sans-serif;
-  font-size: 1.6rem;
-  font-weight: 400;
-  letter-spacing: 2px;
-  cursor: pointer;
-  opacity: 0.2;
-  transition: opacity 0.4s ease;
-  text-transform: uppercase;
-  padding: 5px; 
-}
-
-.cat-item.active {
-  opacity: 1;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-}
-
-/* ========================== */
-/* 标准化 SHOP GRID (修复白线) */
-/* ========================== */
-.shop-grid {
-  width: 90%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 40px 20px;
-  margin-bottom: 80px;
-}
-
-.product-card {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.5s forwards;
-  outline: none; /* 移除选中蓝框 */
-}
-
-@keyframes fadeIn {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.image-wrapper {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: #000; /* 背景设为纯黑 */
-  overflow: hidden; /* 关键：裁剪掉溢出的边缘 */
-  border: none !important;
-  outline: none !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-wrapper img {
-  /* 修复方案：稍微放大 1%-2% 以遮盖图片本身的边缘瑕疵或白线 */
-  width: 101%;
-  height: 101%;
-  object-fit: cover;
-  display: block;
-  border: 0;
-  outline: none;
-  /* 解决缩放导致的边缘锯齿白边 */
-  image-rendering: -webkit-optimize-contrast;
-}
-
-/* 固定高度的信息区，确保整齐划一 */
-.product-info {
-  text-align: center;
-  margin-top: 12px;
-  width: 100%;
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.product-name {
-  font-family: "Alumni Sans Pinstripe", sans-serif;
-  font-size: 1.6rem;
-  font-weight: 400;
-  margin: 0;
-  line-height: 0.9;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.product-price {
-  font-family: "Alumni Sans Pinstripe", sans-serif;
-  font-size: 1rem;
-  opacity: 0.4;
-  margin-top: 4px;
-  display: block;
-}
-
-/* ========================== */
-/* NAV (100% 还原主页源码 V7) */
-/* ========================== */
-:root {
-    --nav-bg: #ffffff; 
-    --nav-text: #000000;
-    --primary-font: "Alumni Sans Pinstripe", sans-serif;
-    --secondary-font: "Bebas Neue", sans-serif;
-    --nav-transition: 0.5s;
-    --nav-delay: 0.08s;
-}
-
-.nav-wrapper {
-    position: fixed;
-    top: 25px;
-    right: 25px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    padding-bottom: 40px; 
-}
-
-.nav-trigger {
-    width: 26px; height: 26px;
-    background-color: transparent; border-radius: 4px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
-
-#fuzzy-nav-icon { width: 100%; height: 100%; }
-
-.menu-list {
-    margin-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 210px; pointer-events: none;
-}
-
-.menu-bar {
-    background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
-    text-decoration: none; cursor: pointer; transform: translateY(-15px); opacity: 0;
-    transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden; display: flex; flex-direction: column; justify-content: center;
-}
-
-.menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
-.menu-bar:nth-child(2) { transition-delay: calc(var(--nav-delay) * 2); }
-.menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 1); }
-.menu-bar:nth-child(4) { transition-delay: 0s; }
-
-.nav-wrapper.active .menu-list { pointer-events: auto; }
-.nav-wrapper.active .menu-bar { transform: translateY(0); opacity: 1; }
-
-.nav-wrapper.active .menu-bar:nth-child(1) { transition-delay: 0s; }
-.nav-wrapper.active .menu-bar:nth-child(2) { transition-delay: var(--nav-delay); }
-.nav-wrapper.active .menu-bar:nth-child(3) { transition-delay: calc(var(--nav-delay) * 2); }
-.nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
-
-.bar-title {
-    font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
-    letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
-}
-
-.dot { width: 8px; height: 8px; background-color: var(--nav-text); border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
-
-.sub-content { max-height: 0; opacity: 0; transition: all 0.4s ease; padding-left: 18px; }
-.menu-bar.expanded .sub-content { max-height: 200px; opacity: 1; margin-top: 10px; padding-bottom: 12px; }
-
-.sub-list { list-style: none; padding: 0; margin: 0; }
-.sub-item { margin: 6px 0; }
-.sub-item a {
-    text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
-    font-size: 1.3rem; display: block; opacity: 0.8; text-transform: uppercase;
-}
-.sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
-
-/* ========================== */
-/* FOOTER (完全复刻主页) */
-/* ========================== */
-footer {
-  margin-top: 50px;
-  padding-bottom: 30px; 
-  font-family: "Noto Serif TC", serif;
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: #ffffff;
-  opacity: 0.8;
-  letter-spacing: 1px;
-  text-align: center;
-  width: 100%;
-}
-
-footer a { color: inherit; text-decoration: none; }
-
-/* 响应式适配 */
 @media (max-width: 600px) {
     .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 15px; width: 94%; }
     .cat-item { font-size: 1.2rem; }
@@ -258,16 +35,17 @@ footer a { color: inherit; text-decoration: none; }
 
 <div id="font-loader">Force Font Load</div>
 
-<!-- 导航 -->
 <div class="nav-wrapper" id="navWrapper">
     <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
     <div class="menu-list">
         <div class="menu-bar" onclick="toggleAccordion(event, this)">
-            <div class="bar-title"><div class="dot"></div>Events</div>
+            <div class="bar-title"><div class="dot"></div>APPS</div>
             <div class="sub-content">
                 <ul class="sub-list">
                     <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
                     <li class="sub-item"><a href="lottery.html">LOTTERY</a></li>
+                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">(coming soon)</a></li>
+                    <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
                 </ul>
             </div>
         </div>
@@ -286,7 +64,6 @@ footer a { color: inherit; text-decoration: none; }
 </div>
 
 <div class="header-section">
-  <!-- 闪烁 SHOP -->
   <canvas id="fuzzy-shop-title"></canvas>
   <div class="categories">
     <div class="cat-item active" onclick="updateShop('new', event)">New 2026</div>
@@ -297,12 +74,11 @@ footer a { color: inherit; text-decoration: none; }
 
 <div class="shop-grid" id="productContainer"></div>
 
-<footer><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
+<footer class="global-footer" style="margin-top:50px;"><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
 
+<script src="common.js"></script>
 <script>
-/* ========================== */
-/* 商品数据 */
-/* ========================== */
+// 商品数据与业务逻辑
 const shopData = {
     apparel: [
         { name: "Cheaper Brothers Sticker", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMMaYtq03RWauGhNf8eUiY4mr5DQUYAAqQLaxs0_2FEc193FIxlGREBAAMCAAN4AAM6BA.jpg" },
@@ -315,7 +91,6 @@ const shopData = {
         { name: "Cheaper Brand Poker Chip", price: "$6.66", img: "https://telegraph-image-afv.pages.dev/file/AgACAgEAAyEGAAShflOnAAMLaYtqhjfeTuRn82RaXIl1e-Ld80IAAqMLaxs0_2FErDf7VBeF9I0BAAMCAAN4AAM6BA.jpg" }
     ]
 };
-
 shopData.new = [...shopData.apparel, ...shopData.acc].sort(() => Math.random() - 0.5);
 
 function updateShop(category, event) {
@@ -328,94 +103,15 @@ function updateShop(category, event) {
     container.innerHTML = "";
     items.forEach((item, index) => {
         const card = document.createElement('a');
-        card.href = "#";
-        card.className = "product-card";
-        card.style.animationDelay = `${index * 0.05}s`;
+        card.href = "#"; card.className = "product-card"; card.style.animationDelay = `${index * 0.05}s`;
         card.innerHTML = `<div class="image-wrapper"><img src="${item.img}" alt=""></div><div class="product-info"><h3 class="product-name">${item.name}</h3><span class="product-price">${item.price}</span></div>`;
         container.appendChild(card);
     });
 }
-
 window.onload = () => { updateShop('new'); };
 
-/* ========================== */
-/* FUZZY TEXT (完全复刻主页)  */
-/* ========================== */
-class FuzzyText {
-  constructor(canvasId, options = {}) {
-    this.canvas = document.getElementById(canvasId);
-    if (!this.canvas) return;
-    this.text = options.text || "";
-    this.fontSize = options.fontSize || 80;
-    this.fontWeight = options.fontWeight || 400;
-    this.fontFamily = options.fontFamily || 'sans-serif';
-    this.color = options.color || '#fff';
-    this.baseIntensity = options.baseIntensity || 0.18;
-    this.hoverIntensity = options.hoverIntensity || 0.5;
-    this.fuzzRange = options.fuzzRange || 30;
-    this.ctx = this.canvas.getContext('2d');
-    this.offscreen = document.createElement('canvas');
-    this.offCtx = this.offscreen.getContext('2d');
-    this.isHovering = false;
-    this.animate = this.animate.bind(this);
-    this.resize = this.resize.bind(this);
-    this.init();
-  }
-  async init() {
-    try { await document.fonts.load("400 80px \"Manufacturing Consent\""); } catch(e) {}
-    await document.fonts.ready;
-    setTimeout(() => { this.resize(); this.animate(); }, 100);
-    this.canvas.addEventListener('mousemove', () => this.isHovering = true);
-    this.canvas.addEventListener('mouseleave', () => this.isHovering = false);
-    window.addEventListener('resize', this.resize);
-  }
-  resize() {
-    const isSmallIcon = this.canvas.id === 'fuzzy-nav-icon';
-    const responsiveSize = (window.innerWidth < 600 && !isSmallIcon) ? this.fontSize * 0.6 : this.fontSize;
-    this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
-    const metrics = this.offCtx.measureText(this.text);
-    this.offscreen.width = Math.ceil(metrics.width) + 10;
-    this.offscreen.height = Math.ceil(responsiveSize * 1.5);
-    this.offCtx.font = `${this.fontWeight} ${responsiveSize}px "${this.fontFamily}"`;
-    this.offCtx.fillStyle = this.color;
-    this.offCtx.textBaseline = 'middle';
-    this.offCtx.fillText(this.text, 5, this.offscreen.height / 2);
-    this.width = this.offscreen.width + this.fuzzRange * 2;
-    this.height = this.offscreen.height;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    if(isSmallIcon) { this.canvas.style.width = '35px'; this.canvas.style.height = '35px'; }
-  }
-  animate() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    const intensity = this.isHovering ? this.hoverIntensity : this.baseIntensity;
-    for (let j = 0; j < this.offscreen.height; j++) {
-      const dx = Math.floor(intensity * (Math.random() - 0.5) * this.fuzzRange);
-      this.ctx.drawImage(this.offscreen, 0, j, this.offscreen.width, 1, dx + this.fuzzRange, j, this.offscreen.width, 1);
-    }
-    requestAnimationFrame(this.animate);
-  }
-}
-
+// 初始化 SHOP 模糊字
 new FuzzyText('fuzzy-shop-title', { fontFamily: "Manufacturing Consent", text: "SHOP", fontSize: 80, baseIntensity: 0.15, hoverIntensity: 0.5 });
-new FuzzyText('fuzzy-nav-icon', { fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false });
-
-/* ========================== */
-/* NAV LOGIC */
-/* ========================== */
-const wrapper = document.getElementById('navWrapper');
-const trigger = document.getElementById('navTrigger');
-trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
-wrapper.addEventListener('mouseleave', () => { wrapper.classList.remove('active'); document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded')); });
-trigger.addEventListener('click', (e) => { e.stopPropagation(); wrapper.classList.toggle('active'); });
-function toggleAccordion(event, element) {
-    if (event.target.tagName === 'A') return;
-    const subContent = element.querySelector('.sub-content');
-    if (!subContent) return; 
-    if (element.classList.contains('expanded')) { element.classList.remove('expanded'); return; }
-    document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
-    element.classList.add('expanded');
-}
 </script>
 </body>
 </html>
