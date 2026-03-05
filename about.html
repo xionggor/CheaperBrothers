@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - Cheaper Brothers</title>
+
+<link rel="stylesheet" href="common.css">
+
+<style>
+/* ABOUT 独有样式 */
+body {
+  margin: 0; height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; background-color: #000;
+  overflow: hidden; color: #fff;
+}
+.about-main {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; width: 90%;
+  max-width: 800px; z-index: 1;
+}
+canvas { cursor: pointer; max-width: 100%; }
+.about-subtitle {
+  font-family: "Alumni Sans Pinstripe", sans-serif;
+  font-size: clamp(2rem, 8vw, 3rem); font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-top: 10px; margin-bottom: 25px; line-height: 1;
+}
+.about-body {
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(0.9rem, 4vw, 1.15rem); line-height: 2;
+  opacity: 0.8; max-width: 600px;
+}
+</style>
+</head>
+<body>
+
+<div id="font-loader">Force Font Load</div>
+
+<div class="nav-wrapper" id="navWrapper">
+    <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
