@@ -39,3 +39,47 @@ canvas { cursor: pointer; max-width: 100%; }
 
 <div class="nav-wrapper" id="navWrapper">
     <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
+    <div class="menu-list">
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>APPS</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
+                    <li class="sub-item"><a href="lottery.html">LOTTERY</a></li>
+                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">(coming soon)</a></li>
+                    <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>Art</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="art-2024.html">2024</a></li>
+                    <li class="sub-item"><a href="art-2025.html">2025</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="shop.html" class="menu-bar"><div class="bar-title">Shop</div></a>
+        <a href="about.html" class="menu-bar"><div class="bar-title">About</div></a>
+    </div>
+</div>
+
+<div class="about-main">
+  <canvas id="fuzzy-about"></canvas>
+  <div class="about-subtitle">Who The Hell Are We</div>
+  <div class="about-body">
+    Cheaper Brothers is not a brand. It's an attitude towards life.<br>
+    Born from low budgets, high confidence, and zero market research.
+  </div>
+</div>
+
+<footer class="global-footer" style="position:absolute; bottom:30px;"><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
+
+<script src="common.js"></script>
+<script>
+  // ABOUT 页独有的模糊文字初始化
+  new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 140, baseIntensity: 0.15, hoverIntensity: 0.5 });
+</script>
+</body>
+</html>
