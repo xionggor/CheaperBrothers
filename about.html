@@ -14,10 +14,10 @@
             overflow: hidden; color: #fff; font-family: "Inter", sans-serif;
         }
 
-        /* 3D 小票容器：严格遵循你的物理布局 */
+        /* 3D 小票容器 */
         #receipt-container {
             position: fixed;
-            top: -110vh; /* 初始完全隐藏在上方 */
+            top: -115vh; 
             left: 0;
             width: 100vw;
             height: 100vh;
@@ -35,7 +35,7 @@
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; text-align: center; width: 90%;
             max-width: 800px; z-index: 1;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
         }
 
         canvas#fuzzy-about { cursor: pointer; max-width: 100%; }
@@ -55,10 +55,14 @@
         }
 
         footer { position: absolute; bottom: 30px; z-index: 5; }
+        
+        /* 强制预加载字体 */
+        .font-preload { font-family: "Manufacturing Consent"; position: absolute; opacity: 0; }
     </style>
 </head>
 <body>
 
+<div class="font-preload">Load Font</div>
 <div id="receipt-container"></div>
 
 <nav class="nav-wrapper" id="navWrapper">
@@ -109,69 +113,42 @@
 <script>
     // 1. 初始化 Fuzzy 文字
     new FuzzyText('fuzzy-about', { 
-        fontFamily: "Manufacturing Consent", 
-        text: "ABOUT", 
-        fontSize: 140, 
-        baseIntensity: 0.15, 
-        hoverIntensity: 0.5 
+        fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 140, 
+        baseIntensity: 0.15, hoverIntensity: 0.5 
     });
 
-    // 2. 严格遵循你设计的 3D 小票逻辑
+    // 2. 物理小票引擎
     const ReceiptEngine = (() => {
-        // --- 严格物理参数 ---
         const DAMPING = 0.98;
         const TIMESTEP = 18 / 1000;
         const GRAVITY = new THREE.Vector3(0, -80, 0);
-        const xSegs = 15, ySegs = 35;
-        const width = 6, height = 14;
+        const xSegs = 15, ySegs = 35, width = 6, height = 14;
 
         let scene, camera, renderer, particles = [], constraints = [], receiptMesh, geometry;
         let draggedParticle = null, dragPlane = new THREE.Plane(), raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
-
-        class Particle {
-            constructor(x, y, z) {
-                this.position = new THREE.Vector3(x, y, z);
-                this.previous = new THREE.Vector3(x, y, z);
-                this.original = new THREE.Vector3(x, y, z);
-                this.isPinned = false;
-            }
-            addForce(f) { if(!this.isPinned) this.position.add(f.clone().multiplyScalar(TIMESTEP * TIMESTEP)); }
-            integrate() {
-                if(this.isPinned) return;
-                let v = this.position.clone().sub(this.previous).multiplyScalar(DAMPING);
-                this.previous.copy(this.position);
-                this.position.add(v);
-            }
-        }
-
-        class Constraint {
-            constructor(p1, p2, dist) { this.p1 = p1; this.p2 = p2; this.dist = dist; }
-            resolve() {
-                let diff = new THREE.Vector3().subVectors(this.p2.position, this.p1.position);
-                let cur = diff.length();
-                if(cur === 0) return;
-                let corr = diff.multiplyScalar(1 - this.dist / cur).multiplyScalar(0.5);
-                if(!this.p1.isPinned) this.p1.position.add(corr);
-                if(!this.p2.isPinned) this.p2.position.sub(corr);
-            }
-        }
 
         function createTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 512; canvas.height = 1024;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fcfcfc'; ctx.fillRect(0, 0, 512, 1024);
             
-            // 噪点
+            // 背景与噪点
+            ctx.fillStyle = '#fcfcfc'; ctx.fillRect(0, 0, 512, 1024);
             for (let i = 0; i < 5000; i++) {
                 ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.03})`;
                 ctx.fillRect(Math.random() * 512, Math.random() * 1024, 2, 2);
             }
 
-            ctx.fillStyle = '#222'; ctx.textAlign = 'center';
-            ctx.font = 'bold 42px monospace'; ctx.fillText('CHEAPER BROTHERS', 256, 100);
-            ctx.font = '24px monospace'; ctx.fillText('--------------------------------', 256, 140);
+            // 核心修改：使用 Manufacturing Consent 字体并双行显示
+            ctx.fillStyle = '#111'; ctx.textAlign = 'center';
+            ctx.font = '72px "Manufacturing Consent"'; // 大号字体
+            ctx.fillText('CHEAPER', 256, 100);
+            ctx.fillText('BROTHERS', 256, 175);
             
+            ctx.font = '24px monospace';
+            ctx.fillText('--------------------------------', 256, 220);
+            
+            // 商品明细
             ctx.textAlign = 'left';
             ctx.font = 'bold 26px monospace, "Microsoft YaHei", sans-serif';
             const items = [
@@ -184,7 +161,7 @@
                 { name: "1x Jollibee", price: "  FREE" },
                 { name: "1x 悸动奶茶", price: "  FREE" }
             ];
-            let y = 220;
+            let y = 300;
             items.forEach(item => {
                 ctx.fillText(item.name, 40, y);
                 ctx.fillText(item.price, 360, y);
@@ -204,26 +181,36 @@
             return new THREE.CanvasTexture(canvas);
         }
 
+        // 物理逻辑定义 (与之前一致，略作精简)
+        class Particle {
+            constructor(x, y, z) { this.position = new THREE.Vector3(x, y, z); this.previous = new THREE.Vector3(x, y, z); this.original = new THREE.Vector3(x, y, z); this.isPinned = false; }
+            addForce(f) { if(!this.isPinned) this.position.add(f.clone().multiplyScalar(TIMESTEP * TIMESTEP)); }
+            integrate() { if(this.isPinned) return; let v = this.position.clone().sub(this.previous).multiplyScalar(DAMPING); this.previous.copy(this.position); this.position.add(v); }
+        }
+        class Constraint {
+            constructor(p1, p2, dist) { this.p1 = p1; this.p2 = p2; this.dist = dist; }
+            resolve() {
+                let diff = new THREE.Vector3().subVectors(this.p2.position, this.p1.position);
+                let cur = diff.length(); if(cur === 0) return;
+                let corr = diff.multiplyScalar(1 - this.dist / cur).multiplyScalar(0.5);
+                if(!this.p1.isPinned) this.p1.position.add(corr); if(!this.p2.isPinned) this.p2.position.sub(corr);
+            }
+        }
+
         return {
             init: () => {
                 const container = document.getElementById('receipt-container');
                 scene = new THREE.Scene();
-                // 背景设为透明，以便看到底下的 About 文字
                 renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
                 container.appendChild(renderer.domElement);
 
                 camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-                const aspect = window.innerWidth / window.innerHeight;
-                camera.position.z = Math.max(20, 20 / aspect);
+                camera.position.z = Math.max(20, 20 / (window.innerWidth / window.innerHeight));
 
-                scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-                const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-                dirLight.position.set(10, 20, 20);
-                scene.add(dirLight);
-
-                // 构建粒子
+                scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+                
                 for (let v = 0; v <= ySegs; v++) {
                     for (let u = 0; u <= xSegs; u++) {
                         let p = new Particle((u/xSegs-0.5)*width, (0.5-v/ySegs)*height, 0);
@@ -231,53 +218,17 @@
                         particles.push(p);
                     }
                 }
-                const index = (u, v) => u + v * (xSegs + 1);
+                const idx = (u, v) => u + v * (xSegs + 1);
                 for (let v = 0; v <= ySegs; v++) {
                     for (let u = 0; u <= xSegs; u++) {
-                        if (u < xSegs) constraints.push(new Constraint(particles[index(u, v)], particles[index(u + 1, v)], width / xSegs));
-                        if (v < ySegs) constraints.push(new Constraint(particles[index(u, v)], particles[index(u, v + 1)], height / ySegs));
-                        if (u < xSegs && v < ySegs) {
-                            let diag = Math.sqrt(Math.pow(width/xSegs, 2) + Math.pow(height/ySegs, 2));
-                            constraints.push(new Constraint(particles[index(u, v)], particles[index(u + 1, v + 1)], diag));
-                            constraints.push(new Constraint(particles[index(u + 1, v)], particles[index(u, v + 1)], diag));
-                        }
+                        if (u < xSegs) constraints.push(new Constraint(particles[idx(u, v)], particles[idx(u + 1, v)], width / xSegs));
+                        if (v < ySegs) constraints.push(new Constraint(particles[idx(u, v)], particles[idx(u, v + 1)], height / ySegs));
                     }
                 }
 
                 geometry = new THREE.PlaneGeometry(width, height, xSegs, ySegs);
                 receiptMesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: createTexture(), side: THREE.DoubleSide, transparent: true }));
                 scene.add(receiptMesh);
-
-                // 交互
-                const handleStart = (cx, cy) => {
-                    mouse.x = (cx / window.innerWidth) * 2 - 1;
-                    mouse.y = -(cy / window.innerHeight) * 2 + 1;
-                    raycaster.setFromCamera(mouse, camera);
-                    const intersects = raycaster.intersectObject(receiptMesh);
-                    if(intersects.length > 0) {
-                        const hit = intersects[0];
-                        const face = hit.face;
-                        draggedParticle = particles[face.a]; // 简化选择
-                        if(draggedParticle.isPinned && draggedParticle.original.y > 0) { draggedParticle = null; return; }
-                        draggedParticle.isPinned = true;
-                        dragPlane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(new THREE.Vector3()), hit.point);
-                    }
-                };
-                
-                const handleMove = (cx, cy) => {
-                    if(!draggedParticle) return;
-                    mouse.x = (cx / window.innerWidth) * 2 - 1;
-                    mouse.y = -(cy / window.innerHeight) * 2 + 1;
-                    raycaster.setFromCamera(mouse, camera);
-                    const target = new THREE.Vector3();
-                    raycaster.ray.intersectPlane(dragPlane, target);
-                    draggedParticle.position.copy(target);
-                };
-
-                window.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
-                window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
-                window.addEventListener('mouseup', () => { if(draggedParticle) { if(draggedParticle.original.y < height/2 - 0.1) draggedParticle.isPinned = false; draggedParticle = null; }});
-                
                 animate();
             }
         };
@@ -287,23 +238,20 @@
             for(let p of particles) { p.addForce(GRAVITY); p.integrate(); }
             for(let i=0; i<15; i++) for(let c of constraints) c.resolve();
             const pos = geometry.attributes.position.array;
-            for(let i=0; i<particles.length; i++) {
-                pos[i*3] = particles[i].position.x; pos[i*3+1] = particles[i].position.y; pos[i*3+2] = particles[i].position.z;
-            }
+            for(let i=0; i<particles.length; i++) { pos[i*3] = particles[i].position.x; pos[i*3+1] = particles[i].position.y; pos[i*3+2] = particles[i].position.z; }
             geometry.attributes.position.needsUpdate = true;
             geometry.computeVertexNormals();
             renderer.render(scene, camera);
         }
     })();
 
-    // 3. 点击 ABOUT 触发
-    let triggered = false;
+    // 触发
     document.getElementById('fuzzy-about').addEventListener('click', () => {
-        if(!triggered) {
+        const container = document.getElementById('receipt-container');
+        if(!container.classList.contains('active')) {
             ReceiptEngine.init();
-            document.getElementById('receipt-container').classList.add('active');
-            document.getElementById('about-content').style.opacity = '0.3'; // 降低文字透明度突出小票
-            triggered = true;
+            container.classList.add('active');
+            document.getElementById('about-content').style.opacity = '0.3';
         }
     });
 </script>
