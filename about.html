@@ -168,9 +168,19 @@
                 ctx.fillRect(Math.random() * 512, Math.random() * 1024, 2, 2);
             }
 
-            ctx.fillStyle = '#222'; ctx.textAlign = 'center';
-            ctx.font = 'bold 42px monospace'; ctx.fillText('CHEAPER BROTHERS', 256, 100);
-            ctx.font = '24px monospace'; ctx.fillText('--------------------------------', 256, 140);
+// 1. 颜色与对齐方式保持不变
+            ctx.fillStyle = '#111'; ctx.textAlign = 'center';
+
+            // 2. 第一行：加粗并稍微调大字号 (80px)
+            ctx.font = 'bold 80px sans-serif'; 
+            ctx.fillText('CHEAPER', 256, 120);
+
+            // 3. 第二行：保持加粗 (80px)
+            ctx.fillText('BROTHERS', 256, 205);
+            
+            // 4. 分割线：位置下移到 250，避免撞到文字
+            ctx.font = '24px monospace';
+            ctx.fillText('--------------------------------', 256, 250);
             
             ctx.textAlign = 'left';
             ctx.font = 'bold 26px monospace, "Microsoft YaHei", sans-serif';
