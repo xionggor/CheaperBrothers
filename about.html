@@ -14,16 +14,16 @@
             overflow: hidden; color: #fff; font-family: "Inter", sans-serif;
         }
 
-        /* 3D 小票容器 */
+        /* 3D 小票容器：严格遵循你的物理布局 */
         #receipt-container {
             position: fixed;
-            top: -100vh; /* 初始位置在屏幕上方 */
+            top: -110vh; /* 初始完全隐藏在上方 */
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 2; /* 位于文字上方 */
-            pointer-events: none; /* 初始时不干扰点击 */
-            transition: top 1s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 2;
+            pointer-events: none;
+            transition: top 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         #receipt-container.active {
@@ -35,7 +35,7 @@
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; text-align: center; width: 90%;
             max-width: 800px; z-index: 1;
-            transition: transform 0.5s ease;
+            transition: opacity 0.5s ease;
         }
 
         canvas#fuzzy-about { cursor: pointer; max-width: 100%; }
@@ -55,13 +55,9 @@
         }
 
         footer { position: absolute; bottom: 30px; z-index: 5; }
-        
-        #font-loader { position: absolute; opacity: 0; font-family: "Manufacturing Consent"; }
     </style>
 </head>
 <body>
-
-<div id="font-loader">Force Font Load</div>
 
 <div id="receipt-container"></div>
 
@@ -95,11 +91,11 @@
 </nav>
 
 <div class="about-main" id="about-content">
-    <canvas id="fuzzy-about" title="Click to reveal receipt"></canvas>
+    <canvas id="fuzzy-about"></canvas>
     <div class="about-subtitle">Who The Hell Are We</div>
     <div class="about-body">
-        Cheaper Brothers is not just a brand. It's a survival guide for the modern jungle.<br>
-        Born from low budgets, high-performance code, and the streets of New York.
+        Cheaper Brothers is not a brand. It's an attitude towards life.<br>
+        Born from low budgets, high confidence, and zero market research.
     </div>
 </div>
 
@@ -112,7 +108,7 @@
 
 <script>
     // 1. 初始化 Fuzzy 文字
-    const fuzzyAbout = new FuzzyText('fuzzy-about', { 
+    new FuzzyText('fuzzy-about', { 
         fontFamily: "Manufacturing Consent", 
         text: "ABOUT", 
         fontSize: 140, 
@@ -120,14 +116,17 @@
         hoverIntensity: 0.5 
     });
 
-    // 2. 3D 小票逻辑模块 (封装)
-    const ReceiptApp = (() => {
-        const DAMPING = 0.96;
+    // 2. 严格遵循你设计的 3D 小票逻辑
+    const ReceiptEngine = (() => {
+        // --- 严格物理参数 ---
+        const DAMPING = 0.98;
         const TIMESTEP = 18 / 1000;
-        const GRAVITY = new THREE.Vector3(0, -70, 0);
-        const width = 6, height = 12, xSegs = 15, ySegs = 30;
+        const GRAVITY = new THREE.Vector3(0, -80, 0);
+        const xSegs = 15, ySegs = 35;
+        const width = 6, height = 14;
+
         let scene, camera, renderer, particles = [], constraints = [], receiptMesh, geometry;
-        let isInitialized = false;
+        let draggedParticle = null, dragPlane = new THREE.Plane(), raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
 
         class Particle {
             constructor(x, y, z) {
@@ -162,13 +161,46 @@
             canvas.width = 512; canvas.height = 1024;
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = '#fcfcfc'; ctx.fillRect(0, 0, 512, 1024);
-            ctx.fillStyle = '#111'; ctx.textAlign = 'center';
-            ctx.font = 'bold 45px monospace'; ctx.fillText('CHEAPER BROTHERS', 256, 80);
-            ctx.font = '22px monospace'; ctx.fillText('--------------------------', 256, 120);
-            let items = ["MTA PASS: $0.00", "POKER LUCK: MAX", "DREAMS: UNLIMITED", "STREET CRED: HIGH"];
-            ctx.textAlign = 'left'; ctx.font = 'bold 28px monospace';
-            items.forEach((text, i) => ctx.fillText(text, 60, 200 + i * 60));
-            ctx.textAlign = 'center'; ctx.fillText('TOTAL: $0.00', 256, 800);
+            
+            // 噪点
+            for (let i = 0; i < 5000; i++) {
+                ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.03})`;
+                ctx.fillRect(Math.random() * 512, Math.random() * 1024, 2, 2);
+            }
+
+            ctx.fillStyle = '#222'; ctx.textAlign = 'center';
+            ctx.font = 'bold 42px monospace'; ctx.fillText('CHEAPER BROTHERS', 256, 100);
+            ctx.font = '24px monospace'; ctx.fillText('--------------------------------', 256, 140);
+            
+            ctx.textAlign = 'left';
+            ctx.font = 'bold 26px monospace, "Microsoft YaHei", sans-serif';
+            const items = [
+                { name: "∞ Amazon", price: "  FREE" },
+                { name: "1x Walmart", price: "  FREE" },
+                { name: "1x Homedepot", price: "  FREE" },
+                { name: "1x Doordash", price: "  FREE" },
+                { name: "1x Uber Eats", price: "  FREE" },
+                { name: "1x Domino's pizza", price: "  FREE" },
+                { name: "1x Jollibee", price: "  FREE" },
+                { name: "1x 悸动奶茶", price: "  FREE" }
+            ];
+            let y = 220;
+            items.forEach(item => {
+                ctx.fillText(item.name, 40, y);
+                ctx.fillText(item.price, 360, y);
+                y += 60;
+            });
+
+            ctx.textAlign = 'center';
+            ctx.fillText('--------------------------------', 256, y + 40);
+            ctx.font = 'bold 36px monospace'; ctx.fillText('TOTAL: 0', 256, y + 100);
+            
+            // 条形码
+            ctx.fillStyle = '#111';
+            for (let i = 0; i < 60; i++) {
+                let w = Math.random() * 6 + 1;
+                ctx.fillRect(50 + i * 7, y + 160, w, 80);
+            }
             return new THREE.CanvasTexture(canvas);
         }
 
@@ -176,34 +208,76 @@
             init: () => {
                 const container = document.getElementById('receipt-container');
                 scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-                camera.position.set(0, 0, 18);
-                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // 透明背景
+                // 背景设为透明，以便看到底下的 About 文字
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
                 container.appendChild(renderer.domElement);
 
-                scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-                
-                // 构建物理网格
-                for(let v=0; v<=ySegs; v++) {
-                    for(let u=0; u<=xSegs; u++) {
+                camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const aspect = window.innerWidth / window.innerHeight;
+                camera.position.z = Math.max(20, 20 / aspect);
+
+                scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+                const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+                dirLight.position.set(10, 20, 20);
+                scene.add(dirLight);
+
+                // 构建粒子
+                for (let v = 0; v <= ySegs; v++) {
+                    for (let u = 0; u <= xSegs; u++) {
                         let p = new Particle((u/xSegs-0.5)*width, (0.5-v/ySegs)*height, 0);
-                        if(v === 0) p.isPinned = true; // 挂在顶部
+                        if(v === 0) p.isPinned = true;
                         particles.push(p);
                     }
                 }
-                const idx = (u,v) => u + v*(xSegs+1);
-                for(let v=0; v<=ySegs; v++) {
-                    for(let u=0; u<=xSegs; u++) {
-                        if(u<xSegs) constraints.push(new Constraint(particles[idx(u,v)], particles[idx(u+1,v)], width/xSegs));
-                        if(v<ySegs) constraints.push(new Constraint(particles[idx(u,v)], particles[idx(u,v+1)], height/ySegs));
+                const index = (u, v) => u + v * (xSegs + 1);
+                for (let v = 0; v <= ySegs; v++) {
+                    for (let u = 0; u <= xSegs; u++) {
+                        if (u < xSegs) constraints.push(new Constraint(particles[index(u, v)], particles[index(u + 1, v)], width / xSegs));
+                        if (v < ySegs) constraints.push(new Constraint(particles[index(u, v)], particles[index(u, v + 1)], height / ySegs));
+                        if (u < xSegs && v < ySegs) {
+                            let diag = Math.sqrt(Math.pow(width/xSegs, 2) + Math.pow(height/ySegs, 2));
+                            constraints.push(new Constraint(particles[index(u, v)], particles[index(u + 1, v + 1)], diag));
+                            constraints.push(new Constraint(particles[index(u + 1, v)], particles[index(u, v + 1)], diag));
+                        }
                     }
                 }
 
                 geometry = new THREE.PlaneGeometry(width, height, xSegs, ySegs);
-                receiptMesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: createTexture(), side: THREE.DoubleSide }));
+                receiptMesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: createTexture(), side: THREE.DoubleSide, transparent: true }));
                 scene.add(receiptMesh);
-                isInitialized = true;
+
+                // 交互
+                const handleStart = (cx, cy) => {
+                    mouse.x = (cx / window.innerWidth) * 2 - 1;
+                    mouse.y = -(cy / window.innerHeight) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera);
+                    const intersects = raycaster.intersectObject(receiptMesh);
+                    if(intersects.length > 0) {
+                        const hit = intersects[0];
+                        const face = hit.face;
+                        draggedParticle = particles[face.a]; // 简化选择
+                        if(draggedParticle.isPinned && draggedParticle.original.y > 0) { draggedParticle = null; return; }
+                        draggedParticle.isPinned = true;
+                        dragPlane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(new THREE.Vector3()), hit.point);
+                    }
+                };
+                
+                const handleMove = (cx, cy) => {
+                    if(!draggedParticle) return;
+                    mouse.x = (cx / window.innerWidth) * 2 - 1;
+                    mouse.y = -(cy / window.innerHeight) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera);
+                    const target = new THREE.Vector3();
+                    raycaster.ray.intersectPlane(dragPlane, target);
+                    draggedParticle.position.copy(target);
+                };
+
+                window.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+                window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+                window.addEventListener('mouseup', () => { if(draggedParticle) { if(draggedParticle.original.y < height/2 - 0.1) draggedParticle.isPinned = false; draggedParticle = null; }});
+                
                 animate();
             }
         };
@@ -211,7 +285,7 @@
         function animate() {
             requestAnimationFrame(animate);
             for(let p of particles) { p.addForce(GRAVITY); p.integrate(); }
-            for(let i=0; i<10; i++) for(let c of constraints) c.resolve();
+            for(let i=0; i<15; i++) for(let c of constraints) c.resolve();
             const pos = geometry.attributes.position.array;
             for(let i=0; i<particles.length; i++) {
                 pos[i*3] = particles[i].position.x; pos[i*3+1] = particles[i].position.y; pos[i*3+2] = particles[i].position.z;
@@ -222,17 +296,14 @@
         }
     })();
 
-    // 3. 点击事件绑定
-    let receiptTriggered = false;
+    // 3. 点击 ABOUT 触发
+    let triggered = false;
     document.getElementById('fuzzy-about').addEventListener('click', () => {
-        if(!receiptTriggered) {
-            const container = document.getElementById('receipt-container');
-            const mainContent = document.getElementById('about-content');
-            
-            ReceiptApp.init(); // 初始化 3D 场景
-            container.classList.add('active'); // 掉落动画
-            mainContent.style.transform = 'translateY(10vh)'; // 文字稍稍下移
-            receiptTriggered = true;
+        if(!triggered) {
+            ReceiptEngine.init();
+            document.getElementById('receipt-container').classList.add('active');
+            document.getElementById('about-content').style.opacity = '0.3'; // 降低文字透明度突出小票
+            triggered = true;
         }
     });
 </script>
