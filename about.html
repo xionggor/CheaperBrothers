@@ -1,85 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About - Cheaper Brothers</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Cheaper Brothers</title>
 
-<link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="common.css">
 
-<style>
-/* ABOUT 独有样式 */
-body {
-  margin: 0; height: 100vh; display: flex; flex-direction: column;
-  justify-content: center; align-items: center; background-color: #000;
-  overflow: hidden; color: #fff;
-}
-.about-main {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; text-align: center; width: 90%;
-  max-width: 800px; z-index: 1;
-}
-canvas { cursor: pointer; max-width: 100%; }
-.about-subtitle {
-  font-family: "Alumni Sans Pinstripe", sans-serif;
-  font-size: clamp(2rem, 8vw, 3rem); font-weight: 400;
-  letter-spacing: 2px; text-transform: uppercase;
-  margin-top: 10px; margin-bottom: 25px; line-height: 1;
-}
-.about-body {
-  font-family: "Noto Serif TC", serif;
-  font-size: clamp(0.9rem, 4vw, 1.15rem); line-height: 2;
-  opacity: 0.8; max-width: 600px;
-}
-</style>
+    <style>
+        body {
+            margin: 0; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; background-color: #000;
+            overflow: hidden; color: #fff; font-family: "Inter", sans-serif;
+        }
+
+        /* 3D 小票容器 */
+        #receipt-container {
+            position: fixed;
+            top: -100vh; /* 初始位置在屏幕上方 */
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2; /* 位于文字上方 */
+            pointer-events: none; /* 初始时不干扰点击 */
+            transition: top 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #receipt-container.active {
+            top: 0;
+            pointer-events: auto;
+        }
+
+        .about-main {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; width: 90%;
+            max-width: 800px; z-index: 1;
+            transition: transform 0.5s ease;
+        }
+
+        canvas#fuzzy-about { cursor: pointer; max-width: 100%; }
+
+        .about-subtitle {
+            font-family: "Alumni Sans Pinstripe", sans-serif;
+            font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 400;
+            letter-spacing: 4px; text-transform: uppercase;
+            margin-top: 10px; margin-bottom: 20px; line-height: 1;
+            opacity: 0.7;
+        }
+
+        .about-body {
+            font-family: "Noto Serif TC", serif;
+            font-size: clamp(0.85rem, 3.5vw, 1rem); line-height: 1.8;
+            opacity: 0.6; max-width: 500px;
+        }
+
+        footer { position: absolute; bottom: 30px; z-index: 5; }
+        
+        #font-loader { position: absolute; opacity: 0; font-family: "Manufacturing Consent"; }
+    </style>
 </head>
 <body>
 
 <div id="font-loader">Force Font Load</div>
 
-<div class="nav-wrapper" id="navWrapper">
+<div id="receipt-container"></div>
+
+<nav class="nav-wrapper" id="navWrapper">
     <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
     <div class="menu-list">
         <div class="menu-bar" onclick="toggleAccordion(event, this)">
             <div class="bar-title"><div class="dot"></div>APPS</div>
             <div class="sub-content">
                 <ul class="sub-list">
+                    <li class="sub-item"><a href="https://xionggor.github.io/MTA/">NY COMMUTE SWISS ARMY KNIFE PRO MAX</a></li>
                     <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
                     <li class="sub-item"><a href="lottery.html">LOTTERY</a></li>
-                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">(coming soon)</a></li>
+                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
                     <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
                 </ul>
             </div>
         </div>
         <div class="menu-bar" onclick="toggleAccordion(event, this)">
-            <div class="bar-title"><div class="dot"></div>Art</div>
+            <div class="bar-title"><div class="dot"></div>ART</div>
             <div class="sub-content">
                 <ul class="sub-list">
-                    <li class="sub-item"><a href="art-2024.html">2024</a></li>
-                    <li class="sub-item"><a href="art-2025.html">2025</a></li>
+                    <li class="sub-item"><a href="art-2024.html">2024 GALLERY</a></li>
+                    <li class="sub-item"><a href="art-2025.html">2025 GALLERY</a></li>
                 </ul>
             </div>
         </div>
-        <a href="shop.html" class="menu-bar"><div class="bar-title">Shop</div></a>
-        <a href="about.html" class="menu-bar"><div class="bar-title">About</div></a>
+        <a href="shop.html" class="menu-bar"><div class="bar-title">SHOP</div></a>
+        <a href="about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
+    </div>
+</nav>
+
+<div class="about-main" id="about-content">
+    <canvas id="fuzzy-about" title="Click to reveal receipt"></canvas>
+    <div class="about-subtitle">Who The Hell Are We</div>
+    <div class="about-body">
+        Cheaper Brothers is not just a brand. It's a survival guide for the modern jungle.<br>
+        Born from low budgets, high-performance code, and the streets of New York.
     </div>
 </div>
 
-<div class="about-main">
-  <canvas id="fuzzy-about"></canvas>
-  <div class="about-subtitle">Who The Hell Are We</div>
-  <div class="about-body">
-    Cheaper Brothers is not a brand. It's an attitude towards life.<br>
-    Born from low budgets, high confidence, and zero market research.
-  </div>
-</div>
+<footer class="global-footer">
+    <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
+</footer>
 
-<footer class="global-footer" style="position:absolute; bottom:30px;"><a href="index.html">Cheaper Brothers Co. 廉兄集团</a></footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="common.js"></script>
+
 <script>
-  // ABOUT 页独有的模糊文字初始化
-  new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 140, baseIntensity: 0.15, hoverIntensity: 0.5 });
+    // 1. 初始化 Fuzzy 文字
+    const fuzzyAbout = new FuzzyText('fuzzy-about', { 
+        fontFamily: "Manufacturing Consent", 
+        text: "ABOUT", 
+        fontSize: 140, 
+        baseIntensity: 0.15, 
+        hoverIntensity: 0.5 
+    });
+
+    // 2. 3D 小票逻辑模块 (封装)
+    const ReceiptApp = (() => {
+        const DAMPING = 0.96;
+        const TIMESTEP = 18 / 1000;
+        const GRAVITY = new THREE.Vector3(0, -70, 0);
+        const width = 6, height = 12, xSegs = 15, ySegs = 30;
+        let scene, camera, renderer, particles = [], constraints = [], receiptMesh, geometry;
+        let isInitialized = false;
+
+        class Particle {
+            constructor(x, y, z) {
+                this.position = new THREE.Vector3(x, y, z);
+                this.previous = new THREE.Vector3(x, y, z);
+                this.original = new THREE.Vector3(x, y, z);
+                this.isPinned = false;
+            }
+            addForce(f) { if(!this.isPinned) this.position.add(f.clone().multiplyScalar(TIMESTEP * TIMESTEP)); }
+            integrate() {
+                if(this.isPinned) return;
+                let v = this.position.clone().sub(this.previous).multiplyScalar(DAMPING);
+                this.previous.copy(this.position);
+                this.position.add(v);
+            }
+        }
+
+        class Constraint {
+            constructor(p1, p2, dist) { this.p1 = p1; this.p2 = p2; this.dist = dist; }
+            resolve() {
+                let diff = new THREE.Vector3().subVectors(this.p2.position, this.p1.position);
+                let cur = diff.length();
+                if(cur === 0) return;
+                let corr = diff.multiplyScalar(1 - this.dist / cur).multiplyScalar(0.5);
+                if(!this.p1.isPinned) this.p1.position.add(corr);
+                if(!this.p2.isPinned) this.p2.position.sub(corr);
+            }
+        }
+
+        function createTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fcfcfc'; ctx.fillRect(0, 0, 512, 1024);
+            ctx.fillStyle = '#111'; ctx.textAlign = 'center';
+            ctx.font = 'bold 45px monospace'; ctx.fillText('CHEAPER BROTHERS', 256, 80);
+            ctx.font = '22px monospace'; ctx.fillText('--------------------------', 256, 120);
+            let items = ["MTA PASS: $0.00", "POKER LUCK: MAX", "DREAMS: UNLIMITED", "STREET CRED: HIGH"];
+            ctx.textAlign = 'left'; ctx.font = 'bold 28px monospace';
+            items.forEach((text, i) => ctx.fillText(text, 60, 200 + i * 60));
+            ctx.textAlign = 'center'; ctx.fillText('TOTAL: $0.00', 256, 800);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        return {
+            init: () => {
+                const container = document.getElementById('receipt-container');
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+                camera.position.set(0, 0, 18);
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // 透明背景
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                container.appendChild(renderer.domElement);
+
+                scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+                
+                // 构建物理网格
+                for(let v=0; v<=ySegs; v++) {
+                    for(let u=0; u<=xSegs; u++) {
+                        let p = new Particle((u/xSegs-0.5)*width, (0.5-v/ySegs)*height, 0);
+                        if(v === 0) p.isPinned = true; // 挂在顶部
+                        particles.push(p);
+                    }
+                }
+                const idx = (u,v) => u + v*(xSegs+1);
+                for(let v=0; v<=ySegs; v++) {
+                    for(let u=0; u<=xSegs; u++) {
+                        if(u<xSegs) constraints.push(new Constraint(particles[idx(u,v)], particles[idx(u+1,v)], width/xSegs));
+                        if(v<ySegs) constraints.push(new Constraint(particles[idx(u,v)], particles[idx(u,v+1)], height/ySegs));
+                    }
+                }
+
+                geometry = new THREE.PlaneGeometry(width, height, xSegs, ySegs);
+                receiptMesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: createTexture(), side: THREE.DoubleSide }));
+                scene.add(receiptMesh);
+                isInitialized = true;
+                animate();
+            }
+        };
+
+        function animate() {
+            requestAnimationFrame(animate);
+            for(let p of particles) { p.addForce(GRAVITY); p.integrate(); }
+            for(let i=0; i<10; i++) for(let c of constraints) c.resolve();
+            const pos = geometry.attributes.position.array;
+            for(let i=0; i<particles.length; i++) {
+                pos[i*3] = particles[i].position.x; pos[i*3+1] = particles[i].position.y; pos[i*3+2] = particles[i].position.z;
+            }
+            geometry.attributes.position.needsUpdate = true;
+            geometry.computeVertexNormals();
+            renderer.render(scene, camera);
+        }
+    })();
+
+    // 3. 点击事件绑定
+    let receiptTriggered = false;
+    document.getElementById('fuzzy-about').addEventListener('click', () => {
+        if(!receiptTriggered) {
+            const container = document.getElementById('receipt-container');
+            const mainContent = document.getElementById('about-content');
+            
+            ReceiptApp.init(); // 初始化 3D 场景
+            container.classList.add('active'); // 掉落动画
+            mainContent.style.transform = 'translateY(10vh)'; // 文字稍稍下移
+            receiptTriggered = true;
+        }
+    });
 </script>
 </body>
 </html>
