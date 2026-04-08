@@ -90,21 +90,58 @@ class FuzzyText {
 }
 
 /* ========================== */
-/* 2. 全局导航栏逻辑 (V7) */
+/* 2. 全局 UI 动态注入系统 (V8) */
 /* ========================== */
-document.addEventListener('DOMContentLoaded', () => {
-    // 自动渲染导航栏图标
-    if(document.getElementById('fuzzy-nav-icon')) {
+window.renderGlobalUI = function(rootPath = '') {
+    const navHTML = `
+    <nav class="nav-wrapper" id="navWrapper">
+        <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
+        <div class="menu-list">
+            <div class="menu-bar" onclick="toggleAccordion(event, this)">
+                <div class="bar-title"><div class="dot"></div>APPS</div>
+                <div class="sub-content">
+                    <ul class="sub-list">
+                        <li class="sub-item"><a href="https://xionggor.github.io/MTA/" target="_blank">MTA TRACKER</a></li>
+                        <li class="sub-item"><a href="${rootPath}PokerTracker/index.html">POKER TRACKER</a></li>
+                        <li class="sub-item"><a href="${rootPath}lottery/index.html">LOTTERY</a></li>
+                        <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
+                        <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu-bar" onclick="toggleAccordion(event, this)">
+                <div class="bar-title"><div class="dot"></div>ART</div>
+                <div class="sub-content">
+                    <ul class="sub-list">
+                        <li class="sub-item"><a href="${rootPath}Gallery/art-2024.html">2024 GALLERY</a></li>
+                        <li class="sub-item"><a href="${rootPath}Gallery/art-2025.html">2025 GALLERY</a></li>
+                    </ul>
+                </div>
+            </div>
+            <a href="${rootPath}Shop/index.html" class="menu-bar"><div class="bar-title">SHOP</div></a>
+            <a href="${rootPath}about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
+        </div>
+    </nav>
+    `;
+
+    const footerHTML = `
+    <footer class="global-footer" style="margin-top: 40px; position: relative; z-index: 10;">
+        <a href="${rootPath}index.html">CHEAPER BROTHERS CO. 廉兄集团。</a>
+    </footer>
+    `;
+
+    document.body.insertAdjacentHTML('afterbegin', navHTML);
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
+
+    if (document.getElementById('fuzzy-nav-icon')) {
         new FuzzyText('fuzzy-nav-icon', { 
-            fontFamily: "Manufacturing Consent", 
-            text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false 
+            fontFamily: "Manufacturing Consent", text: "■", fontSize: 40, fuzzRange: 15, baseIntensity: 0.2, enableHover: false 
         });
     }
 
     const wrapper = document.getElementById('navWrapper');
     const trigger = document.getElementById('navTrigger');
-    
-    if(wrapper && trigger) {
+    if (wrapper && trigger) {
         trigger.addEventListener('mouseenter', () => wrapper.classList.add('active'));
         wrapper.addEventListener('mouseleave', () => {
             wrapper.classList.remove('active');
@@ -115,17 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.classList.toggle('active');
         });
     }
-});
+};
 
-// 手风琴折叠菜单逻辑
 window.toggleAccordion = function(event, element) {
     if (event.target.tagName === 'A') return;
     const subContent = element.querySelector('.sub-content');
     if (!subContent) return; 
-    if (element.classList.contains('expanded')) {
-        element.classList.remove('expanded');
-        return;
-    }
+    if (element.classList.contains('expanded')) { element.classList.remove('expanded'); return; }
     document.querySelectorAll('.menu-bar').forEach(bar => bar.classList.remove('expanded'));
     element.classList.add('expanded');
 };
