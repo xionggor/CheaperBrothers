@@ -117,7 +117,6 @@ window.renderGlobalUI = function(rootPath = '') {
                     </ul>
                 </div>
             </div>
-            <a href="${rootPath}Shop/index.html" class="menu-bar"><div class="bar-title">SHOP</div></a>
             <a href="${rootPath}about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
         </div>
     </nav>
