@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="common.css">
 
     <style>
-        /* 核心布局优化：使用 Flex 确保 Footer 永远在底部且不遮挡内容 */
         :root {
             --bg-color: #000000;
             --main-color: #ffffff;
-            --accent-color: #00ff00; /* 预留给 MTA Live 状态的绿色 */
+            --accent-color: #00ff00;
         }
 
         body {
@@ -27,7 +26,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 居中展示区域 */
         .main-content {
             flex: 1;
             display: flex;
@@ -45,45 +43,15 @@
             transition: opacity 0.5s ease;
         }
 
-        canvas {
-            cursor: pointer;
-            max-width: 90vw;
-            display: block;
-        }
+        canvas { cursor: pointer; max-width: 90vw; display: block; }
 
-        /* 底部导航/版权区 */
-        .global-footer {
-            padding-bottom: 40px;
-            width: 100%;
-            text-align: center;
-            z-index: 10;
-        }
+        .global-footer { padding-bottom: 40px; width: 100%; text-align: center; z-index: 10; }
+        .global-footer a { color: var(--main-color); text-decoration: none; font-size: 14px; letter-spacing: 2px; opacity: 0.6; transition: opacity 0.3s; }
+        .global-footer a:hover { opacity: 1; }
 
-        .global-footer a {
-            color: var(--main-color);
-            text-decoration: none;
-            font-size: 14px;
-            letter-spacing: 2px;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
+        #font-loader { position: absolute; opacity: 0; pointer-events: none; font-family: "Manufacturing Consent"; }
 
-        .global-footer a:hover {
-            opacity: 1;
-        }
-
-        /* 强制加载字体的隐藏层 */
-        #font-loader {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-            font-family: "Manufacturing Consent";
-        }
-
-        /* 适配移动端：防止内容过载 */
-        @media (max-width: 768px) {
-            .global-footer { padding-bottom: 20px; }
-        }
+        @media (max-width: 768px) { .global-footer { padding-bottom: 20px; } }
     </style>
 </head>
 <body>
@@ -99,8 +67,9 @@
             <div class="bar-title"><div class="dot"></div>APPS</div>
             <div class="sub-content">
                 <ul class="sub-list">
-                    <li class="sub-item"><a href="https://xionggor.github.io/MTA/">MTA TRACKER</a></li>
-                    <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
+                    <li class="sub-item"><a href="MTA/index.html">MTA TRACKER</a></li>
+                    <li class="sub-item"><a href="PokerTracker/index.html">POKER TRACKER</a></li>
+                    <li class="sub-item"><a href="lottery/index.html">LOTTERY</a></li>
                     <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
                     <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
                 </ul>
@@ -115,6 +84,7 @@
                 </ul>
             </div>
         </div>   
+        <a href="Shop/index.html" class="menu-bar"><div class="bar-title">SHOP</div></a>
         <a href="about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
     </div>
 </nav>
@@ -133,49 +103,22 @@
 <script src="common.js"></script>
 
 <script>
-/**
- * 优化后的初始化逻辑
- */
 const initHome = () => {
     const commonConfig = {
-        fontFamily: "Manufacturing Consent",
-        fontWeight: 400,
-        color: '#ffffff',
-        baseIntensity: 0.15,
-        hoverIntensity: 0.5,
-        fuzzRange: 30
+        fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#ffffff',
+        baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30
     };
-
-    // 1. 处理 Retina 屏幕模糊问题（假设 FuzzyText 内部没做的话）
-    // 如果 common.js 里的 FuzzyText 类已处理了 DRP，则直接实例化
     new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
     new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
-
-    // 2. 显示容器（防止字体未加载时的闪烁）
     document.getElementById('canvas-stage').style.opacity = '1';
 };
 
-/**
- * 核心安全检查：确保字体加载后再渲染 Canvas
- */
 if (document.fonts) {
-    document.fonts.ready.then((fontFaceSet) => {
-        console.log('Fonts loaded, initializing canvas...');
-        initHome();
-    }).catch(err => {
-        console.error('Font loading failed, falling back...', err);
-        initHome(); // 降级处理
-    });
-} else {
-    // 兼容老旧浏览器
-    window.onload = initHome;
-}
+    document.fonts.ready.then(() => { initHome(); }).catch(() => { initHome(); });
+} else { window.onload = initHome; }
 
-// 阻止移动端橡皮泥滚动效果（可选，提升 App 感）
 document.body.addEventListener('touchmove', (e) => {
-    if (e.target.tagName !== 'A' && e.target.tagName !== 'LI') {
-        e.preventDefault();
-    }
+    if (e.target.tagName !== 'A' && e.target.tagName !== 'LI') { e.preventDefault(); }
 }, { passive: false });
 </script>
 </body>
