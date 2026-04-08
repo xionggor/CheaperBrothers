@@ -59,6 +59,27 @@
 
         class P { constructor(x, y, z) { this.pos = new THREE.Vector3(x, y, z); this.old = new THREE.Vector3(x, y, z); this.pin = false; } update() { if(!this.pin) { let v = this.pos.clone().sub(this.old).multiplyScalar(DAMPING); this.old.copy(this.pos); this.pos.add(v).add(GRAVITY.clone().multiplyScalar(TIMESTEP*TIMESTEP)); }} }
 
+        // 将 animate 移回闭包内部，避免 this 指向错误
+        function animate() {
+            requestAnimationFrame(animate);
+            for(let p of particles) p.update();
+            for(let i=0; i<12; i++) { 
+                for(let c of constraints) { 
+                    let diff = c[1].pos.clone().sub(c[0].pos); 
+                    let dist = diff.length(); 
+                    let pull = (dist - c[2]) / dist * 0.5; 
+                    if(!c[0].pin) c[0].pos.add(diff.clone().multiplyScalar(pull)); 
+                    if(!c[1].pin) c[1].pos.sub(diff.clone().multiplyScalar(pull)); 
+                } 
+            }
+            const posArr = geometry.attributes.position.array; 
+            for(let i=0; i<particles.length; i++) { 
+                posArr[i*3] = particles[i].pos.x; posArr[i*3+1] = particles[i].pos.y; posArr[i*3+2] = particles[i].pos.z; 
+            } 
+            geometry.attributes.position.needsUpdate = true; 
+            renderer.render(scene, camera);
+        }
+
         return {
             init: () => {
                 const container = document.getElementById('receipt-container');
@@ -76,13 +97,8 @@
 
                 window.addEventListener('mousedown', onDown); window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
                 window.addEventListener('touchstart', onDown, {passive: false}); window.addEventListener('touchmove', onMove, {passive: false}); window.addEventListener('touchend', onUp);
-                this.animate();
-            },
-            animate: function() {
-                requestAnimationFrame(() => this.animate());
-                for(let p of particles) p.update();
-                for(let i=0; i<12; i++) { for(let c of constraints) { let diff = c[1].pos.clone().sub(c[0].pos); let dist = diff.length(); let pull = (dist - c[2]) / dist * 0.5; if(!c[0].pin) c[0].pos.add(diff.clone().multiplyScalar(pull)); if(!c[1].pin) c[1].pos.sub(diff.clone().multiplyScalar(pull)); } }
-                const posArr = geometry.attributes.position.array; for(let i=0; i<particles.length; i++) { posArr[i*3] = particles[i].pos.x; posArr[i*3+1] = particles[i].pos.y; posArr[i*3+2] = particles[i].pos.z; } geometry.attributes.position.needsUpdate = true; renderer.render(scene, camera);
+                
+                animate(); // 安全调用闭包内部函数
             }
         };
     })();
