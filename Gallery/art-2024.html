@@ -8,55 +8,21 @@
     <link rel="stylesheet" href="../common.css">
     
     <style>
-        body { 
-            margin: 0; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            background-color: #000; 
-            color: #fff; 
-            font-family: "Inter", sans-serif; 
-            overflow: hidden; 
-        }
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: #000; color: #fff; font-family: "Inter", sans-serif; overflow: hidden; }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
         
-        .main-content { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            width: 100%; 
-        }
-        
-        /* 画廊展示框统一样式 */
         .gallery-artwork {
             max-width: 280px; 
             width: 75vw;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* 强烈的底部阴影 */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
             border: 2px solid #1a1a1a;
             border-radius: 2px;
             display: block;
             margin-bottom: 20px;
             transition: transform 0.4s ease;
         }
-        
-        .gallery-artwork:hover { 
-            transform: scale(1.02); 
-        }
+        .gallery-artwork:hover { transform: scale(1.02); }
 
-        /* 临时：用于假装图片的蓝色矩形 */
-        .placeholder-image {
-            height: 380px; /* 模拟一张竖版画作的高度 */
-            background-color: #0039A6; /* MTA 蓝 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255,255,255,0.3);
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
-
-        /* 博物馆风格铭牌 (丁丁斜体字) */
         .gallery-label {
             font-family: "Noto Serif TC", serif;
             font-style: italic;
@@ -67,29 +33,19 @@
             margin-top: 5px;
         }
 
-        /* 适配手机端缩小画作 */
-        @media (max-width: 768px) { 
-            .gallery-artwork { max-width: 220px; } 
-            .placeholder-image { height: 300px; }
-        }
+        @media (max-width: 768px) { .gallery-artwork { max-width: 220px; } }
     </style>
 </head>
 <body>
 
 <main class="main-content">
-    
-    <div class="gallery-artwork placeholder-image">
-        [ IMAGE PLACEHOLDER ]
-    </div>
-    
+    <img src="fatcat.png" alt="丁丁" class="gallery-artwork">
     <div class="gallery-label">丁丁</div>
 </main>
 
 <script src="../common.js"></script>
-
 <script>
-    // 3. 修复：调用全局 UI 时，传入 '../'，这样导航栏里的所有链接都会正确回退一级
-    renderGlobalUI('../');
+    renderGlobalUI('../'); 
 </script>
 
 </body>
