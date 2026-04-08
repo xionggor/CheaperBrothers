@@ -103,7 +103,6 @@ window.renderGlobalUI = function(rootPath = '') {
                     <ul class="sub-list">
                         <li class="sub-item"><a href="https://xionggor.github.io/MTA/" target="_blank">MTA TRACKER</a></li>
                         <li class="sub-item"><a href="${rootPath}PokerTracker/index.html">POKER TRACKER</a></li>
-                        <li class="sub-item"><a href="${rootPath}lottery/index.html">LOTTERY</a></li>
                         <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
                         <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
                     </ul>
