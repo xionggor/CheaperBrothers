@@ -4,87 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cheaper Brothers | 廉兄集团</title>
-
     <link rel="stylesheet" href="common.css">
-
     <style>
-        :root {
-            --bg-color: #000000;
-            --main-color: #ffffff;
-            --accent-color: #00ff00;
-        }
-
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-color);
-            color: var(--main-color);
-            font-family: "Manufacturing Consent", "Inter", sans-serif;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        .fuzzy-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1vh;
-            transition: opacity 0.5s ease;
-        }
-
+        :root { --bg-color: #000000; --main-color: #ffffff; }
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-color); color: var(--main-color); font-family: "Manufacturing Consent", "Inter", sans-serif; overflow: hidden; -webkit-font-smoothing: antialiased; }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
+        .fuzzy-container { display: flex; flex-direction: column; align-items: center; gap: 1vh; transition: opacity 0.5s ease; }
         canvas { cursor: pointer; max-width: 90vw; display: block; }
-
-        .global-footer { padding-bottom: 40px; width: 100%; text-align: center; z-index: 10; }
-        .global-footer a { color: var(--main-color); text-decoration: none; font-size: 14px; letter-spacing: 2px; opacity: 0.6; transition: opacity 0.3s; }
-        .global-footer a:hover { opacity: 1; }
-
         #font-loader { position: absolute; opacity: 0; pointer-events: none; font-family: "Manufacturing Consent"; }
-
-        @media (max-width: 768px) { .global-footer { padding-bottom: 20px; } }
     </style>
 </head>
 <body>
 
 <div id="font-loader">Force Font Load</div>
-
-<nav class="nav-wrapper" id="navWrapper">
-    <div class="nav-trigger" id="navTrigger">
-        <canvas id="fuzzy-nav-icon"></canvas>
-    </div>
-    <div class="menu-list">
-        <div class="menu-bar" onclick="toggleAccordion(event, this)">
-            <div class="bar-title"><div class="dot"></div>APPS</div>
-            <div class="sub-content">
-                <ul class="sub-list">
-                    <li class="sub-item"><a href="MTA/index.html">MTA TRACKER</a></li>
-                    <li class="sub-item"><a href="PokerTracker/index.html">POKER TRACKER</a></li>
-\                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
-                    <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="menu-bar" onclick="toggleAccordion(event, this)">
-            <div class="bar-title"><div class="dot"></div>ART</div>
-            <div class="sub-content">
-                <ul class="sub-list">
-                    <li class="sub-item"><a href="Gallery/art-2024.html">2024 GALLERY</a></li>
-                </ul>
-            </div>
-        </div>   
-        <a href="about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
-    </div>
-</nav>
 
 <main class="main-content">
     <div class="fuzzy-container" id="canvas-stage" style="opacity: 0;">
@@ -93,30 +25,23 @@
     </div>
 </main>
 
-<footer class="global-footer">
-    <a href="index.html">CHEAPER BROTHERS CO. 廉兄集团。</a>
-</footer>
-
 <script src="common.js"></script>
-
 <script>
-const initHome = () => {
-    const commonConfig = {
-        fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#ffffff',
-        baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30
+    renderGlobalUI(''); // 根目录传空字符串
+
+    const initHome = () => {
+        const commonConfig = { fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#ffffff', baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30 };
+        new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
+        new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
+        document.getElementById('canvas-stage').style.opacity = '1';
     };
-    new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
-    new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
-    document.getElementById('canvas-stage').style.opacity = '1';
-};
 
-if (document.fonts) {
-    document.fonts.ready.then(() => { initHome(); }).catch(() => { initHome(); });
-} else { window.onload = initHome; }
+    if (document.fonts) { document.fonts.ready.then(() => { initHome(); }).catch(() => { initHome(); }); } 
+    else { window.onload = initHome; }
 
-document.body.addEventListener('touchmove', (e) => {
-    if (e.target.tagName !== 'A' && e.target.tagName !== 'LI') { e.preventDefault(); }
-}, { passive: false });
+    document.body.addEventListener('touchmove', (e) => {
+        if (e.target.tagName !== 'A' && e.target.tagName !== 'LI') { e.preventDefault(); }
+    }, { passive: false });
 </script>
 </body>
 </html>
