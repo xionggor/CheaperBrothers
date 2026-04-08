@@ -4,348 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>Tracker - Cheaper Brothers</title>
-
-<link rel="stylesheet" href="common.css">
-
+<link rel="stylesheet" href="../common.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Chiron+Hei+HK:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-
 <style>
-    /* ========================== */
-    /* Tracker 专属样式 */
-    /* ========================== */
-    :root {
-        --bg-color: #000;
-        --bar-bg: #fff;
-        --bar-active-bg: #ff0000;
-        --text-dark: #000;
-        --text-light: #fff;
-        --loss-color: #ff1744;
-        --profit-color: #00c853;
-        --heavy-font: "Chiron Hei HK", sans-serif;
-        --num-font: "Bebas Neue", sans-serif;
-        --body-font: "Helvetica Neue", Arial, sans-serif;
-    }
-
+    :root { --bg-color: #000; --bar-bg: #fff; --bar-active-bg: #ff0000; --text-dark: #000; --text-light: #fff; --loss-color: #ff1744; --profit-color: #00c853; --heavy-font: "Chiron Hei HK", sans-serif; --num-font: "Bebas Neue", sans-serif; --body-font: "Helvetica Neue", Arial, sans-serif; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
-
-    body {
-        margin: 0;
-        min-height: 100vh;
-        background-color: var(--bg-color);
-        color: var(--text-light);
-        font-family: var(--body-font);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 30px 15px;
-        -webkit-font-smoothing: antialiased;
-    }
-
+    body { margin: 0; min-height: 100vh; background-color: var(--bg-color); color: var(--text-light); font-family: var(--body-font); display: flex; flex-direction: column; align-items: center; padding: 30px 15px; -webkit-font-smoothing: antialiased; }
     header { width: 100%; max-width: 500px; text-align: left; margin-bottom: 30px; }
-
-    h1 {
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-style: italic;
-        font-size: clamp(3.5rem, 18vw, 7rem);
-        text-transform: uppercase;
-        margin: 0;
-        line-height: 0.8;
-        letter-spacing: -2px;
-    }
-
-    .brand-tag {
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-style: italic;
-        font-size: 0.95rem;
-        letter-spacing: 1px;
-        margin-top: 10px;
-        color: #fff;
-        opacity: 0.9;
-    }
-
+    h1 { font-family: var(--heavy-font); font-weight: 900; font-style: italic; font-size: clamp(3.5rem, 18vw, 7rem); text-transform: uppercase; margin: 0; line-height: 0.8; letter-spacing: -2px; }
+    .brand-tag { font-family: var(--heavy-font); font-weight: 900; font-style: italic; font-size: 0.95rem; letter-spacing: 1px; margin-top: 10px; color: #fff; opacity: 0.9; }
     .container { width: 100%; max-width: 500px; }
-
     .settings-area { display: flex; flex-direction: column; margin-bottom: 25px; }
-
-    .settings-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        border-bottom: 2px solid #222;
-        padding-bottom: 5px;
-    }
-
-    .unit-label {
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-size: clamp(1.1rem, 4.5vw, 1.6rem);
-        text-transform: uppercase;
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    input[type="number"] {
-        background: transparent;
-        border: none;
-        color: #fff;
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-size: 2.2rem;
-        width: 120px;
-        outline: none;
-        text-align: right;
-    }
-
-    .bank-summary {
-        display: flex;
-        justify-content: flex-end; 
-        align-items: center;
-        gap: 12px;
-        margin-top: 8px;
-    }
-
-    .bank-label {
-        font-family: var(--num-font);
-        font-weight: 400;
-        font-size: 1.8rem;
-        color: #fff;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .bank-total-display {
-        font-family: var(--num-font);
-        font-size: 1.8rem;
-        color: #fff;
-        line-height: 1;
-        width: 120px;
-        text-align: right;
-    }
-
+    .settings-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; border-bottom: 2px solid #222; padding-bottom: 5px; }
+    .unit-label { font-family: var(--heavy-font); font-weight: 900; font-size: clamp(1.1rem, 4.5vw, 1.6rem); text-transform: uppercase; line-height: 1; white-space: nowrap; }
+    input[type="number"] { background: transparent; border: none; color: #fff; font-family: var(--heavy-font); font-weight: 900; font-size: 2.2rem; width: 120px; outline: none; text-align: right; }
+    .bank-summary { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 8px; }
+    .bank-label { font-family: var(--num-font); font-weight: 400; font-size: 1.8rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+    .bank-total-display { font-family: var(--num-font); font-size: 1.8rem; color: #fff; line-height: 1; width: 120px; text-align: right; }
     .input-group { display: flex; width: 100%; margin-bottom: 30px; height: 45px; }
-
-    .input-group input {
-        flex: 1;
-        background: transparent;
-        border: 1px solid #333;
-        color: #fff;
-        padding: 0 12px;
-        font-family: var(--body-font);
-        text-transform: uppercase;
-        outline: none;
-    }
-
-    .input-group button {
-        background: #fff;
-        color: #000;
-        border: none;
-        padding: 0 20px;
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-style: italic;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
+    .input-group input { flex: 1; background: transparent; border: 1px solid #333; color: #fff; padding: 0 12px; font-family: var(--body-font); text-transform: uppercase; outline: none; }
+    .input-group button { background: #fff; color: #000; border: none; padding: 0 20px; font-family: var(--heavy-font); font-weight: 900; font-style: italic; font-size: 0.9rem; cursor: pointer; }
     .player-list { display: flex; flex-direction: column; gap: 4px; }
-
-    .player-bar {
-        background-color: var(--bar-bg);
-        color: var(--text-dark);
-        padding: 10px 15px;
-        border-radius: 2px;
-        display: flex;
-        flex-direction: column;
-        transition: background-color 0.2s ease;
-        cursor: pointer;
-    }
-
+    .player-bar { background-color: var(--bar-bg); color: var(--text-dark); padding: 10px 15px; border-radius: 2px; display: flex; flex-direction: column; transition: background-color 0.2s ease; cursor: pointer; }
     .player-bar.active { background-color: var(--bar-active-bg); color: var(--text-light); }
-
     .bar-main { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-
-    .player-name {
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-size: 1.35rem;
-        text-transform: uppercase;
-        line-height: 1;
-    }
-
+    .player-name { font-family: var(--heavy-font); font-weight: 900; font-size: 1.35rem; text-transform: uppercase; line-height: 1; }
     .player-total { font-family: var(--num-font); font-size: 2rem; line-height: 0.9; }
-
-    .settle-row {
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 8px;
-        border-top: 1px dashed rgba(0,0,0,0.2);
-    }
+    .settle-row { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.2); }
     .player-bar.active .settle-row { border-top-color: rgba(255,255,255,0.3); }
-
-    .cash-input {
-        width: 120px;
-        height: 30px;
-        border: 1px solid rgba(0,0,0,0.3);
-        background: #f0f0f0; 
-        color: #000 !important; 
-        font-family: var(--num-font);
-        font-size: 1.1rem; 
-        text-align: center; 
-        outline: none;
-        border-radius: 0;
-    }
+    .cash-input { width: 120px; height: 30px; border: 1px solid rgba(0,0,0,0.3); background: #f0f0f0; color: #000 !important; font-family: var(--num-font); font-size: 1.1rem; text-align: center; outline: none; border-radius: 0; }
     .player-bar.active .cash-input { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff !important; }
-
     .result-display { font-family: var(--num-font); font-size: 1.1rem; text-align: right; }
     .status-loss { color: var(--loss-color); font-weight: 900; }
     .status-profit { color: var(--profit-color); font-weight: 900; }
-
-    .bar-sub {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 6px;
-        border-top: 1px solid rgba(0,0,0,0.1);
-        padding-top: 6px;
-    }
-
+    .bar-sub { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 6px; }
     .controls { display: flex; align-items: center; gap: 10px; }
-
-    .btn-step {
-        width: 24px;
-        height: 24px;
-        border: 1px solid #000;
-        background: transparent;
-        color: inherit;
-        font-weight: 900;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    .remove-link {
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        color: inherit;
-        opacity: 0.4;
-        cursor: pointer;
-        border: none;
-        background: transparent;
-        font-family: var(--heavy-font);
-        font-weight: 900;
-    }
-
+    .btn-step { width: 24px; height: 24px; border: 1px solid #000; background: transparent; color: inherit; font-weight: 900; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .remove-link { font-size: 0.6rem; text-transform: uppercase; color: inherit; opacity: 0.4; cursor: pointer; border: none; background: transparent; font-family: var(--heavy-font); font-weight: 900; }
     .settlement-summary-section { margin-top: 40px; width: 100%; display: none; }
-
-    .summary-title {
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-style: italic;
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-        text-transform: uppercase;
-        border-bottom: 2px solid #fff;
-    }
-
-    .settle-bill-bar {
-        background: #fff;
-        color: #000;
-        padding: 12px 15px;
-        margin-bottom: 4px;
-        cursor: pointer;
-        border-radius: 2px;
-    }
-
+    .summary-title { font-family: var(--heavy-font); font-weight: 900; font-style: italic; font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid #fff; }
+    .settle-bill-bar { background: #fff; color: #000; padding: 12px 15px; margin-bottom: 4px; cursor: pointer; border-radius: 2px; }
     .bill-header { display: flex; justify-content: space-between; align-items: center; }
-
     .bill-name { font-family: var(--heavy-font); font-weight: 900; font-size: 1.2rem; }
     .bill-tag { font-size: 0.6rem; opacity: 0.5; margin-left: 5px; }
     .bill-amount { font-family: var(--num-font); font-size: 1.6rem; line-height: 1.1; text-align: right; }
-
-    .bill-detail {
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        font-style: italic;
-        font-size: 0.85rem;
-    }
-    .settle-bill-bar.open .bill-detail {
-        max-height: 500px;
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px dashed #ccc;
-    }
+    .bill-detail { max-height: 0; overflow: hidden; transition: all 0.3s ease; font-family: var(--heavy-font); font-weight: 900; font-style: italic; font-size: 0.85rem; }
+    .settle-bill-bar.open .bill-detail { max-height: 500px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ccc; }
     .instruction-row { display: flex; justify-content: space-between; margin-bottom: 5px; align-items: baseline; }
-
-    .footer-actions {
-        margin-top: 40px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .btn-ghost {
-        background: transparent;
-        border: 1px solid #333;
-        color: #666;
-        padding: 10px 16px;
-        font-family: var(--heavy-font);
-        font-weight: 900;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+    .footer-actions { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; }
+    .btn-ghost { background: transparent; border: 1px solid #333; color: #666; padding: 10px 16px; font-family: var(--heavy-font); font-weight: 900; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; }
     .btn-ghost.active { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); }
     .btn-generate { background: #fff; color: #000; border: none; }
 </style>
 </head>
 <body>
-
-    <div class="nav-wrapper" id="navWrapper">
-        <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
-        <div class="menu-list">
-            <div class="menu-bar" onclick="toggleAccordion(event, this)">
-                <div class="bar-title"><div class="dot"></div>APPS</div>
-                <div class="sub-content">
-                    <ul class="sub-list">
-                        <li class="sub-item"><a href="PokerTracker.html">POKER TRACKER</a></li>
-                        <li class="sub-item"><a href="lottery.html">LOTTERY</a></li>
-                        <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">(coming soon)</a></li>
-                        <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="menu-bar" onclick="toggleAccordion(event, this)">
-                <div class="bar-title"><div class="dot"></div>Art</div>
-                <div class="sub-content">
-                    <ul class="sub-list">
-                        <li class="sub-item"><a href="art-2024.html">2024</a></li>
-                        <li class="sub-item"><a href="art-2025.html">2025</a></li>
-                    </ul>
-                </div>
-            </div>
-            <a href="shop.html" class="menu-bar"><div class="bar-title">Shop</div></a>
-            <a href="about.html" class="menu-bar"><div class="bar-title">About</div></a>
-        </div>
-    </div>
 
     <header>
         <h1>Cheaper Brothers</h1>
@@ -383,240 +99,74 @@
         </div>
     </div>
 
-    <footer class="global-footer" style="margin-top:60px;">
-        <a href="index.html">Cheaper Brothers Co. 廉兄集团</a>
-    </footer>
-
-    <script src="common.js"></script>
-
+    <script src="../common.js"></script>
     <script>
-        let players = [];
-        let isCalcMode = false;
-        let usdRate = 7.23; 
+        // 在子文件夹中调用，必须传入 '../'
+        renderGlobalUI('../'); 
 
-        async function fetchExchangeRate() {
-            try {
-                const response = await fetch('https://open.er-api.com/v6/latest/CNY');
-                const data = await response.json();
-                if (data && data.rates && data.rates.USD) {
-                    usdRate = (1 / data.rates.USD).toFixed(2);
-                }
-            } catch (error) { console.warn("Using default rate."); }
-        }
-
-        window.onload = function() {
-            fetchExchangeRate();
-            const savedPlayers = localStorage.getItem('poker_players');
-            const savedUnit = localStorage.getItem('poker_unit');
-            if (savedPlayers) players = JSON.parse(savedPlayers);
-            if (savedUnit) document.getElementById('unitValue').value = savedUnit;
-            renderTable();
-        };
-
-        function updateStorage() {
-            localStorage.setItem('poker_players', JSON.stringify(players));
-            localStorage.setItem('poker_unit', document.getElementById('unitValue').value);
-            renderTable();
-        }
-
-        function toggleCalcMode() {
-            isCalcMode = !isCalcMode;
-            document.getElementById('calcModeBtn').classList.toggle('active', isCalcMode);
-            document.getElementById('generateBtn').style.display = isCalcMode ? 'block' : 'none';
-            if (!isCalcMode) document.getElementById('summarySection').style.display = 'none';
-            renderTable();
-        }
-
-        function updateBankTotal() {
-            const unit = parseFloat(document.getElementById('unitValue').value) || 0;
-            const total = players.reduce((sum, p) => sum + (p.groups * unit), 0);
-            document.getElementById('totalBankDisplay').innerText = '￥' + total.toLocaleString();
-            return total;
-        }
-
+        let players = []; let isCalcMode = false; let usdRate = 7.23; 
+        async function fetchExchangeRate() { try { const response = await fetch('https://open.er-api.com/v6/latest/CNY'); const data = await response.json(); if (data && data.rates && data.rates.USD) { usdRate = (1 / data.rates.USD).toFixed(2); } } catch (error) { console.warn("Using default rate."); } }
+        window.onload = function() { fetchExchangeRate(); const savedPlayers = localStorage.getItem('poker_players'); const savedUnit = localStorage.getItem('poker_unit'); if (savedPlayers) players = JSON.parse(savedPlayers); if (savedUnit) document.getElementById('unitValue').value = savedUnit; renderTable(); };
+        function updateStorage() { localStorage.setItem('poker_players', JSON.stringify(players)); localStorage.setItem('poker_unit', document.getElementById('unitValue').value); renderTable(); }
+        function toggleCalcMode() { isCalcMode = !isCalcMode; document.getElementById('calcModeBtn').classList.toggle('active', isCalcMode); document.getElementById('generateBtn').style.display = isCalcMode ? 'block' : 'none'; if (!isCalcMode) document.getElementById('summarySection').style.display = 'none'; renderTable(); }
+        function updateBankTotal() { const unit = parseFloat(document.getElementById('unitValue').value) || 0; const total = players.reduce((sum, p) => sum + (p.groups * unit), 0); document.getElementById('totalBankDisplay').innerText = '￥' + total.toLocaleString(); return total; }
         function calculateDebts() {
-            const unitValue = parseFloat(document.getElementById('unitValue').value) || 0;
-            const poolTotal = updateBankTotal();
-            const handTotal = players.reduce((sum, p) => sum + (parseFloat(p.handCash) || 0), 0);
-
-            if (Math.abs(poolTotal - handTotal) > 5) {
-                alert(`账目不平 (BALANCE ERROR)\n偏差超出允许范围(±5)\n当前总买入: ￥${poolTotal}\n剩余总计: ￥${handTotal}`);
-                return;
-            }
-
-            let debtors = []; 
-            let creditors = []; 
-            let totalNet = 0;
-
-            players.forEach(p => {
-                const net = (p.groups * unitValue) - (parseFloat(p.handCash) || 0);
-                totalNet += net;
-                if (net > 0) debtors.push({ name: p.name, amount: net, trans: [], initial: net });
-                else if (net < 0) creditors.push({ name: p.name, amount: Math.abs(net), trans: [], initial: Math.abs(net) });
-            });
-
-            if (Math.abs(totalNet) > 0 && Math.abs(totalNet) <= 5) {
-                if (totalNet > 0 && creditors.length > 0) creditors[0].amount += totalNet;
-                else if (totalNet < 0 && debtors.length > 0) debtors[0].amount += Math.abs(totalNet);
-            }
-
-            let dIdx = 0, cIdx = 0;
-            let safety = 0;
+            const unitValue = parseFloat(document.getElementById('unitValue').value) || 0; const poolTotal = updateBankTotal(); const handTotal = players.reduce((sum, p) => sum + (parseFloat(p.handCash) || 0), 0);
+            if (Math.abs(poolTotal - handTotal) > 5) { alert(`账目不平 (BALANCE ERROR)\n偏差超出允许范围(±5)\n当前总买入: ￥${poolTotal}\n剩余总计: ￥${handTotal}`); return; }
+            let debtors = []; let creditors = []; let totalNet = 0;
+            players.forEach(p => { const net = (p.groups * unitValue) - (parseFloat(p.handCash) || 0); totalNet += net; if (net > 0) debtors.push({ name: p.name, amount: net, trans: [], initial: net }); else if (net < 0) creditors.push({ name: p.name, amount: Math.abs(net), trans: [], initial: Math.abs(net) }); });
+            if (Math.abs(totalNet) > 0 && Math.abs(totalNet) <= 5) { if (totalNet > 0 && creditors.length > 0) creditors[0].amount += totalNet; else if (totalNet < 0 && debtors.length > 0) debtors[0].amount += Math.abs(totalNet); }
+            let dIdx = 0, cIdx = 0; let safety = 0;
             while (dIdx < debtors.length && cIdx < creditors.length && safety < 100) {
-                safety++;
-                let d = debtors[dIdx];
-                let c = creditors[cIdx];
-                let settle = Math.min(d.amount, c.amount);
-
-                if (settle > 0) {
-                    d.trans.push({ target: c.name, val: settle, type: 'PAY' });
-                    c.trans.push({ target: d.name, val: settle, type: 'REC' });
-                    d.amount -= settle;
-                    c.amount -= settle;
-                }
-                if (d.amount <= 0.01) dIdx++;
-                if (c.amount <= 0.01) cIdx++;
+                safety++; let d = debtors[dIdx]; let c = creditors[cIdx]; let settle = Math.min(d.amount, c.amount);
+                if (settle > 0) { d.trans.push({ target: c.name, val: settle, type: 'PAY' }); c.trans.push({ target: d.name, val: settle, type: 'REC' }); d.amount -= settle; c.amount -= settle; }
+                if (d.amount <= 0.01) dIdx++; if (c.amount <= 0.01) cIdx++;
             }
             renderSummary(debtors, creditors);
         }
-
         function renderSummary(debtors, creditors) {
-            const section = document.getElementById('summarySection');
-            const list = document.getElementById('summaryList');
-            section.style.display = 'block';
-            list.innerHTML = "";
-
+            const section = document.getElementById('summarySection'); const list = document.getElementById('summaryList'); section.style.display = 'block'; list.innerHTML = "";
             const allSettle = [...debtors, ...creditors];
             allSettle.forEach(item => {
-                const isDebtor = debtors.includes(item);
-                const bar = document.createElement('div');
-                bar.className = 'settle-bill-bar';
-                bar.onclick = () => bar.classList.toggle('open');
-
-                const initialUsd = (item.initial / usdRate).toFixed(2);
-                const sign = isDebtor ? '-' : '+';
-                const usdSign = isDebtor ? '-' : '';
-
-                let details = item.trans.map(t => {
-                    const tUsd = (t.val / usdRate).toFixed(2);
-                    const label = t.type === 'PAY' ? `PAY TO ${t.target}` : `FROM ${t.target}`;
-                    return `
-                        <div class="instruction-row">
-                            <span>${label}</span>
-                            <span>￥${t.val.toFixed(0)} <small style="opacity:0.6; font-size:0.75rem;">(US$${tUsd})</small></span>
-                        </div>`;
-                }).join('');
-
-                bar.innerHTML = `
-                    <div class="bill-header">
-                        <div class="bill-name">${item.name} <span class="bill-tag">${isDebtor ? 'DEBTOR' : 'CREDITOR'}</span></div>
-                        <div class="bill-amount" style="color:${isDebtor ? 'var(--loss-color)' : 'var(--profit-color)'}">
-                            ${sign}${item.initial}
-                            <div style="font-size:0.75rem; opacity:0.7; text-align:right;">${usdSign}US$${initialUsd}</div>
-                        </div>
-                    </div>
-                    <div class="bill-detail">
-                        <div style="font-size:0.65rem; margin-bottom:8px; opacity:0.5; letter-spacing:1px;">RATE: 1 USD = ${usdRate} CNY</div>
-                        ${details}
-                    </div>
-                `;
+                const isDebtor = debtors.includes(item); const bar = document.createElement('div'); bar.className = 'settle-bill-bar'; bar.onclick = () => bar.classList.toggle('open');
+                const initialUsd = (item.initial / usdRate).toFixed(2); const sign = isDebtor ? '-' : '+'; const usdSign = isDebtor ? '-' : '';
+                let details = item.trans.map(t => { const tUsd = (t.val / usdRate).toFixed(2); const label = t.type === 'PAY' ? `PAY TO ${t.target}` : `FROM ${t.target}`; return `<div class="instruction-row"><span>${label}</span><span>￥${t.val.toFixed(0)} <small style="opacity:0.6; font-size:0.75rem;">(US$${tUsd})</small></span></div>`; }).join('');
+                bar.innerHTML = `<div class="bill-header"><div class="bill-name">${item.name} <span class="bill-tag">${isDebtor ? 'DEBTOR' : 'CREDITOR'}</span></div><div class="bill-amount" style="color:${isDebtor ? 'var(--loss-color)' : 'var(--profit-color)'}">${sign}${item.initial}<div style="font-size:0.75rem; opacity:0.7; text-align:right;">${usdSign}US$${initialUsd}</div></div></div><div class="bill-detail"><div style="font-size:0.65rem; margin-bottom:8px; opacity:0.5; letter-spacing:1px;">RATE: 1 USD = ${usdRate} CNY</div>${details}</div>`;
                 list.appendChild(bar);
             });
             window.scrollTo({ top: section.offsetTop, behavior: 'smooth' });
         }
-
         function updateHandCash(id, val) {
             const player = players.find(p => p.id === id);
             if (player) {
-                player.handCash = val;
-                const unitValue = parseFloat(document.getElementById('unitValue').value) || 0;
-                const buyInTotal = player.groups * unitValue;
-                const hand = parseFloat(val) || 0;
-                const result = buyInTotal - hand;
-                const displayEl = document.getElementById('res-' + id);
-
-                if (val === "") { displayEl.innerText = "WAITING"; displayEl.className = "result-display"; }
-                else if (result > 0) { displayEl.innerText = "LOSS ￥" + result; displayEl.className = "result-display status-loss"; }
-                else if (result < 0) { displayEl.innerText = "PROFIT ￥" + Math.abs(result); displayEl.className = "result-display status-profit"; }
-                else { displayEl.innerText = "EVEN"; displayEl.className = "result-display"; }
+                player.handCash = val; const unitValue = parseFloat(document.getElementById('unitValue').value) || 0; const buyInTotal = player.groups * unitValue; const hand = parseFloat(val) || 0; const result = buyInTotal - hand; const displayEl = document.getElementById('res-' + id);
+                if (val === "") { displayEl.innerText = "WAITING"; displayEl.className = "result-display"; } else if (result > 0) { displayEl.innerText = "LOSS ￥" + result; displayEl.className = "result-display status-loss"; } else if (result < 0) { displayEl.innerText = "PROFIT ￥" + Math.abs(result); displayEl.className = "result-display status-profit"; } else { displayEl.innerText = "EVEN"; displayEl.className = "result-display"; }
                 localStorage.setItem('poker_players', JSON.stringify(players));
             }
         }
-
-        function addPlayer() {
-            const nameInput = document.getElementById('playerName');
-            const name = nameInput.value.trim();
-            if (name === "") return;
-            players.push({ id: "ID_" + Date.now(), name: name, groups: 1, standup: false, handCash: "" });
-            nameInput.value = "";
-            updateStorage();
-        }
-
-        function changeGroup(event, id, delta) {
-            event.stopPropagation(); 
-            const player = players.find(p => p.id === id);
-            if (player) { player.groups += delta; if (player.groups < 0) player.groups = 0; updateStorage(); }
-        }
-
+        function addPlayer() { const nameInput = document.getElementById('playerName'); const name = nameInput.value.trim(); if (name === "") return; players.push({ id: "ID_" + Date.now(), name: name, groups: 1, standup: false, handCash: "" }); nameInput.value = ""; updateStorage(); }
+        function changeGroup(event, id, delta) { event.stopPropagation(); const player = players.find(p => p.id === id); if (player) { player.groups += delta; if (player.groups < 0) player.groups = 0; updateStorage(); } }
         function toggleStandup(id) {
-            const player = players.find(p => p.id === id);
-            if (!player) return;
-            if (player.standup) { player.standup = false; updateStorage(); }
-            else {
-                player.standup = true; updateStorage(); 
-                const checked = players.filter(p => p.standup).length;
-                if (players.length > 1 && checked === players.length - 1) {
-                    const loser = players.find(p => !p.standup);
-                    setTimeout(() => { alert((loser ? loser.name : "PLAYER").toUpperCase() + " PAYS THE PRICE! 💰"); clearAllStandups(); }, 100);
-                }
+            const player = players.find(p => p.id === id); if (!player) return;
+            if (player.standup) { player.standup = false; updateStorage(); } else {
+                player.standup = true; updateStorage(); const checked = players.filter(p => p.standup).length;
+                if (players.length > 1 && checked === players.length - 1) { const loser = players.find(p => !p.standup); setTimeout(() => { alert((loser ? loser.name : "PLAYER").toUpperCase() + " PAYS THE PRICE! 💰"); clearAllStandups(); }, 100); }
             }
         }
-
         function clearAllStandups() { players.forEach(p => p.standup = false); updateStorage(); }
         function deletePlayer(event, id) { event.stopPropagation(); if(confirm("REMOVE PLAYER?")) { players = players.filter(p => p.id !== id); updateStorage(); } }
         function clearAllData() { if(confirm("RESET ENTIRE SYSTEM?")) { players = []; updateStorage(); } }
-
         function renderTable() {
-            const unit = parseFloat(document.getElementById('unitValue').value) || 0;
-            const container = document.getElementById('playerList');
-            container.innerHTML = "";
+            const unit = parseFloat(document.getElementById('unitValue').value) || 0; const container = document.getElementById('playerList'); container.innerHTML = "";
             players.forEach(player => {
-                const buyIn = player.groups * unit;
-                const bar = document.createElement('div');
-                bar.className = player.standup ? 'player-bar active' : 'player-bar';
-                bar.onclick = () => toggleStandup(player.id);
-                
+                const buyIn = player.groups * unit; const bar = document.createElement('div'); bar.className = player.standup ? 'player-bar active' : 'player-bar'; bar.onclick = () => toggleStandup(player.id);
                 let settleUI = "";
                 if (isCalcMode) {
-                    const hand = parseFloat(player.handCash) || 0;
-                    const res = buyIn - hand;
-                    let resText = "WAITING", resClass = "";
-                    if (player.handCash !== "") {
-                        if (res > 0) { resText = "LOSS ￥" + res; resClass = "status-loss"; }
-                        else if (res < 0) { resText = "PROFIT ￥" + Math.abs(res); resClass = "status-profit"; }
-                        else { resText = "EVEN"; }
-                    }
-                    settleUI = `<div class="settle-row" onclick="event.stopPropagation()">
-                        <input type="number" class="cash-input" placeholder="HAND CASH" value="${player.handCash}" oninput="updateHandCash('${player.id}', this.value)">
-                        <div id="res-${player.id}" class="result-display ${resClass}">${resText}</div>
-                    </div>`;
+                    const hand = parseFloat(player.handCash) || 0; const res = buyIn - hand; let resText = "WAITING", resClass = "";
+                    if (player.handCash !== "") { if (res > 0) { resText = "LOSS ￥" + res; resClass = "status-loss"; } else if (res < 0) { resText = "PROFIT ￥" + Math.abs(res); resClass = "status-profit"; } else { resText = "EVEN"; } }
+                    settleUI = `<div class="settle-row" onclick="event.stopPropagation()"><input type="number" class="cash-input" placeholder="HAND CASH" value="${player.handCash}" oninput="updateHandCash('${player.id}', this.value)"><div id="res-${player.id}" class="result-display ${resClass}">${resText}</div></div>`;
                 }
-
-                bar.innerHTML = `
-                    <div class="bar-main">
-                        <div class="player-name">${player.name}</div>
-                        <div class="player-total">￥${buyIn.toLocaleString()}</div>
-                    </div>
-                    ${settleUI}
-                    <div class="bar-sub">
-                        <div class="controls">
-                            <button class="btn-step" onclick="changeGroup(event, '${player.id}', -1)">-</button>
-                            <span class="unit-display">${player.groups} UNITS</span>
-                            <button class="btn-step" onclick="changeGroup(event, '${player.id}', 1)">+</button>
-                        </div>
-                        <button class="remove-link" onclick="deletePlayer(event, '${player.id}')">Remove</button>
-                    </div>
-                `;
+                bar.innerHTML = `<div class="bar-main"><div class="player-name">${player.name}</div><div class="player-total">￥${buyIn.toLocaleString()}</div></div>${settleUI}<div class="bar-sub"><div class="controls"><button class="btn-step" onclick="changeGroup(event, '${player.id}', -1)">-</button><span class="unit-display">${player.groups} UNITS</span><button class="btn-step" onclick="changeGroup(event, '${player.id}', 1)">+</button></div><button class="remove-link" onclick="deletePlayer(event, '${player.id}')">Remove</button></div>`;
                 container.appendChild(bar);
             });
             updateBankTotal();
