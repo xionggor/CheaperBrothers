@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2024 Gallery - Cheaper Brothers</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: #000; color: #fff; font-family: "Inter", sans-serif; overflow: hidden; }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
+        
+        /* 画廊展示框 */
+        .gallery-artwork {
+            max-width: 280px; 
+            width: 75vw;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* 强烈的阴影突出画作 */
+            border: 2px solid #1a1a1a;
+            border-radius: 2px;
+            display: block;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+        .gallery-artwork:hover { transform: scale(1.02); }
+
+        /* 博物馆风格铭牌 */
+        .gallery-label {
+            font-family: "Noto Serif TC", serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #888;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .global-footer { padding-bottom: 40px; width: 100%; text-align: center; z-index: 10; }
+        .global-footer a { color: #fff; text-decoration: none; font-size: 14px; letter-spacing: 2px; opacity: 0.6; transition: opacity 0.3s; }
+        .global-footer a:hover { opacity: 1; }
+        @media (max-width: 768px) { .global-footer { padding-bottom: 20px; } .gallery-artwork { max-width: 220px; } }
+    </style>
+</head>
+<body>
+
+<nav class="nav-wrapper" id="navWrapper">
+    <div class="nav-trigger" id="navTrigger"><canvas id="fuzzy-nav-icon"></canvas></div>
+    <div class="menu-list">
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>APPS</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="MTA/index.html">MTA TRACKER</a></li>
+                    <li class="sub-item"><a href="PokerTracker/index.html">POKER TRACKER</a></li>
+                    <li class="sub-item"><a href="lottery/index.html">LOTTERY</a></li>
+                    <li class="sub-item"><a href="https://xionggor.github.io/poker/" target="_blank">雲德社</a></li>
+                    <li class="sub-item"><a href="https://xionggor.dpdns.org/" target="_blank">TP Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="menu-bar" onclick="toggleAccordion(event, this)">
+            <div class="bar-title"><div class="dot"></div>ART</div>
+            <div class="sub-content">
+                <ul class="sub-list">
+                    <li class="sub-item"><a href="art-2024.html">2024 GALLERY</a></li>
+                    <li class="sub-item"><a href="art-2025.html">2025 GALLERY</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="Shop/index.html" class="menu-bar"><div class="bar-title">SHOP</div></a>
+        <a href="about.html" class="menu-bar"><div class="bar-title">ABOUT</div></a>
+    </div>
+</nav>
+
+<main class="main-content">
+    <img src="Gallery/fatcat.png" alt="丁丁" class="gallery-artwork">
+    <div class="gallery-label">丁丁</div>
+</main>
+
+<footer class="global-footer"><a href="index.html">CHEAPER BROTHERS CO. 廉兄集团。</a></footer>
+
+<script src="common.js"></script>
+</body>
+</html>
