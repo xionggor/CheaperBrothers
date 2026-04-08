@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2024 Gallery - Cheaper Brothers</title>
+    
+    <link rel="stylesheet" href="../common.css">
+    
+    <style>
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: #000; color: #fff; font-family: "Inter", sans-serif; overflow: hidden; }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
+        
+        .gallery-artwork {
+            max-width: 280px; 
+            width: 75vw;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border: 2px solid #1a1a1a;
+            border-radius: 2px;
+            display: block;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+        .gallery-artwork:hover { transform: scale(1.02); }
+
+        .gallery-label {
+            font-family: "Noto Serif TC", serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #888;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) { .gallery-artwork { max-width: 220px; } }
+    </style>
+</head>
+<body>
+
+<main class="main-content">
+    <img src="fatcat.png" alt="丁丁" class="gallery-artwork">
+    <div class="gallery-label">丁丁</div>
+</main>
+
+<script src="../common.js"></script>
+<script>
+    renderGlobalUI('../'); 
+</script>
+
+</body>
+</html>
