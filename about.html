@@ -4,15 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>About - Cheaper Brothers</title>
+    
     <link rel="stylesheet" href="common.css">
+    
     <style>
-        body { margin: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #000; overflow: hidden; color: #fff; font-family: "Inter", sans-serif; }
-        #receipt-container { position: fixed; top: -115vh; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; transition: top 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+        body { 
+            margin: 0; height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; background-color: #000; 
+            overflow: hidden; color: #fff; font-family: "Inter", sans-serif; 
+        }
+        
+        #receipt-container { 
+            position: fixed; top: -115vh; left: 0; width: 100vw; height: 100vh; 
+            z-index: 2; pointer-events: none; transition: top 1.2s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
         #receipt-container.active { top: 0; pointer-events: auto; }
-        .about-main { text-align: center; z-index: 1; transition: opacity 0.6s; width: 90%; max-width: 800px; margin-top: -50px; }
+        
+        .about-main { 
+            text-align: center; z-index: 1; transition: opacity 0.6s; 
+            width: 90%; max-width: 800px; margin-top: -50px; 
+        }
+        
         canvas#fuzzy-about { cursor: pointer; max-width: 100%; }
-        .about-subtitle { font-family: "Alumni Sans Pinstripe", sans-serif; font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 400; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; margin-bottom: 20px; line-height: 1; opacity: 0.7; }
-        .about-body { font-family: "Noto Serif TC", serif; font-size: clamp(0.85rem, 3.5vw, 1.1rem); line-height: 2; opacity: 0.8; max-width: 600px; margin: 0 auto; }
+        
+        .about-subtitle { 
+            font-family: "Alumni Sans Pinstripe", sans-serif; font-size: clamp(1.5rem, 6vw, 2.5rem); 
+            font-weight: 400; letter-spacing: 4px; text-transform: uppercase; 
+            margin-top: 10px; margin-bottom: 20px; line-height: 1; opacity: 0.7; 
+        }
+        
+        .about-body { 
+            font-family: "Noto Serif TC", serif; font-size: clamp(0.85rem, 3.5vw, 1.1rem); 
+            line-height: 2; opacity: 0.8; max-width: 600px; margin: 0 auto; 
+        }
     </style>
 </head>
 <body>
@@ -32,10 +56,13 @@
 <script src="common.js"></script>
 
 <script>
-    renderGlobalUI(''); // 根目录传空字符串
+    // 1. 动态生成导航栏和底部页脚 (根目录传空字符串)
+    renderGlobalUI(''); 
 
+    // 2. 初始化 Fuzzy 文字
     new FuzzyText('fuzzy-about', { fontFamily: "Manufacturing Consent", text: "ABOUT", fontSize: 140 });
 
+    // 3. 3D 物理小票引擎
     const ReceiptEngine = (() => {
         const DAMPING = 0.98; const TIMESTEP = 18 / 1000; const GRAVITY = new THREE.Vector3(0, -80, 0);
         const xSegs = 15, ySegs = 35, width = 6, height = 14;
@@ -50,16 +77,24 @@
             ctx.fillText('CHEAPER', 256, 120); ctx.fillText('BROTHERS', 256, 205);
             ctx.font = '24px monospace'; ctx.fillText('--------------------------------', 256, 250);
             ctx.textAlign = 'left'; ctx.font = 'bold 26px monospace';
-            const items = [ { name: "∞ Amazon", price: "  FREE" }, { name: "1x Walmart", price: "  FREE" }, { name: "1x Homedepot", price: "  FREE" }, { name: "1x Doordash", price: "  FREE" }, { name: "1x Uber Eats", price: "  FREE" }, { name: "1x Domino's pizza", price: "  FREE" }, { name: "1x Jollibee", price: "  FREE" }, { name: "1x 悸动奶茶", price: "  FREE" } ];
+            const items = [ 
+                { name: "∞ Amazon", price: "  FREE" }, { name: "1x Walmart", price: "  FREE" }, 
+                { name: "1x Homedepot", price: "  FREE" }, { name: "1x Doordash", price: "  FREE" }, 
+                { name: "1x Uber Eats", price: "  FREE" }, { name: "1x Domino's pizza", price: "  FREE" }, 
+                { name: "1x Jollibee", price: "  FREE" }, { name: "1x 悸动奶茶", price: "  FREE" } 
+            ];
             items.forEach((item, i) => { ctx.fillText(item.name, 50, 330 + i * 60); ctx.fillText(item.price, 360, 330 + i * 60); });
             ctx.textAlign = 'center'; ctx.font = 'bold 36px monospace'; ctx.fillText('TOTAL: 0', 256, 850);
             for (let i = 0; i < 50; i++) { ctx.fillRect(60 + i * 8, 880, Math.random() * 6 + 1, 70); }
             return new THREE.CanvasTexture(canvas);
         }
 
-        class P { constructor(x, y, z) { this.pos = new THREE.Vector3(x, y, z); this.old = new THREE.Vector3(x, y, z); this.pin = false; } update() { if(!this.pin) { let v = this.pos.clone().sub(this.old).multiplyScalar(DAMPING); this.old.copy(this.pos); this.pos.add(v).add(GRAVITY.clone().multiplyScalar(TIMESTEP*TIMESTEP)); }} }
+        class P { 
+            constructor(x, y, z) { this.pos = new THREE.Vector3(x, y, z); this.old = new THREE.Vector3(x, y, z); this.pin = false; } 
+            update() { if(!this.pin) { let v = this.pos.clone().sub(this.old).multiplyScalar(DAMPING); this.old.copy(this.pos); this.pos.add(v).add(GRAVITY.clone().multiplyScalar(TIMESTEP*TIMESTEP)); }} 
+        }
 
-        // 将 animate 移回闭包内部，避免 this 指向错误
+        // 修复核心：将 animate 移入闭包内部
         function animate() {
             requestAnimationFrame(animate);
             for(let p of particles) p.update();
@@ -86,6 +121,7 @@
                 scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); camera.position.z = 20;
                 renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight); renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
                 container.appendChild(renderer.domElement); scene.add(new THREE.AmbientLight(0xffffff, 1));
+                
                 for(let v=0; v<=ySegs; v++) { for(let u=0; u<=xSegs; u++) { let p = new P((u/xSegs-0.5)*width, (0.5-v/ySegs)*height, 0); if(v === 0) p.pin = true; particles.push(p); } }
                 const idx = (u,v) => u + v*(xSegs+1);
                 for(let v=0; v<=ySegs; v++) { for(let u=0; u<=xSegs; u++) { if(u<xSegs) constraints.push([particles[idx(u,v)], particles[idx(u+1,v)], width/xSegs]); if(v<ySegs) constraints.push([particles[idx(u,v)], particles[idx(u,v+1)], height/ySegs]); } }
@@ -98,11 +134,12 @@
                 window.addEventListener('mousedown', onDown); window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
                 window.addEventListener('touchstart', onDown, {passive: false}); window.addEventListener('touchmove', onMove, {passive: false}); window.addEventListener('touchend', onUp);
                 
-                animate(); // 安全调用闭包内部函数
+                animate(); 
             }
         };
     })();
 
+    // 4. 点击触发与延迟加载
     let triggered = false;
     document.getElementById('fuzzy-about').addEventListener('click', () => {
         if(!triggered) {
