@@ -1,0 +1,20 @@
+function doPost(e) {
+  const data = e.parameter;
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const phone = data.phone || '(not provided)';
+  const desc = data.description || '(not provided)';
+  
+  const subject = `Cheaper Brothers Quote Request from ${name}`;
+  const body = 
+    `Name: ${name}\n` +
+    `Email: ${email}\n` +
+    `Phone: ${phone}\n\n` +
+    `Project Description:\n${desc}`;
+  
+  GmailApp.sendEmail('danielwuyanzu@icloud.com', subject, body);
+  
+  return ContentService
+    .createTextOutput(JSON.stringify({ success: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}

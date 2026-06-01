@@ -1780,12 +1780,16 @@
           submitBtn.disabled = true;
           submitBtn.textContent = 'Sending…';
 
-          const data = new FormData(form);
-          data.append('_subject', `Quote Request from ${form.querySelector('input[placeholder="Your name"]').value || 'Anonymous'}`);
+          const name = form.querySelector('input[placeholder="Your name"]').value.trim();
+          const email = form.querySelector('input[placeholder="Email address"]').value.trim();
+          const phone = form.querySelector('input[placeholder*="Phone"]').value.trim();
+          const desc = form.querySelector('textarea').value.trim();
 
-          fetch('https://formsubmit.co/ajax/danielwuyanzu@icloud.com', {
+          const body = new URLSearchParams({ name, email, phone, description: desc });
+
+          fetch('https://script.google.com/macros/s/AKfycbycb9aqTyy6Pbg1RTGxTjlg7eMRv8P3t7J4rg2XrejlhVYYv3YFGvteiPjv1Pn_tV8/exec', {
             method: 'POST',
-            body: data
+            body: body
           })
           .then(res => res.json())
           .then(() => {
