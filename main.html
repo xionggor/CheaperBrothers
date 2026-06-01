@@ -1468,16 +1468,6 @@
             <input type="email" placeholder="Email address" required aria-label="Email address" />
           </div>
           <input type="tel" placeholder="Phone (optional)" aria-label="Phone" />
-          <select aria-label="Select service type">
-            <option value="">Select service type</option>
-            <option>Vinyl Decal / Graphics</option>
-            <option>Digital Printing</option>
-            <option>Light Box / Custom Neon</option>
-            <option>Metal & Acrylic Signage</option>
-            <option>Wedding & Event Decor</option>
-            <option>Apparel / Promo Merch</option>
-            <option>Custom / Other</option>
-          </select>
           <textarea placeholder="Describe your project — size, quantity, material, timeline... Don't forget to mention if you have your vector files ready!" required aria-label="Project description"></textarea>
           <button type="submit" id="submitBtn">Send Request</button>
           <div class="toast" id="toast">✓ Thank you — we'll get back to you within 24 hours.</div>
@@ -1790,33 +1780,28 @@
           submitBtn.disabled = true;
           submitBtn.textContent = 'Sending…';
 
-          // Collect form data
-          const name = form.querySelector('input[placeholder="Your name"]').value.trim();
-          const email = form.querySelector('input[placeholder="Email address"]').value.trim();
-          const phone = form.querySelector('input[placeholder*="Phone"]').value.trim();
-          const service = form.querySelector('select').value;
-          const desc = form.querySelector('textarea').value.trim();
+          const data = new FormData(form);
+          data.append('_subject', `Quote Request from ${form.querySelector('input[placeholder="Your name"]').value || 'Anonymous'}`);
 
-          // Build mailto link
-          const to = 'danielwuyanzu@icloud.com';
-          const subj = encodeURIComponent(`Quote Request from ${name || 'Anonymous'}`);
-          const body = encodeURIComponent(
-            `Name: ${name || '(not provided)'}\n` +
-            `Email: ${email || '(not provided)'}\n` +
-            `Phone: ${phone || '(not provided)'}\n` +
-            `Service: ${service || '(not selected)'}\n\n` +
-            `Project Description:\n${desc || '(not provided)'}`
-          );
-
-          window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
-
-          setTimeout(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Send Request';
+          fetch('https://formsubmit.co/ajax/danielwuyanzu@icloud.com', {
+            method: 'POST',
+            body: data
+          })
+          .then(res => res.json())
+          .then(() => {
+            toast.textContent = '✓ Sent! We\'ll get back to you within 24 hours.';
             toast.classList.add('show');
             form.reset();
-            setTimeout(() => toast.classList.remove('show'), 4000);
-          }, 800);
+          })
+          .catch(() => {
+            toast.textContent = '✗ Failed to send. Please email us directly.';
+            toast.classList.add('show');
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Request';
+            setTimeout(() => toast.classList.remove('show'), 5000);
+          });
         });
       }
 
