@@ -30,9 +30,14 @@
     // Footer only (navigation removed)
     document.body.insertAdjacentHTML('beforeend',
       '<footer class="global-footer" style="margin-top: 40px; position: relative; z-index: 10;">' +
-        '<a href="index.html">CHEAPER BROTHERS CO. 廉兄集团。</a>' +
+        '<a href="main.html">CHEAPER BROTHERS CO. 廉兄集团。</a>' +
       '</footer>'
     );
+
+    // Click canvas → enter main site
+    document.querySelector('.main-content').addEventListener('click', () => {
+      window.location.href = 'main.html';
+    });
 
     const initHome = () => {
         const commonConfig = { fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#ffffff', baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30 };
