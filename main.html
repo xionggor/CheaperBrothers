@@ -577,6 +577,33 @@
     }
     .lightbox .lb-close:hover { opacity: 1; }
 
+    .lightbox .lb-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: none;
+      font-size: 3rem;
+      width: 56px;
+      height: 56px;
+      cursor: pointer;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background var(--duration-fast), transform var(--duration-fast);
+      line-height: 1;
+      user-select: none;
+    }
+    .lightbox .lb-nav:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .lightbox .lb-prev { left: 20px; }
+    .lightbox .lb-next { right: 20px; }
+
     .gallery-dots {
       display: flex;
       gap: var(--space-sm);
@@ -1004,6 +1031,13 @@
       .section-header .label { font-size: 0.5rem; }
       .section { padding: var(--space-3xl) 0; }
       .lightbox img { max-width: 96vw; max-height: 90vh; }
+      .lightbox .lb-nav {
+        width: 44px;
+        height: 44px;
+        font-size: 2.2rem;
+      }
+      .lightbox .lb-prev { left: 8px; }
+      .lightbox .lb-next { right: 8px; }
 
       /* About mobile - reorder: image on top, text below */
       .about-grid {
@@ -1080,6 +1114,9 @@
       .about-image .ph { min-height: 140px !important; }
       .spec-row { padding: var(--space-sm) var(--space-md); }
       .contact-item .value { font-size: 0.78rem; }
+      .lightbox .lb-nav { width: 36px; height: 36px; font-size: 1.6rem; }
+      .lightbox .lb-prev { left: 4px; }
+      .lightbox .lb-next { right: 4px; }
     }
   </style>
 </head>
@@ -1311,6 +1348,7 @@
                 <img src="images/neon/Neon2.jpeg" alt="Custom Neon Sign - 2" class="ph" loading="lazy">
                 <img src="images/neon/Neon3.jpeg" alt="Custom Neon Sign - 3" class="ph" loading="lazy">
                 <img src="images/neon/Neon4.jpeg" alt="Custom Neon Sign - 4" class="ph" loading="lazy">
+                <img src="images/light%20box/LB2.jpg" alt="Custom Neon Sign - 5" class="ph" loading="lazy">
               </div>
               <div class="gallery-dots"></div>
               <button class="gallery-close" data-close="2">Close Gallery</button>
@@ -1329,7 +1367,6 @@
             <div class="project-detail-content">
               <div class="gallery-scroll">
                 <img src="images/light box/LB1.jpg" alt="Light Box - 1" class="ph" loading="lazy">
-                <img src="images/light box/LB2.jpg" alt="Light Box - 2" class="ph" loading="lazy">
                 <img src="images/light box/LB3.jpeg" alt="Light Box - 3" class="ph" loading="lazy">
                 <img src="images/light box/LB4.jpeg" alt="Light Box - 4" class="ph" loading="lazy">
               </div>
@@ -1485,6 +1522,8 @@
   <!-- ── Lightbox ── -->
   <div class="lightbox" id="lightbox">
     <button class="lb-close" id="lbClose">&times;</button>
+    <button class="lb-nav lb-prev" id="lbPrev">&lsaquo;</button>
+    <button class="lb-nav lb-next" id="lbNext">&rsaquo;</button>
     <img id="lbImage" src="" alt="">
   </div>
 
@@ -1641,7 +1680,7 @@
               if (activeRowIndex !== i) return;
               slideIdx = (slideIdx + 1) % images.length;
               previewGraphic.src = images[slideIdx].src;
-            }, 500);
+            }, 1000);
           });
 
           row.addEventListener('mousemove', function(e) {
@@ -1767,28 +1806,82 @@
         const lb = document.getElementById('lightbox');
         const lbImg = document.getElementById('lbImage');
         const lbClose = document.getElementById('lbClose');
+        const lbPrev = document.getElementById('lbPrev');
+        const lbNext = document.getElementById('lbNext');
+        let currentImages = [];
+        let currentIdx = 0;
+
+        function openLb(imgEl) {
+          const gallery = imgEl.closest('.gallery-scroll');
+          if (!gallery) return;
+          currentImages = [...gallery.querySelectorAll('img')];
+          currentIdx = currentImages.indexOf(imgEl);
+          if (currentIdx === -1) return;
+          lbImg.src = imgEl.src;
+          lb.classList.add('active');
+        }
+
+        function showImage(dir) {
+          if (currentImages.length === 0) return;
+          currentIdx = (currentIdx + dir + currentImages.length) % currentImages.length;
+          lbImg.style.opacity = '0.3';
+          lbImg.src = currentImages[currentIdx].src;
+          // fade in
+          requestAnimationFrame(() => { lbImg.style.transition = 'opacity 0.2s'; lbImg.style.opacity = '1'; });
+          setTimeout(() => { lbImg.style.transition = ''; }, 250);
+        }
 
         document.querySelectorAll('.gallery-scroll img').forEach(img => {
           img.addEventListener('click', function(e) {
             e.stopPropagation();
-            lbImg.src = this.src;
-            lb.classList.add('active');
+            openLb(this);
           });
         });
 
         function closeLb() {
           lb.classList.remove('active');
           lbImg.src = '';
+          currentImages = [];
         }
 
-        lb.addEventListener('click', closeLb);
+        lb.addEventListener('click', function(e) {
+          if (e.target === lb) closeLb();
+        });
         lbClose.addEventListener('click', function(e) {
           e.stopPropagation();
           closeLb();
         });
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') closeLb();
+        lbPrev.addEventListener('click', function(e) {
+          e.stopPropagation();
+          showImage(-1);
         });
+        lbNext.addEventListener('click', function(e) {
+          e.stopPropagation();
+          showImage(1);
+        });
+        document.addEventListener('keydown', function(e) {
+          if (!lb.classList.contains('active')) return;
+          if (e.key === 'Escape') closeLb();
+          if (e.key === 'ArrowLeft') showImage(-1);
+          if (e.key === 'ArrowRight') showImage(1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        lb.addEventListener('touchstart', function(e) {
+          if (e.target === lb || e.target === lbImg) {
+            touchStartX = e.changedTouches[0].screenX;
+          }
+        }, { passive: true });
+        lb.addEventListener('touchend', function(e) {
+          if (!lb.classList.contains('active')) return;
+          touchEndX = e.changedTouches[0].screenX;
+          const diff = touchStartX - touchEndX;
+          if (Math.abs(diff) > 50) {
+            showImage(diff > 0 ? 1 : -1);
+          }
+        }, { passive: true });
       }
 
       // ──────────────────────────────────────
