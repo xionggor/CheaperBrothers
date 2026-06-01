@@ -20,10 +20,10 @@
       --text-primary: #ece8e0;
       --text-secondary: #888;
       --text-muted: #555;
-      --accent-blue: #facc15; /* Changed to an elegant gold/yellow for Cheaper Brothers */
+      --accent-blue: #00B4D8; /* Electric blue - modern industrial accent for print shop */
       --accent-amber: #ff8c3a;
       --accent-mint: #00e5a0;
-      --accent-dim: rgba(250, 204, 21, 0.08);
+      --accent-dim: rgba(0, 180, 216, 0.08);
 
       /* Typography */
       --font-display: 'Bebas Neue', sans-serif;
@@ -787,8 +787,10 @@
       margin-bottom: 0;
     }
 
-    .about-image .ph {
+    .about-image img {
       border-radius: 4px;
+      min-height: 260px;
+      object-fit: cover;
     }
 
     .about-specs {
@@ -1061,7 +1063,7 @@
       .spec-row {
         padding: var(--space-md) var(--space-lg);
       }
-      .about-image .ph {
+      .about-image img {
         min-height: 180px !important;
       }
 
@@ -1111,7 +1113,7 @@
       .hero-cta { padding: 12px 24px; font-size: 0.7rem; }
       .specs-grid { grid-template-columns: 1fr 1fr; }
       .about-specs { grid-template-columns: 1fr; }
-      .about-image .ph { min-height: 140px !important; }
+      .about-image img { min-height: 140px !important; }
       .spec-row { padding: var(--space-sm) var(--space-md); }
       .contact-item .value { font-size: 0.78rem; }
       .lightbox .lb-nav { width: 36px; height: 36px; font-size: 1.6rem; }
@@ -1437,10 +1439,7 @@
           <p>Our expertise spans across professional commercial signage, durable custom vinyl decals, and elegant visual decor for weddings and special events. Whether you need striking business branding or personalized event materials, we execute your ideas with uncompromising quality. Simply send us your design, and we will masterfully craft it.</p>
         </div>
         <div class="about-image reveal reveal-delay-1">
-          <div class="ph" style="height:100%;min-height:260px;">
-            <div class="shape rect" style="width:64px;height:64px;"></div>
-            <span>STUDIO · BROOKLYN</span>
-          </div>
+          <img src="images/about/about.jpg" alt="Cheaper Brothers Studio - Brooklyn" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);display:block;">
         </div>
       </div>
 
