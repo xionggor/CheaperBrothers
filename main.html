@@ -1789,13 +1789,34 @@
           e.preventDefault();
           submitBtn.disabled = true;
           submitBtn.textContent = 'Sending…';
+
+          // Collect form data
+          const name = form.querySelector('input[placeholder="Your name"]').value.trim();
+          const email = form.querySelector('input[placeholder="Email address"]').value.trim();
+          const phone = form.querySelector('input[placeholder*="Phone"]').value.trim();
+          const service = form.querySelector('select').value;
+          const desc = form.querySelector('textarea').value.trim();
+
+          // Build mailto link
+          const to = 'danielwuyanzu@icloud.com';
+          const subj = encodeURIComponent(`Quote Request from ${name || 'Anonymous'}`);
+          const body = encodeURIComponent(
+            `Name: ${name || '(not provided)'}\n` +
+            `Email: ${email || '(not provided)'}\n` +
+            `Phone: ${phone || '(not provided)'}\n` +
+            `Service: ${service || '(not selected)'}\n\n` +
+            `Project Description:\n${desc || '(not provided)'}`
+          );
+
+          window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
+
           setTimeout(() => {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Send Request';
             toast.classList.add('show');
             form.reset();
             setTimeout(() => toast.classList.remove('show'), 4000);
-          }, 1200);
+          }, 800);
         });
       }
 
