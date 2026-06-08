@@ -1,21 +1,12 @@
 @charset "UTF-8";
 
 /* ========================== */
-/* 1. 全局字体与基础全局设置 (新增白底黑字) */
+/* 1. 全局字体与基础隐藏元素 */
 /* ========================== */
-
-/* 强制全站默认苹果系统字体，纯白背景，深空灰文字 */
-body {
-    background-color: #ffffff; 
-    color: #1d1d1f; 
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased; /* 让字体在苹果设备上更平滑清晰 */
-}
+@import url('https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap');
 
 #font-loader {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "Manufacturing Consent", system-ui;
     font-weight: 400;
     position: absolute;
     opacity: 0;
@@ -27,11 +18,10 @@ body {
 /* 2. CHEAPER BROTHERS NAV */
 /* ========================== */
 :root {
-    /* 导航栏背景改为半透明白色，配合后面的毛玻璃效果 */
-    --nav-bg: rgba(255, 255, 255, 0.75); 
-    --nav-text: #1d1d1f;
-    --primary-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-    --secondary-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    --nav-bg: #ffffff; 
+    --nav-text: #000000;
+    --primary-font: "Alumni Sans Pinstripe", sans-serif;
+    --secondary-font: "Bebas Neue", sans-serif;
     --nav-transition: 0.5s;
     --nav-delay: 0.08s;
 }
@@ -57,23 +47,14 @@ body {
 #fuzzy-nav-icon { width: 100%; height: 100%; }
 
 .menu-list {
-    margin-top: 8px; display: flex; flex-direction: column; gap: 6px; /* 稍微增加间距 */ width: 210px; pointer-events: none;
+    margin-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 210px; pointer-events: none;
 }
 
 .menu-bar {
-    background-color: var(--nav-bg); 
-    border-radius: 12px; /* 改为苹果风格的更大圆角 */
-    padding: 6px 14px; 
-    color: var(--nav-text);
+    background-color: var(--nav-bg); border-radius: 3px; padding: 1px 12px; color: var(--nav-text);
     text-decoration: none; cursor: pointer; transform: translateY(-15px); opacity: 0;
     transition: all var(--nav-transition) cubic-bezier(0.23, 1, 0.32, 1);
     overflow: hidden; display: flex; flex-direction: column; justify-content: center;
-    
-    /* 增加苹果特有的毛玻璃与微阴影质感 */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.05); /* 极细的边框提升精致感 */
 }
 
 .menu-bar:nth-child(1) { transition-delay: calc(var(--nav-delay) * 3); }
@@ -90,11 +71,8 @@ body {
 .nav-wrapper.active .menu-bar:nth-child(4) { transition-delay: calc(var(--nav-delay) * 3); }
 
 .bar-title {
-    font-family: var(--primary-font); 
-    font-size: 2rem; /* 稍微调小一点，系统字体占地较大 */
-    font-weight: 600; /* 苹果风格标题稍微加粗 */
-    letter-spacing: 0px; 
-    text-transform: uppercase; display: flex; align-items: center; line-height: 0.9; margin: 0;
+    font-family: var(--primary-font); font-size: 2.6rem; font-weight: 400;
+    letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; line-height: 0.8; margin: 0;
     white-space: nowrap;
 }
 
@@ -107,7 +85,7 @@ body {
 .sub-item { margin: 6px 0; }
 .sub-item a {
     text-decoration: none; color: var(--nav-text); font-family: var(--secondary-font);
-    font-size: 1.1rem; display: block; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; transition: opacity 0.2s;
+    font-size: 1.3rem; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; transition: opacity 0.2s;
 }
 .sub-item a::before { content: "└ "; font-family: sans-serif; margin-right: 6px; font-size: 0.8rem; vertical-align: middle; }
 .sub-item a:hover { opacity: 1; }
@@ -116,16 +94,16 @@ body {
 /* 3. 全局页脚 Footer */
 /* ========================== */
 .global-footer {
-    font-family: var(--secondary-font);
+    font-family: "Noto Serif TC", serif;
     font-weight: 400;
     font-size: 0.9rem;
-    color: #86868b; /* 苹果官网常用的页脚辅助灰 */
-    opacity: 0.9;
-    letter-spacing: 0.5px;
+    color: #ffffff;
+    opacity: 0.8;
+    letter-spacing: 1px;
     text-align: center;
     width: 100%;
     pointer-events: auto;
     padding-bottom: 30px; 
 }
-.global-footer a { color: inherit; text-decoration: none; transition: color 0.3s; }
-.global-footer a:hover { color: #1d1d1f; /* 鼠标放上去变深色 */ }
+.global-footer a { color: inherit; text-decoration: none; transition: opacity 0.3s; }
+.global-footer a:hover { opacity: 1; }
