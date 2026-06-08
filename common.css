@@ -1,6 +1,14 @@
 @charset "UTF-8";
 
 /* ========================== */
+/* 0. 全局基础颜色 (新增)     */
+/* ========================== */
+body {
+    background-color: #ffffff; /* 页面白底 */
+    color: #000000;            /* 全局黑字 */
+}
+
+/* ========================== */
 /* 1. 全局字体与基础隐藏元素 */
 /* ========================== */
 @import url('https://fonts.googleapis.com/css2?family=Manufacturing+Consent&family=Alumni+Sans+Pinstripe:ital@0;1&family=Bebas+Neue&family=Noto+Serif+TC:wght@400&display=swap');
@@ -18,8 +26,9 @@
 /* 2. CHEAPER BROTHERS NAV */
 /* ========================== */
 :root {
-    --nav-bg: #ffffff; 
-    --nav-text: #000000;
+    /* 页面变成白底后，导航栏改为黑底白字以保持对比度清晰 */
+    --nav-bg: #000000; 
+    --nav-text: #ffffff;
     --primary-font: "Alumni Sans Pinstripe", sans-serif;
     --secondary-font: "Bebas Neue", sans-serif;
     --nav-transition: 0.5s;
@@ -97,7 +106,7 @@
     font-family: "Noto Serif TC", serif;
     font-weight: 400;
     font-size: 0.9rem;
-    color: #ffffff;
+    color: #000000; /* 从白色改为黑色，适应白底 */
     opacity: 0.8;
     letter-spacing: 1px;
     text-align: center;
