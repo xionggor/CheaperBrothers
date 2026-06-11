@@ -247,7 +247,7 @@
     .letter {
       display: inline-block;
       font-family: var(--font-display);
-      color: var(--c); /* 使用内联变量填充颜色 */
+      color: var(--c);
       line-height: 0.85;
     }
 
@@ -322,12 +322,14 @@
     }
     
     .service-card {
-      display: block;
+      display: flex;
+      flex-direction: column;
       background: var(--bg);
       padding: var(--space-2xl) var(--space-xl) var(--space-xl);
       position: relative;
       cursor: pointer;
       transition: background var(--duration-fast), transform var(--duration-fast);
+      height: 100%;
     }
     
     .service-card:hover {
@@ -336,7 +338,7 @@
     
     .service-card.featured {
       grid-column: 1 / -1;
-      display: grid;
+      display: grid; 
       grid-template-columns: 1fr 1fr;
       gap: var(--space-3xl);
       align-items: center;
@@ -380,6 +382,7 @@
       font-size: 0.8rem;
       color: var(--text-secondary);
       line-height: 1.7;
+      flex-grow: 1; 
     }
     
     .service-card .badge-row {
@@ -387,6 +390,19 @@
       gap: var(--space-xs);
       flex-wrap: wrap;
       margin-top: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    /* 常规服务卡片的图片容器 */
+    .svc-image {
+      width: 100%;
+      height: 180px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin-top: auto;
     }
 
     /* ===== Portfolio Marquee ===== */
@@ -617,7 +633,7 @@
             </div>
           </div>
           <div class="svc-icon" style="height: 100%; min-height: 250px; background: url('images/services/service-01-vinyl.jpg') center/cover no-repeat; border-radius: 4px; border: 1px solid var(--border);">
-            </div>
+          </div>
         </a>
 
         <a href="#contact" class="service-card">
@@ -625,6 +641,7 @@
           <h3>Digital<br>Printing</h3>
           <p>High-resolution digital prints on a wide range of materials — banners, posters, apparel, and event signage.</p>
           <div class="badge-row"><span class="badge">DIGITAL PRINT</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-02-print.jpg');"></div>
         </a>
         
         <a href="#contact" class="service-card">
@@ -632,6 +649,7 @@
           <h3>Light<br>Box</h3>
           <p>Illuminated light boxes for storefronts, indoor signage &amp; advertising — premium edge-lit or backlit options.</p>
           <div class="badge-row"><span class="badge">LIGHT BOX</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-03-lightbox.jpg');"></div>
         </a>
         
         <a href="#contact" class="service-card">
@@ -639,6 +657,7 @@
           <h3>Custom<br>Neon Sign</h3>
           <p>LED neon flex signs in any shape, color &amp; size — for storefronts, weddings, offices and interiors.</p>
           <div class="badge-row"><span class="badge">CUSTOM NEON</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-04-neon.jpg');"></div>
         </a>
         
         <a href="#contact" class="service-card">
@@ -646,6 +665,7 @@
           <h3>Metal &amp;<br>Acrylic Signs</h3>
           <p>Custom dimensional signs, A-frame boards, and premium metal fabrications tailored exclusively to your vision.</p>
           <div class="badge-row"><span class="badge">METAL SIGNAGE</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-05-metal.jpg');"></div>
         </a>
         
         <a href="#contact" class="service-card">
@@ -653,6 +673,7 @@
           <h3>Display Board<br>Printing</h3>
           <p>High-quality custom printing on rigid materials like foam core and PVC. Perfect for professional presentations.</p>
           <div class="badge-row"><span class="badge">DISPLAY BOARDS</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-06-PVC.jpg');"></div>
         </a>
 
         <a href="#contact" class="service-card">
@@ -660,6 +681,7 @@
           <h3>Other<br>Customization</h3>
           <p>Tell us what you want to customize! From t-shirts and tote bags to unique custom signboards, we can bring your ideas to life.</p>
           <div class="badge-row"><span class="badge">CUSTOM MERCH</span></div>
+          <div class="svc-image" style="background-image: url('images/services/service-07-tshirt&amp;totebag.jpg');"></div>
         </a>
       </div>
     </div>
