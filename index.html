@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cheaper Brothers | 廉兄集团</title>
+    <title>Cheaper Brothers Inc. | Bespoke Signage</title>
     <link rel="stylesheet" href="common.css">
     <style>
         :root { --bg-color: #000000; --main-color: #ffffff; }
@@ -11,6 +11,19 @@
         .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
         .fuzzy-container { display: flex; flex-direction: column; align-items: center; gap: 1vh; transition: opacity 0.5s ease; }
         canvas { cursor: pointer; max-width: 90vw; display: block; }
+        
+        /* 新增副标题样式 */
+        .sub-title {
+            font-family: "Inter", sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: #888888;
+            text-transform: uppercase;
+            margin-top: 15px;
+            font-weight: 400;
+            text-align: center;
+        }
+
         #font-loader { position: absolute; opacity: 0; pointer-events: none; font-family: "Manufacturing Consent"; }
     </style>
 </head>
@@ -22,21 +35,31 @@
     <div class="fuzzy-container" id="canvas-stage" style="opacity: 0;">
         <canvas id="fuzzy-text-1"></canvas>
         <canvas id="fuzzy-text-2"></canvas>
+        <div class="sub-title">Best NYC Vinyl Decals Company</div>
     </div>
 </main>
 
 <script src="common.js"></script>
 <script>
-    // Footer only (navigation removed)
+    // 移除了中文部分的 Footer
     document.body.insertAdjacentHTML('beforeend',
       '<footer class="global-footer" style="margin-top: 40px; position: relative; z-index: 10;">' +
-        '<a href="main.html">CHEAPER BROTHERS CO. 廉兄集团。</a>' +
+        '<a href="main.html">CHEAPER BROTHERS CO.</a>' +
       '</footer>'
     );
 
-    // Click canvas → enter main site
+    // 设置跳转目标地址
+    const targetUrl = 'main.html';
+
+    // 设置 3 秒 (3000 毫秒) 后自动跳转
+    const autoRedirectTimer = setTimeout(() => {
+      window.location.href = targetUrl;
+    }, 3000);
+
+    // 点击页面时立即跳转，并取消自动跳转的计时器
     document.querySelector('.main-content').addEventListener('click', () => {
-      window.location.href = 'main.html';
+      clearTimeout(autoRedirectTimer);
+      window.location.href = targetUrl;
     });
 
     const initHome = () => {
