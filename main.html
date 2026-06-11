@@ -148,24 +148,32 @@
       background: rgba(230, 0, 0, 0.05);
     }
 
-    /* ===== Top Contact Bar ===== */
+    /* ===== Top Contact Bar (Redesigned) ===== */
     .top-bar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border-light);
-      padding: 8px 0;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
+      background: #a81010; /* 参考图深红背景 */
+      color: #ffffff; /* 白字 */
+      padding: 10px 0;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
       letter-spacing: 0.04em;
     }
     .top-bar-inner {
       display: flex;
-      justify-content: flex-end;
-      gap: var(--space-lg);
+      justify-content: space-between;
+      align-items: center;
       padding: 0 var(--gutter);
       max-width: var(--max-w);
       margin: 0 auto;
     }
-    .top-bar a:hover { color: var(--accent-blue); }
+    .top-bar a { color: #ffffff; text-decoration: none; transition: opacity 0.2s; }
+    .top-bar a:hover { opacity: 0.8; }
+    @media (max-width: 768px) {
+      .top-bar-inner {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
 
     /* ===== Header ===== */
     .header {
@@ -224,19 +232,58 @@
       background: var(--text-primary);
     }
 
-    /* ===== Hero & Pure Text Letters (Signature Blue) ===== */
+    /* ===== Hero Section (Redesigned Layout with Images) ===== */
     .hero {
       position: relative;
       padding: var(--space-5xl) 0;
       overflow: hidden;
+      background-color: #3b5284; /* 背景用蓝色 */
+      color: #ffffff; /* 字体用白色 */
     }
-    .hero-content { position: relative; z-index: 1; }
+    .hero-content { 
+      position: relative; 
+      z-index: 1; 
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-top-row {
+      display: grid;
+      grid-template-columns: 1.2fr 2fr;
+      gap: var(--space-4xl);
+      margin-bottom: var(--space-4xl);
+      align-items: start;
+    }
+
+    .hero-text-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-image-side {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+
+    .hero-image-side img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05); /* Placeholder if image is missing */
+    }
+
     .hero-headline {
       font-family: var(--font-display);
       font-size: clamp(3.5rem, 10vw, 8rem);
       letter-spacing: 0.01em;
       line-height: 0.85;
       text-transform: uppercase;
+      color: #ffffff;
+      margin-top: auto;
     }
     
     .text-letters {
@@ -251,12 +298,10 @@
       line-height: 0.85;
     }
 
-    /* 哑光文字：平整的亮色，带有很弱的扁平投影 */
     .letter.matte {
       text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.08);
     }
 
-    /* 光面文字：利用背景渐变裁剪到文字上，形成顶部反光的高级质感 */
     .letter.glossy {
       background: linear-gradient(180deg, #ffffff 0%, var(--c) 45%, var(--c) 100%);
       -webkit-background-clip: text;
@@ -264,53 +309,73 @@
       filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.15));
     }
 
-    /* 单词之间的标准空格 */
     .space {
       display: inline-block;
       width: 0.25em; 
     }
 
-    .hero-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: var(--space-3xl);
-      gap: var(--space-xl);
-      flex-wrap: wrap;
-    }
     .hero-desc {
-      max-width: 600px;
       font-size: 0.9rem;
-      color: var(--text-secondary);
+      color: rgba(255, 255, 255, 0.9);
       line-height: 1.8;
     }
     .hero-desc .tagline {
       font-family: var(--font-mono);
       font-size: 0.65rem;
       letter-spacing: 0.08em;
-      color: var(--text-muted);
+      color: rgba(255, 255, 255, 0.6);
       display: block;
       margin-top: var(--space-md);
     }
+    
+    .hero-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .hero-specs .spec-item { margin-bottom: 12px; }
+    .hero-specs .mono {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .hero-specs .value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
     .hero-cta {
       display: inline-flex;
       align-items: center;
       gap: var(--space-sm);
-      margin-top: var(--space-2xl);
+      margin-top: var(--space-xl);
       padding: 14px 32px;
-      background: var(--text-primary);
-      color: #ffffff;
+      background: #ffffff;
+      color: #3b5284;
       font-weight: 700;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       border: none;
       cursor: pointer;
-      transition: background var(--duration-fast);
+      transition: background var(--duration-fast), color var(--duration-fast);
     }
-    .hero-cta:hover { background: var(--accent-blue); }
+    .hero-cta:hover { background: #f4c754; color: #1d1d1f; }
 
-    /* ===== Services (Redesigned & Clickable) ===== */
+    @media (max-width: 900px) {
+      .hero-top-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-3xl);
+        margin-bottom: var(--space-2xl);
+      }
+    }
+
+    /* ===== Services ===== */
     .services-section { padding: var(--space-5xl) 0; }
     .services-grid {
       display: grid;
@@ -393,7 +458,6 @@
       margin-bottom: var(--space-md);
     }
 
-    /* 常规服务卡片的图片容器 */
     .svc-image {
       width: 100%;
       height: 180px;
@@ -558,8 +622,13 @@
 
   <div class="top-bar">
     <div class="top-bar-inner">
-      <a href="tel:+19178606506">TEL: (917) 860-6506</a>
-      <a href="mailto:danielwuyanzu@icloud.com">EMAIL: danielwuyanzu@icloud.com</a>
+      <div class="top-bar-left">
+        Free shipping on all US orders over $400. <a href="#contact" style="text-decoration: underline;">Shop Now!</a>
+      </div>
+      <div class="top-bar-right" style="display: flex; gap: var(--space-lg);">
+        <a href="tel:+19178606506">TEL: (917) 860-6506</a>
+        <a href="mailto:danielwuyanzu@icloud.com">EMAIL: danielwuyanzu@icloud.com</a>
+      </div>
     </div>
   </div>
 
@@ -581,35 +650,49 @@
 
   <section class="hero">
     <div class="container hero-content">
+      
+      <div class="hero-top-row">
+        
+        <div class="hero-text-side">
+          <div class="hero-desc">
+            We closed our retail showroom to bring the savings directly to you. Operating as a private studio allows us to bypass inflation entirely. You still get industry-leading quality on all bespoke decals, light boxes, and commercial signage—just at prices designed to support the NYC business community.
+            <span class="tagline">FILE-TO-FINISH · NYC BASED</span>
+          </div>
+          
+          <div class="hero-specs">
+            <div class="spec-item">
+              <div class="mono">Est.</div>
+              <div class="value">2024</div>
+            </div>
+            <div class="spec-item">
+              <div class="mono">Projects</div>
+              <div class="value">Premium +</div>
+            </div>
+            <div class="spec-item">
+              <div class="mono">Coverage</div>
+              <div class="value">NYC + Nationwide</div>
+            </div>
+          </div>
+          
+          <a href="#contact" class="hero-cta">Get a Free Quote →</a>
+        </div>
+
+        <div class="hero-image-side">
+          <img src="images/title/title1.jpg" alt="Featured Work 1">
+          <img src="images/title/title2.jpg" alt="Featured Work 2">
+          <img src="images/title/title3.jpg" alt="Featured Work 3">
+        </div>
+
+      </div>
+
       <h1 class="hero-headline">
         BIG IDEAS.<br>
         SMALL BUDGETS.<br>
         <div class="text-letters">
-          <span class="letter matte" style="--c: #0071e3;">W</span><span class="letter glossy" style="--c: #0071e3;">E</span><span class="space"></span><span class="letter glossy" style="--c: #0071e3;">G</span><span class="letter matte" style="--c: #0071e3;">O</span><span class="letter glossy" style="--c: #0071e3;">T</span><span class="space"></span><span class="letter matte" style="--c: #0071e3;">Y</span><span class="letter glossy" style="--c: #0071e3;">O</span><span class="letter matte" style="--c: #0071e3;">U</span><span class="letter glossy" style="--c: #0071e3;">.</span>
+          <span class="letter matte" style="--c: #f4c754;">W</span><span class="letter glossy" style="--c: #f4c754;">E</span><span class="space"></span><span class="letter glossy" style="--c: #f4c754;">G</span><span class="letter matte" style="--c: #f4c754;">O</span><span class="letter glossy" style="--c: #f4c754;">T</span><span class="space"></span><span class="letter matte" style="--c: #f4c754;">Y</span><span class="letter glossy" style="--c: #f4c754;">O</span><span class="letter matte" style="--c: #f4c754;">U</span><span class="letter glossy" style="--c: #f4c754;">.</span>
         </div>
       </h1>
 
-      <div class="hero-meta">
-        <div class="hero-desc">
-          We closed our retail showroom to bring the savings directly to you. Operating as a private studio allows us to bypass inflation entirely. You still get industry-leading quality on all bespoke decals, light boxes, and commercial signage—just at prices designed to support the NYC business community.
-          <span class="tagline">FILE-TO-FINISH · NYC BASED</span>
-        </div>
-        <div class="hero-specs">
-          <div class="spec-item">
-            <div class="mono">Est.</div>
-            <div class="value">2024</div>
-          </div>
-          <div class="spec-item">
-            <div class="mono">Projects</div>
-            <div class="value">Premium +</div>
-          </div>
-          <div class="spec-item">
-            <div class="mono">Coverage</div>
-            <div class="value">NYC + Nationwide</div>
-          </div>
-        </div>
-      </div>
-      <a href="#contact" class="hero-cta">Get a Free Quote →</a>
     </div>
   </section>
 
