@@ -6,7 +6,12 @@
     <title>Cheaper Brothers Inc. | Bespoke Signage</title>
     <link rel="stylesheet" href="common.css">
     <style>
-        :root { --bg-color: #000000; --main-color: #ffffff; }
+        :root { 
+            /* 修改背景为经典蓝色 */
+            --bg-color: #3b5284; 
+            /* 主题色改为黄色 */
+            --main-color: #f4c754; 
+        }
         body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-color); color: var(--main-color); font-family: "Manufacturing Consent", "Inter", sans-serif; overflow: hidden; -webkit-font-smoothing: antialiased; }
         .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
         .fuzzy-container { display: flex; flex-direction: column; align-items: center; gap: 1vh; transition: opacity 0.5s ease; }
@@ -17,7 +22,8 @@
             font-family: "Inter", sans-serif;
             font-size: 0.8rem;
             letter-spacing: 0.3em;
-            color: #888888;
+            /* 原本是暗灰色，在蓝色背景上看不清。改用带透明度的纯白以保持高级感，同时不抢黄色主标题的风头 */
+            color: rgba(255, 255, 255, 0.7); 
             text-transform: uppercase;
             margin-top: 15px;
             font-weight: 400;
@@ -41,10 +47,10 @@
 
 <script src="common.js"></script>
 <script>
-    // 移除了中文部分的 Footer
+    // 加入了 style="color: #ffffff;" 确保底部链接保持原本的白色
     document.body.insertAdjacentHTML('beforeend',
       '<footer class="global-footer" style="margin-top: 40px; position: relative; z-index: 10;">' +
-        '<a href="main.html">CHEAPER BROTHERS CO.</a>' +
+        '<a href="main.html" style="color: #ffffff; text-decoration: none;">CHEAPER BROTHERS CO.</a>' +
       '</footer>'
     );
 
@@ -63,7 +69,8 @@
     });
 
     const initHome = () => {
-        const commonConfig = { fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#ffffff', baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30 };
+        // 将 Canvas 渲染的字体颜色改为黄色 (#f4c754)
+        const commonConfig = { fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#f4c754', baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30 };
         new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "CHEAPER", fontSize: 80 });
         new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "BROTHERS", fontSize: 80 });
         document.getElementById('canvas-stage').style.opacity = '1';
