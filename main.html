@@ -1106,31 +1106,50 @@
         let currentIndex = 0;
         let slideCount = 0;
         let autoPlayInterval;
-        let imageIndex = 1;
-        let isProbing = true;
+       let imageIndex = 1;
+      let isProbing = true;
+      
+      // 新增：自动判断备用后缀
+      const altExt = (ext && ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
+      let currentExt = ext;
+      let triedAlternate = false;
 
-        function probeNextImage() {
-          if (!isProbing || !path || !prefix || !ext) {
-            initCarouselLogic();
-            return;
-          }
-          const imgTest = new Image();
-          imgTest.src = `${path}${prefix}${imageIndex}${ext}`;
-          imgTest.onload = function() {
-            const imgElement = document.createElement('img');
-            imgElement.src = imgTest.src;
-            imgElement.className = 'carousel-slide';
-            imgElement.alt = `${prefix} ${imageIndex}`;
-            track.appendChild(imgElement);
-            slideCount++;
-            imageIndex++;
+      function probeNextImage() {
+        if (!isProbing || !path || !prefix || !ext) {
+          initCarouselLogic();
+          return;
+        }
+
+        const imgTest = new Image();
+        imgTest.src = `${path}${prefix}${imageIndex}${currentExt}`;
+
+        imgTest.onload = function() {
+          const imgElement = document.createElement('img');
+          imgElement.src = imgTest.src;
+          imgElement.className = 'carousel-slide';
+          imgElement.alt = `${prefix} ${imageIndex}`;
+          track.appendChild(imgElement);
+          
+          slideCount++;
+          imageIndex++;
+          currentExt = ext; // 成功后，重置为默认后缀继续找下一张
+          triedAlternate = false;
+          probeNextImage();
+        };
+
+        imgTest.onerror = function() {
+          if (!triedAlternate) {
+            // 默认后缀没找到，换备用后缀再试一次
+            triedAlternate = true;
+            currentExt = altExt;
             probeNextImage();
-          };
-          imgTest.onerror = function() {
+          } else {
+            // 两个都找不到，说明这个产品目录的图片结束了，启动轮播逻辑
             isProbing = false;
             initCarouselLogic();
-          };
-        }
+          }
+        };
+      }
 
         probeNextImage();
 
