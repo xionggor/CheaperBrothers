@@ -276,44 +276,66 @@
 
   <!-- Dynamic Image Auto-loader Script -->
   <script>
-    (function() {
-      'use strict';
-      const loaders = document.querySelectorAll('.auto-loader');
-      loaders.forEach(loader => {
-        const path = loader.getAttribute('data-path');
-        const prefix = loader.getAttribute('data-prefix');
-        const ext = loader.getAttribute('data-ext');
-        const parentGrid = loader.closest('.image-grid');
-        let imgIndex = 1;
-        let isProbing = true;
+  (function() {
+    'use strict';
+    const loaders = document.querySelectorAll('.auto-loader');
 
-        function probeNextImage() {
-          if (!isProbing) return;
-          const imgTest = new Image();
-          imgTest.src = `${path}${prefix}${imgIndex}${ext}`;
-          imgTest.onload = function() {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'grid-item';
-            const newImg = document.createElement('img');
-            newImg.src = imgTest.src;
-            newImg.alt = `${prefix} ${imgIndex}`;
-            newImg.loading = "lazy";
-            wrapper.appendChild(newImg);
-            parentGrid.insertBefore(wrapper, loader);
-            imgIndex++;
+    loaders.forEach(loader => {
+      const path = loader.getAttribute('data-path');
+      const prefix = loader.getAttribute('data-prefix');
+      const ext = loader.getAttribute('data-ext'); // 默认后缀
+      const parentGrid = loader.closest('.image-grid');
+      
+      let imgIndex = 1;
+      let isProbing = true;
+      
+      // 判断备用后缀是什么
+      const altExt = (ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
+      let currentExt = ext;
+      let triedAlternate = false;
+
+      function probeNextImage() {
+        if (!isProbing) return;
+        
+        const imgTest = new Image();
+        imgTest.src = `${path}${prefix}${imgIndex}${currentExt}`;
+        
+        imgTest.onload = function() {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'grid-item';
+          const newImg = document.createElement('img');
+          newImg.src = imgTest.src;
+          newImg.alt = `${prefix} ${imgIndex}`;
+          newImg.loading = "lazy";
+          wrapper.appendChild(newImg);
+          parentGrid.insertBefore(wrapper, loader);
+          
+          // 加载成功：准备加载下一张图，重置后缀和状态
+          imgIndex++;
+          currentExt = ext; // 换回默认后缀重新开始试
+          triedAlternate = false; // 重置备用状态
+          probeNextImage();
+        };
+        
+        imgTest.onerror = function() {
+          if (!triedAlternate) {
+            // 如果默认后缀找不到，换备用后缀再试一次
+            triedAlternate = true;
+            currentExt = altExt;
             probeNextImage();
-          };
-          imgTest.onerror = function() {
+          } else {
+            // 如果两个后缀都试了还是找不到，说明图片到头了，停止加载
             isProbing = false;
             loader.remove();
-          };
-        }
+          }
+        };
+      }
 
-        if(path && prefix && ext) {
-          probeNextImage();
-        }
-      });
-    })();
-  </script>
+      if(path && prefix && ext) {
+        probeNextImage();
+      }
+    });
+  })();
+</script>
 </body>
 </html>
