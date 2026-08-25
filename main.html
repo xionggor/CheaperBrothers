@@ -736,12 +736,12 @@
 
       <div class="contact-grid">
         <div class="contact-form-area">
-          <!-- 
-            NOTE: This form currently uses method="POST" with action="#". 
-            Form backend still needs to be connected to a service (e.g., Formspree, Netlify) to process emails.
+      <!-- 
+            NOTE: The action is now routed to your Google Ads conversion page. 
+            Once you connect a backend service (like Formspree), update this action to their URL and configure the redirect in their dashboard.
           -->
-          <form action="#" method="POST" id="quote-form">
-            
+          <form action="thank-you.html" method="GET" id="quote-form">
+
             <!-- STEP 1: Service Selection -->
             <div id="form-step-1" class="form-step">
               <div class="step-indicator">STEP 1 OF 2</div>
