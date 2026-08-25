@@ -88,6 +88,13 @@
       line-height: 1;
     }
 
+    /* Adjusted for the new click-to-call phone addition */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
     .header-nav {
       display: flex;
       gap: 1.75rem;
@@ -103,6 +110,18 @@
     .header-nav a:hover,
     .header-nav a.active {
       color: var(--text-primary);
+    }
+
+    .header-phone {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .header-phone:hover {
+      color: var(--text-secondary);
     }
 
     /* ===== Buttons ===== */
@@ -218,7 +237,6 @@
 
     .category-block {
       margin-bottom: 3rem;
-      /* Scroll-margin accounts for sticky header when deep linking */
       scroll-margin-top: 80px; 
     }
 
@@ -343,7 +361,7 @@
       color: var(--text-secondary);
     }
 
-    /* ===== Inline Lead Capture ===== */
+    /* ===== Inline Lead Capture (Updated) ===== */
     .lead-capture-section {
       padding: 3rem 0;
       background: var(--surface);
@@ -359,8 +377,18 @@
     .lead-capture-container h2 {
       font-family: var(--font-display);
       font-size: 2rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.4rem;
       letter-spacing: 0.02em;
+    }
+    
+    /* Local Brooklyn Trust Signal */
+    .trust-signal {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     .inline-form {
@@ -396,7 +424,7 @@
       font-size: 0.9rem;
       background: var(--bg);
       color: var(--text-primary);
-      height: 42px; /* Ensure uniform height across fields */
+      height: 42px; 
     }
 
     .inline-form input[type="file"] {
@@ -433,6 +461,8 @@
     /* ===== Mobile Adjustments ===== */
     @media (max-width: 768px) {
       .header-nav { display: none; }
+      .header-right { gap: 1rem; }
+      .header-phone { font-size: 0.9rem; }
       .image-grid { grid-template-columns: 1fr; }
       .grid-overlay { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 2rem 1rem 0.8rem; }
       .floating-cta { bottom: 16px; right: 16px; padding: 8px 16px; font-size: 0.8rem; }
@@ -452,13 +482,17 @@
       <div class="header-logo">
         <a href="main.html">CHEAPER BROTHERS <small>// INC.</small></a>
       </div>
-      <nav class="header-nav" id="mainNav">
-        <a href="main.html">Home</a>
-        <a href="portfolio.html" class="active">Portfolio</a>
-        <a href="main.html#services">Services</a>
-        <a href="contact.html">Contact</a>
-        <a href="main.html#about">About</a>
-      </nav>
+      <div class="header-right">
+        <nav class="header-nav" id="mainNav">
+          <a href="main.html">Home</a>
+          <a href="portfolio.html" class="active">Portfolio</a>
+          <a href="main.html#services">Services</a>
+          <a href="contact.html">Contact</a>
+          <a href="main.html#about">About</a>
+        </nav>
+        <!-- Click-to-call added -->
+        <a href="tel:+19178606506" class="header-phone">(917) 860-6506</a>
+      </div>
     </div>
   </header>
 
@@ -590,7 +624,11 @@
   <section class="lead-capture-section">
     <div class="container lead-capture-container">
       <h2>START YOUR PROJECT</h2>
-      <form class="inline-form" action="contact.html" method="GET">
+      <!-- Local Trust Signal -->
+      <p class="trust-signal">Proudly Fabricated in Brooklyn, Installed Citywide.</p>
+      
+      <!-- Conversion-ready form (id and data-conversion added) -->
+      <form id="quote-request-form" class="inline-form" action="contact.html" method="GET" data-conversion="request_quote_form">
         <div class="form-group">
           <label for="serviceSelect">What do you need?</label>
           <select id="serviceSelect" name="service" required>
@@ -604,9 +642,15 @@
           </select>
         </div>
         
+        <!-- Split Fields for Phone & Email -->
         <div class="form-group">
-          <label for="contactInfo">Contact Details</label>
-          <input type="text" id="contactInfo" name="contact" placeholder="Phone or Email" required>
+          <label for="phoneInfo">Phone Number</label>
+          <input type="tel" id="phoneInfo" name="phone" placeholder="(555) 555-5555" required>
+        </div>
+
+        <div class="form-group">
+          <label for="emailInfo">Email Address</label>
+          <input type="email" id="emailInfo" name="email" placeholder="name@company.com" required>
         </div>
 
         <div class="form-group">
@@ -615,7 +659,8 @@
         </div>
 
         <div class="form-submit">
-          <button type="submit" class="btn-primary">Request My Quote</button>
+          <!-- Submission button prepped for Google Ads Conversion Tracking -->
+          <button type="submit" id="request-quote-submit" class="btn-primary" data-conversion="request_quote_submit">Request My Quote</button>
         </div>
       </form>
     </div>
@@ -627,7 +672,7 @@
     <span>Brooklyn, NY</span>
   </footer>
 
-  <!-- Floating Mobile/Desktop CTA -->
+  <!-- Persistent Floating CTA -->
   <a href="contact.html" class="floating-cta">Get a Free Quote</a>
 
   <!-- Dynamic Scripts: Filter, Auto-loader, and Deep Linking -->
