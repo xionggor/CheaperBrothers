@@ -6,15 +6,12 @@
   <title>Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC</title>
   <meta name="description" content="NYC & Brooklyn-based premium custom signage and vinyl decal studio. Direct studio prices, professional installation, and quotes within 2 hours." />
   
-  <!-- Canonical & Domain Metadata Placeholder -->
-  <!-- NOTE: Configure your production canonical URL and Open Graph links here once deployed to your final production domain -->
   <link rel="canonical" href="https://cheaperbrothers.com/" />
   <meta property="og:title" content="Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC" />
   <meta property="og:description" content="NYC-based premium bespoke print and signage studio specializing in custom vinyl decals, digital printing, light boxes, and neon signs." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://cheaperbrothers.com/" />
 
-  <!-- Preload Critical Hero Assets for LCP -->
   <link rel="preload" as="image" href="images/title/title1.webp" type="image/webp" fetchpriority="high">
   <link rel="preload" as="image" href="images/title/title2.webp" type="image/webp" fetchpriority="high">
   <link rel="preload" as="image" href="images/title/title3.webp" type="image/webp" fetchpriority="high">
@@ -402,7 +399,6 @@
 </head>
 <body>
 
-  <!-- Top Bar -->
   <div class="top-bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">Free shipping on all US orders over $400.</div>
@@ -420,7 +416,6 @@
     </div>
   </div>
 
-  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="header-logo">
@@ -440,7 +435,6 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container hero-content">
       <div class="hero-top-row">
@@ -451,7 +445,6 @@
             <span class="hero-story-toggle">We closed our retail showroom to pass wholesale savings directly to you.</span>
           </div>
           
-          <!-- Surfaced Trust & Speed Selling Points (Visualized) -->
           <div class="hero-trust-strip">
             <div class="trust-strip-item">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -498,7 +491,6 @@
     </div>
   </section>
 
-  <!-- Best Seller / Portfolio Section -->
   <section class="best-seller-section" id="portfolio">
     <div class="container">
       <div class="section-header">
@@ -506,58 +498,49 @@
         <a href="portfolio.html" class="mono label view-all-btn">Full Portfolio →</a>
       </div>
 
-      <!-- Category 1 -->
       <div class="portfolio-category">
         <div class="portfolio-category-header">
           <h3>Die Cut Windows Decals</h3>
           <span class="price-tag">From $60</span>
         </div>
         <div class="portfolio-image-grid" data-path="images/vinyl/" data-prefix="Vinyl" data-ext=".jpg">
-          <!-- JS will inject up to 4 images here initially -->
-        </div>
+          </div>
         <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
       </div>
 
-      <!-- Category 2 -->
       <div class="portfolio-category">
         <div class="portfolio-category-header">
           <h3>Die Cut Car Decals</h3>
           <span class="price-tag">From $50</span>
         </div>
         <div class="portfolio-image-grid" data-path="images/car/" data-prefix="car" data-ext=".jpg">
-          <!-- JS will inject up to 4 images here initially -->
-        </div>
+          </div>
         <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
       </div>
 
-      <!-- Category 3 -->
       <div class="portfolio-category">
         <div class="portfolio-category-header">
           <h3>Neon Signs</h3>
           <span class="price-tag">From $300</span>
         </div>
         <div class="portfolio-image-grid" data-path="images/neon/" data-prefix="Neon" data-ext=".jpeg">
-          <!-- JS will inject up to 4 images here initially -->
-        </div>
+          </div>
         <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
       </div>
 
-      <!-- Category 4 -->
       <div class="portfolio-category">
         <div class="portfolio-category-header">
           <h3>Display Board Printing</h3>
           <span class="price-tag">From $70</span>
         </div>
         <div class="portfolio-image-grid" data-path="images/pvc/" data-prefix="pvc" data-ext=".jpg">
-          <!-- JS will inject up to 4 images here initially -->
-        </div>
+          </div>
         <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
       </div>
 
     </div>
   </section>
 
-  <!-- Services Section -->
   <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header">
@@ -631,7 +614,6 @@
     </div>
   </section>
 
-  <!-- About Section -->
   <section class="section" id="about" style="background: var(--surface);">
     <div class="container">
       <div class="section-header">
@@ -645,7 +627,7 @@
         </div>
         <div class="about-image">
           <picture>
-            <source srcset="images/about/about.webp" type="image/webp">
+            <source srcset="images/about/about.gif" type="image/gif">
             <img src="images/about/about.gif" alt="Cheaper Brothers Studio - Brooklyn" loading="lazy" decoding="async">
           </picture>
         </div>
@@ -659,7 +641,6 @@
     </div>
   </section>
 
-  <!-- Contact Us Section (Two-Step Form) -->
   <section class="section contact-section" id="contact">
     <div class="container">
       <div class="section-header">
@@ -669,13 +650,8 @@
 
       <div class="contact-grid">
         <div class="contact-form-area">
-          <!-- 
-            NOTE: This form currently uses method="POST" with action="#". 
-            Form backend still needs to be connected to a service (e.g., Formspree, Netlify) to process emails.
-          -->
           <form action="#" method="POST" id="quote-form">
             
-            <!-- STEP 1: Service Selection -->
             <div id="form-step-1" class="form-step">
               <div class="step-indicator">STEP 1 OF 2</div>
               <h3 class="form-step-title">What service do you need?</h3>
@@ -710,7 +686,6 @@
               <button type="button" id="btn-next-step" class="submit-btn" disabled>CONTINUE →</button>
             </div>
 
-            <!-- STEP 2: Contact Details -->
             <div id="form-step-2" class="form-step" style="display: none;">
               <div class="step-indicator">STEP 2 OF 2</div>
               <button type="button" id="btn-prev-step" class="back-btn">← Back to Services</button>
@@ -771,10 +746,8 @@
     </div>
   </section>
 
-  <!-- Mobile Sticky CTA -->
   <a href="#contact" class="mobile-sticky-cta" id="mobile-sticky-cta">GET A FREE QUOTE →</a>
 
-  <!-- Footer -->
   <footer class="footer container">
     <span>© 2026 Cheaper Brothers Inc.</span>
     <span>Bespoke Signage &amp; Printing — <a href="mailto:danielwuyanzu@icloud.com">Brooklyn, NY</a></span>
