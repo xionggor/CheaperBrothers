@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Request Received | Cheaper Brothers Inc.</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        :root { 
+            /* Classic Blue Background */
+            --bg-color: #3b5284; 
+            /* Main Yellow Theme */
+            --main-color: #f4c754; 
+        }
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-color); color: var(--main-color); font-family: "Manufacturing Consent", "Inter", sans-serif; overflow: hidden; -webkit-font-smoothing: antialiased; }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; text-align: center; }
+        .fuzzy-container { display: flex; flex-direction: column; align-items: center; gap: 2vh; transition: opacity 0.5s ease; }
+        canvas { cursor: pointer; max-width: 90vw; display: block; }
+        
+        /* Updated Subtitle for Confirmation */
+        .sub-title {
+            font-family: "Inter", sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.9); 
+            margin-top: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        /* New Minimalist Button to return to site */
+        .action-btn {
+            margin-top: 30px;
+            padding: 12px 35px;
+            border: 1px solid var(--main-color);
+            color: var(--main-color);
+            text-decoration: none;
+            font-family: "Inter", sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            background-color: var(--main-color);
+            color: var(--bg-color);
+        }
+
+        #font-loader { position: absolute; opacity: 0; pointer-events: none; font-family: "Manufacturing Consent"; }
+    </style>
+</head>
+<body>
+
+<div id="font-loader">Force Font Load</div>
+
+<main class="main-content">
+    <div class="fuzzy-container" id="canvas-stage" style="opacity: 0;">
+        <canvas id="fuzzy-text-1"></canvas>
+        <canvas id="fuzzy-text-2"></canvas>
+        
+        <div class="sub-title">
+            Your quote request has been received.<br>
+            Our team will review your details and contact you shortly.
+        </div>
+
+        <a href="main.html" class="action-btn">Return to Homepage</a>
+    </div>
+</main>
+
+<script src="common.js"></script>
+<script>
+    document.body.insertAdjacentHTML('beforeend',
+      '<footer class="global-footer" style="margin-bottom: 30px; position: relative; z-index: 10; text-align: center;">' +
+        '<span style="color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; font-family: \'Inter\', sans-serif; letter-spacing: 0.1em;">CHEAPER BROTHERS CO.</span>' +
+      '</footer>'
+    );
+
+    const initHome = () => {
+        const commonConfig = { fontFamily: "Manufacturing Consent", fontWeight: 400, color: '#f4c754', baseIntensity: 0.15, hoverIntensity: 0.5, fuzzRange: 30 };
+        // Changed canvas text to render "THANK YOU"
+        new FuzzyText('fuzzy-text-1', { ...commonConfig, text: "THANK", fontSize: 80 });
+        new FuzzyText('fuzzy-text-2', { ...commonConfig, text: "YOU", fontSize: 80 });
+        document.getElementById('canvas-stage').style.opacity = '1';
+    };
+
+    if (document.fonts) { document.fonts.ready.then(() => { initHome(); }).catch(() => { initHome(); }); } 
+    else { window.onload = initHome; }
+
+    document.body.addEventListener('touchmove', (e) => {
+        if (e.target.tagName !== 'A' && e.target.tagName !== 'LI') { e.preventDefault(); }
+    }, { passive: false });
+</script>
+</body>
+</html>
