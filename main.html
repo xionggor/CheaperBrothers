@@ -6,11 +6,18 @@
   <title>Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC</title>
   <meta name="description" content="NYC & Brooklyn-based premium custom signage and vinyl decal studio. Direct studio prices, professional installation, and quotes within 2 hours." />
   
+  <!-- Canonical & Domain Metadata Placeholder -->
+  <!-- NOTE: Configure your production canonical URL and Open Graph links here once deployed to your final production domain -->
   <link rel="canonical" href="https://cheaperbrothers.com/" />
   <meta property="og:title" content="Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC" />
   <meta property="og:description" content="NYC-based premium bespoke print and signage studio specializing in custom vinyl decals, digital printing, light boxes, and neon signs." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://cheaperbrothers.com/" />
+
+  <!-- Preload Critical Hero Assets for LCP -->
+  <link rel="preload" as="image" href="images/title/title1.webp" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/title/title2.webp" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/title/title3.webp" type="image/webp" fetchpriority="high">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,17 +78,11 @@
       color: var(--text-primary);
       line-height: 1.6;
       overflow-x: hidden;
+      padding-bottom: 0; 
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
     .mono {
       font-family: var(--font-mono);
@@ -97,16 +98,9 @@
       color: var(--text-muted);
     }
 
-    .container {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-    }
-
-    .section {
-      padding: var(--space-5xl) 0;
-    }
-
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); }
+    .section { padding: var(--space-5xl) 0; }
+    
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -123,20 +117,6 @@
       line-height: 0.9;
     }
 
-    .view-all-btn {
-      display: inline-block;
-      padding: 8px 16px;
-      border: 1px solid var(--text-primary);
-      border-radius: 4px;
-      color: var(--text-primary);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .view-all-btn:hover {
-      background: var(--text-primary);
-      color: var(--bg);
-    }
-
     .badge {
       display: inline-block;
       padding: 4px 12px;
@@ -149,734 +129,280 @@
       color: #86868b;
     }
 
-    .badge.primary {
-      border-color: var(--accent-red);
-      color: var(--accent-red);
-      background: rgba(230, 0, 0, 0.05);
-    }
+    .badge.primary { border-color: var(--accent-red); color: var(--accent-red); background: rgba(230, 0, 0, 0.05); }
 
     /* ===== Top Contact Bar ===== */
     .top-bar {
-      background: #a81010;
-      color: #ffffff;
-      padding: 10px 0;
-      font-size: clamp(0.75rem, 0.8vw + 0.5rem, 0.85rem);
-      letter-spacing: 0.04em;
+      background: #a81010; color: #ffffff; padding: 10px 0;
+      font-size: clamp(0.75rem, 0.8vw + 0.5rem, 0.85rem); letter-spacing: 0.04em;
     }
-
     .top-bar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 var(--gutter);
-      max-width: var(--max-w);
-      margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 var(--gutter); max-width: var(--max-w); margin: 0 auto;
     }
-
-    .top-bar-right {
-      display: flex;
-      gap: var(--space-lg);
-      align-items: center;
-    }
-
-    .top-bar-right a {
-      color: #ffffff;
-      transition: opacity 0.2s;
-    }
-
-    .top-bar-right a:hover {
-      opacity: 0.8;
-    }
-
-    @media (max-width: 768px) {
-      .top-bar-inner {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-      }
-    }
+    .top-bar-right { display: flex; gap: var(--space-lg); align-items: center; }
+    .top-bar-right a { color: #ffffff; transition: opacity 0.2s; }
+    .top-bar-right a:hover { opacity: 0.8; }
+    @media (max-width: 768px) { .top-bar-inner { flex-direction: column; gap: 8px; text-align: center; } }
 
     /* ===== Header ===== */
     .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
     }
-
     .header-inner {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 1rem var(--gutter);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      max-width: var(--max-w); margin: 0 auto; padding: 1rem var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .header-logo {
-      font-family: var(--font-display);
-      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.6rem);
-      line-height: 1;
-    }
-
-    .header-logo small {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-left: 4px;
-    }
-
-    .header-nav {
-      display: flex;
-      gap: var(--space-xl);
-      align-items: center;
-    }
-
-    .header-nav a {
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      transition: color 0.2s ease;
-    }
-
-    .header-nav a:hover {
-      color: var(--text-primary);
-    }
-
+    .header-logo { font-family: var(--font-display); font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.6rem); line-height: 1; }
+    .header-logo small { font-family: var(--font-body); font-weight: 400; font-size: 0.7rem; color: var(--text-muted); margin-left: 4px; }
+    .header-nav { display: flex; gap: var(--space-xl); align-items: center; }
+    .header-nav a { font-weight: 500; font-size: 0.95rem; color: var(--text-secondary); transition: color 0.2s ease; }
+    .header-nav a:hover { color: var(--text-primary); }
     .nav-cta-btn {
-      padding: 8px 16px;
-      background: #f4c754 !important;
-      color: #1d1d1f !important;
-      font-weight: 700;
-      border-radius: 4px;
-      text-transform: uppercase;
-      font-size: 0.8rem !important;
-      letter-spacing: 0.06em;
-      transition: background 0.2s ease;
+      padding: 8px 16px; background: #f4c754 !important; color: #1d1d1f !important;
+      font-weight: 700; border-radius: 4px; text-transform: uppercase; font-size: 0.8rem !important;
+      letter-spacing: 0.06em; transition: background 0.2s ease;
     }
-
-    .nav-cta-btn:hover {
-      background: #e5b843 !important;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--text-primary);
-    }
+    .nav-cta-btn:hover { background: #e5b843 !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text-primary); }
 
     /* ===== HERO SECTION ===== */
     .hero {
-      position: relative;
-      padding: var(--space-4xl) 0 var(--space-2xl);
-      background-color: #3b5284;
-      color: #ffffff;
-      overflow: hidden;
+      position: relative; padding: var(--space-4xl) 0 var(--space-2xl);
+      background-color: #3b5284; color: #ffffff; overflow: hidden;
     }
-
     .hero-top-row {
-      display: grid;
-      grid-template-columns: 0.9fr 2.1fr;
-      gap: var(--space-3xl);
-      align-items: start;
+      display: flex; flex-direction: row; gap: var(--space-3xl); align-items: flex-start;
       margin-bottom: var(--space-xl);
     }
+    .hero-text-side { flex: 1.1; display: flex; flex-direction: column; gap: var(--space-lg); padding-top: var(--space-sm); }
+    .hero-image-side { flex: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
-    .hero-text-side {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-lg);
-      padding-top: var(--space-sm);
+    /* Mobile Hero Reordering */
+    @media (max-width: 768px) {
+      .hero-top-row { flex-direction: column; gap: var(--space-2xl); }
+      .hero-text-side { order: 1; width: 100%; }
+      .hero-image-side { order: 2; width: 100%; }
     }
 
     .hero-commercial-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: 0.02em;
-      color: #ffffff;
+      font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.05; letter-spacing: 0.02em; color: #ffffff;
     }
+    .hero-desc { font-size: clamp(0.9rem, 1vw, 1.05rem); color: rgba(255, 255, 255, 0.9); line-height: 1.6; }
+    .hero-story-toggle { font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.2rem; display: block; }
+    
+    .hero-specs { display: flex; flex-wrap: wrap; gap: var(--space-lg); }
+    .hero-specs .mono { font-size: 0.65rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 0.2rem; }
+    .hero-specs .value { font-size: 1rem; font-weight: 500; }
 
-    .hero-desc {
-      font-size: clamp(0.9rem, 1vw, 1.05rem);
-      color: rgba(255, 255, 255, 0.9);
-      line-height: 1.6;
-    }
-
-    .hero-story-toggle {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: 0.2rem;
-    }
-
-    .hero-specs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-lg);
-    }
-
-    .hero-specs .mono {
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 0.2rem;
-    }
-
-    .hero-specs .value {
-      font-size: 1rem;
-      font-weight: 500;
-    }
-
-    /* Trust & Speed Value Strip Above Fold */
+    /* Visual Trust Strip */
     .hero-trust-strip {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 12px;
-      border-radius: 4px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      background: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 14px; border-radius: 4px; align-items: start;
     }
-
     .trust-strip-item {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
-      color: #ffffff;
-      font-weight: 600;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
     }
-
-    .hero-image-side {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+    .trust-strip-item svg { width: 22px; height: 22px; stroke: #f4c754; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .trust-strip-item span {
+      font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.06em;
+      color: #ffffff; font-weight: 600; line-height: 1.3;
+    }
+    @media (max-width: 600px) {
+      .hero-trust-strip { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+      .trust-strip-item { flex-direction: row; text-align: left; }
     }
 
     .hero-image-side img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 4px;
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px;
     }
 
     .hero-cta {
-      align-self: flex-start;
-      padding: 1rem 2.2rem;
-      background: #f4c754;
-      color: #1d1d1f;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border: none;
-      border-radius: 4px;
-      transition: background 0.2s, transform 0.1s;
+      align-self: flex-start; padding: 1rem 2.2rem; background: #f4c754; color: #1d1d1f;
+      font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em;
+      border: none; border-radius: 4px; transition: background 0.2s, transform 0.1s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
-    .hero-cta:hover {
-      background: #f5cf6d;
-      transform: translateY(-1px);
-    }
-
-    @media (max-width: 1024px) {
-      .hero-top-row {
-        grid-template-columns: 1fr;
-        gap: var(--space-2xl);
-      }
-    }
+    .hero-cta:hover { background: #f5cf6d; transform: translateY(-1px); }
 
     /* ===== MARQUEE ===== */
-    .marquee-container {
-      width: 100%;
-      overflow: hidden;
-      margin-top: var(--space-xl);
-      position: relative;
-    }
-
-    .marquee-track {
-      display: flex;
-      width: max-content;
-      animation: scrollMarquee 35s linear infinite;
-    }
-
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
-
+    .marquee-container { width: 100%; overflow: hidden; margin-top: var(--space-xl); position: relative; }
+    .marquee-track { display: flex; width: max-content; animation: scrollMarquee 35s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
     .hero-headline {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 7.5vw, 12rem);
-      letter-spacing: 0.01em;
-      line-height: 0.85;
-      text-transform: uppercase;
-      color: #ffffff;
-      white-space: nowrap;
-      margin: 0;
-      padding-right: 1.5em;
+      font-family: var(--font-display); font-size: clamp(3rem, 7.5vw, 12rem);
+      letter-spacing: 0.01em; line-height: 0.85; text-transform: uppercase; color: #ffffff;
+      white-space: nowrap; margin: 0; padding-right: 1.5em;
     }
+    @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    @keyframes scrollMarquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ===== Best Seller Section ===== */
+    /* ===== Best Seller / Portfolio Grid Section ===== */
     .best-seller-section {
-      background: var(--surface);
-      padding: var(--space-5xl) 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      background: var(--surface); padding: var(--space-5xl) 0;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
-
-    .best-seller-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-lg);
+    .portfolio-category { margin-bottom: var(--space-4xl); }
+    .portfolio-category:last-child { margin-bottom: 0; }
+    .portfolio-category-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: var(--space-lg); border-bottom: 1px solid var(--border-light); padding-bottom: var(--space-sm);
     }
-
-    .product-card {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-      text-decoration: none;
+    .portfolio-category-header h3 { font-size: clamp(1.2rem, 1.5vw + 0.5rem, 1.5rem); font-weight: 700; }
+    .portfolio-category-header .price-tag { font-family: var(--font-mono); color: var(--accent-blue); font-size: 0.85rem; font-weight: 600; }
+    
+    .portfolio-image-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: var(--space-xl);
     }
-
-    .product-carousel {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      background: #fff;
+    .portfolio-image-grid picture { display: block; width: 100%; aspect-ratio: 1/1; overflow: hidden; border-radius: 4px; border: 1px solid var(--border); background: #fff; }
+    .portfolio-image-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .portfolio-image-grid picture:hover img { transform: scale(1.03); }
+    
+    .view-all-works-btn {
+      display: block; width: 100%; padding: 14px; text-align: center; background: none;
+      border: 1px solid var(--text-primary); border-radius: 4px; font-family: var(--font-mono);
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s;
     }
+    .view-all-works-btn:hover { background: var(--text-primary); color: #fff; }
 
-    .carousel-track {
-      display: flex;
-      height: 100%;
-      transition: transform 0.4s ease-in-out;
-    }
-
-    .carousel-slide {
-      min-width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      width: 28px;
-      height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.2s;
-      color: var(--text-primary);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .carousel-btn:hover {
-      background: #ffffff;
-    }
-
-    .product-carousel:hover .carousel-btn {
-      opacity: 1;
-    }
-
-    .carousel-btn.prev { left: 8px; }
-    .carousel-btn.next { right: 8px; }
-
-    .product-info {
-      display: flex;
-      flex-direction: column;
-      padding-top: var(--space-xs);
-    }
-
-    .product-title {
-      font-size: clamp(0.95rem, 1vw + 0.5rem, 1.1rem);
-      font-weight: 500;
-      color: var(--text-primary);
-      line-height: 1.3;
-    }
-
-    .product-price-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
-    }
-
-    .product-price {
-      font-size: clamp(0.85rem, 0.8vw + 0.5rem, 0.95rem);
-      color: var(--text-secondary);
-    }
-
-    .product-action-link {
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      color: var(--accent-blue);
-      font-weight: 600;
-    }
-
-    @media (max-width: 900px) {
-      .best-seller-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-xl) var(--space-md);
-      }
-      .carousel-btn { opacity: 1; }
-    }
-
-    @media (max-width: 600px) {
-      .best-seller-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-2xl);
-      }
-    }
+    @media (max-width: 900px) { .portfolio-image-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .portfolio-image-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
 
     /* ===== Services ===== */
-    .services-section {
-      padding: var(--space-5xl) 0;
-    }
-
+    .services-section { padding: var(--space-5xl) 0; }
     .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
-
     .service-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
+      display: flex; flex-direction: column; background: var(--bg);
       padding: var(--space-2xl) var(--space-xl) var(--space-xl);
-      position: relative;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      height: 100%;
+      position: relative; cursor: pointer; transition: background 0.2s; height: 100%;
     }
-
-    .service-card:hover {
-      background: var(--surface-hover);
-    }
-
+    .service-card:hover { background: var(--surface-hover); }
     .service-card.featured {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-3xl);
-      align-items: center;
-      background: linear-gradient(135deg, #ffffff 0%, #f9f9fb 100%);
+      grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3xl);
+      align-items: center; background: linear-gradient(135deg, #ffffff 0%, #f9f9fb 100%);
     }
-
-    .service-card.featured:hover {
-      background: linear-gradient(135deg, #f5f5f7 0%, #ebebef 100%);
-    }
-
     .featured-content h3 {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
-      line-height: 1;
-      margin-bottom: var(--space-md);
-      color: var(--text-primary);
+      font-family: var(--font-display); font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
+      line-height: 1; margin-bottom: var(--space-md); color: var(--text-primary);
     }
-
-    .featured-content p {
-      font-size: clamp(1rem, 1vw + 0.5rem, 1.15rem);
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: var(--space-lg);
-    }
-
-    .service-card .svc-num {
-      font-family: var(--font-mono);
-      font-size: clamp(0.55rem, 0.5vw + 0.4rem, 0.65rem);
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-      margin-bottom: var(--space-sm);
-    }
-
-    .service-card h3 {
-      font-weight: 700;
-      font-size: clamp(1.05rem, 1.2vw + 0.6rem, 1.4rem);
-      margin-bottom: var(--space-sm);
-      line-height: 1.3;
-    }
-
-    .service-card p {
-      font-size: clamp(0.9rem, 0.8vw + 0.6rem, 1rem);
-      color: var(--text-secondary);
-      line-height: 1.7;
-      flex-grow: 1;
-    }
-
-    .service-card .badge-row {
-      display: flex;
-      gap: var(--space-xs);
-      flex-wrap: wrap;
-      margin-top: var(--space-lg);
-      margin-bottom: var(--space-md);
-    }
-
-    .service-quote-link {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent-blue);
-      margin-top: var(--space-md);
-      display: inline-block;
-    }
-
-    .svc-image {
-      width: 100%;
-      height: 12rem;
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      margin-top: auto;
-    }
+    .featured-content p { font-size: clamp(1rem, 1vw + 0.5rem, 1.15rem); color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-lg); }
+    .service-card .svc-num { font-family: var(--font-mono); font-size: clamp(0.55rem, 0.5vw + 0.4rem, 0.65rem); color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: var(--space-sm); }
+    .service-card h3 { font-weight: 700; font-size: clamp(1.05rem, 1.2vw + 0.6rem, 1.4rem); margin-bottom: var(--space-sm); line-height: 1.3; }
+    .service-card p { font-size: clamp(0.9rem, 0.8vw + 0.6rem, 1rem); color: var(--text-secondary); line-height: 1.7; flex-grow: 1; }
+    .service-card .badge-row { display: flex; gap: var(--space-xs); flex-wrap: wrap; margin-top: var(--space-lg); margin-bottom: var(--space-md); }
+    .service-quote-link { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--accent-blue); margin-top: var(--space-md); display: inline-block; }
+    .svc-image { width: 100%; height: 12rem; background-position: center; background-size: cover; background-repeat: no-repeat; border-radius: 4px; border: 1px solid var(--border); margin-top: auto; }
 
     /* ===== About Section ===== */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-4xl);
-      align-items: center;
-    }
-
-    .about-text p {
-      font-size: clamp(0.95rem, 1vw + 0.5rem, 1.1rem);
-      color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: var(--space-lg);
-    }
-
-    .about-image img {
-      border-radius: 4px;
-      min-height: 16rem;
-      object-fit: cover;
-      width: 100%;
-    }
-
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4xl); align-items: center; }
+    .about-text p { font-size: clamp(0.95rem, 1vw + 0.5rem, 1.1rem); color: var(--text-secondary); line-height: 1.8; margin-bottom: var(--space-lg); }
+    .about-image picture, .about-image img { border-radius: 4px; min-height: 16rem; object-fit: cover; width: 100%; }
     .about-specs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: var(--space-2xl);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-top: var(--space-2xl);
+    }
+    .spec-row { background: var(--surface); padding: var(--space-lg) var(--space-xl); display: flex; flex-direction: column; gap: var(--space-xs); }
+    .spec-row .label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; }
+    .spec-row .mono { font-size: 0.85rem; color: var(--text-primary); letter-spacing: 0.04em; }
+
+    /* ===== Contact Section (Two-Step Form) ===== */
+    .contact-section { border-top: 1px solid var(--border); padding-bottom: 120px; } /* Extra padding for mobile sticky CTA */
+    .contact-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 4rem; }
+    
+    .form-step { transition: opacity 0.3s ease; }
+    .step-indicator { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: var(--space-sm); }
+    .form-step-title { font-size: 1.5rem; margin-bottom: var(--space-lg); }
+
+    /* Step 1 Cards */
+    .service-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: var(--space-xl); }
+    .service-card-label {
+      display: block; border: 1px solid var(--border-light); border-radius: 4px; padding: 16px; cursor: pointer;
+      background: var(--bg); transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; position: relative;
+    }
+    .service-card-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .service-card-label .card-content { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); }
+    .service-card-label:hover { border-color: var(--text-secondary); background: var(--surface); }
+    .service-card-label:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12); }
+    .service-card-label.selected {
+      border-color: var(--accent-blue); background: rgba(0, 113, 227, 0.04);
+    }
+    .service-card-label.selected::after {
+      content: '✓'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--accent-blue); font-weight: bold; font-family: var(--font-body);
     }
 
-    .spec-row {
-      background: var(--surface);
-      padding: var(--space-lg) var(--space-xl);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xs);
-    }
-
-    .spec-row .label {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      text-transform: uppercase;
-    }
-
-    .spec-row .mono {
-      font-size: 0.85rem;
-      color: var(--text-primary);
-      letter-spacing: 0.04em;
-    }
-
-    /* ===== Contact Section ===== */
-    .contact-section {
-      border-top: 1px solid var(--border);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 4rem;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
-      letter-spacing: 0.06em;
-    }
-
+    /* Step 2 Inputs */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.06em; }
     .form-control {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border-light);
-      border-radius: 4px;
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      color: var(--text-primary);
-      transition: border-color 0.2s;
+      width: 100%; padding: 16px 18px; background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: 4px; font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); transition: all 0.2s;
     }
-
-    .form-control::placeholder {
-      color: var(--text-muted);
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--accent-blue);
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 120px;
-    }
+    .form-control::placeholder { color: var(--text-muted); }
+    .form-control:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12); background: var(--bg); }
+    textarea.form-control { resize: vertical; min-height: 120px; }
 
     .submit-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 16px 36px;
-      background: #f4c754;
-      color: #1d1d1f;
-      font-family: var(--font-body);
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: inline-block; padding: 16px 36px; background: #f4c754; color: #1d1d1f; font-family: var(--font-body);
+      font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em;
+      border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%;
     }
+    .submit-btn:hover:not(:disabled) { background: #f5cf6d; transform: translateY(-1px); }
+    .submit-btn:disabled { background: #e5e5ea; color: #86868b; cursor: not-allowed; box-shadow: none; }
+    
+    .back-btn { background: none; border: none; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; cursor: pointer; margin-bottom: var(--space-md); display: inline-block; }
+    .back-btn:hover { color: var(--text-primary); text-decoration: underline; }
 
-    .submit-btn:hover {
-      background: #f5cf6d;
-      transform: translateY(-1px);
-    }
-
-    .info-block {
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .info-block:last-child {
-      border-bottom: none;
-    }
-
-    .info-block .label {
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .info-block p, .info-block a {
-      font-size: 1rem;
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
-
-    .info-block a:hover {
-      text-decoration: underline;
-    }
+    .contact-info-area .info-block { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); }
+    .contact-info-area .info-block:last-child { border-bottom: none; }
+    .info-block .label { margin-bottom: 8px; display: block; }
+    .info-block p, .info-block a { font-size: 1rem; color: var(--text-primary); line-height: 1.6; }
+    .info-block a:hover { text-decoration: underline; }
 
     /* ===== Footer ===== */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: var(--space-xl) 0;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+    .footer { border-top: 1px solid var(--border); padding: var(--space-xl) 0; display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); }
 
+    /* ===== Mobile Sticky CTA ===== */
+    .mobile-sticky-cta {
+      display: none; position: fixed; bottom: env(safe-area-inset-bottom, 20px); left: 50%; transform: translateX(-50%);
+      width: calc(100% - 40px); background: #1d1d1f; color: #ffffff; text-align: center; padding: 16px;
+      font-weight: 700; font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 4px; z-index: 99; box-shadow: 0 8px 24px rgba(0,0,0,0.25); transition: transform 0.3s ease;
+    }
+    
     @media (max-width: 900px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .service-card.featured {
-        grid-template-columns: 1fr;
-        gap: var(--space-lg);
-      }
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-2xl);
-        display: flex;
-        flex-direction: column;
-      }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-card.featured { grid-template-columns: 1fr; gap: var(--space-lg); }
+      .about-grid { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: var(--space-2xl); }
       .about-grid > .about-text { order: 2; }
       .about-grid > .about-image { order: 1; }
       .about-specs { grid-template-columns: repeat(2, 1fr); }
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
     }
-
+    @media (max-width: 768px) {
+      .mobile-sticky-cta { display: block; }
+    }
     @media (max-width: 600px) {
-      .header-nav {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #fff;
-        flex-direction: column;
-        padding: var(--space-lg);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      }
+      .header-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; padding: var(--space-lg); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
       .header-nav.open { display: flex; }
       .hamburger { display: flex; }
       .services-grid { grid-template-columns: 1fr; }
       .about-specs { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
+      .service-cards-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Bar -->
   <div class="top-bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">Free shipping on all US orders over $400.</div>
@@ -894,6 +420,7 @@
     </div>
   </div>
 
+  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="header-logo">
@@ -913,6 +440,7 @@
     </div>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero">
     <div class="container hero-content">
       <div class="hero-top-row">
@@ -923,11 +451,20 @@
             <span class="hero-story-toggle">We closed our retail showroom to pass wholesale savings directly to you.</span>
           </div>
           
+          <!-- Surfaced Trust & Speed Selling Points (Visualized) -->
           <div class="hero-trust-strip">
-            <div class="trust-strip-item">⚡ QUOTES WITHIN 2 HRS</div>
-            <div class="trust-strip-item">📍 NYC / BROOKLYN STUDIO</div>
-            <div class="trust-strip-item">🛠 SAME-DAY INSTALL</div>
-            <div class="trust-strip-item">💰 PRICE MATCH GUARANTEE</div>
+            <div class="trust-strip-item">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>2 HOUR<br>QUOTES</span>
+            </div>
+            <div class="trust-strip-item">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>SAME-DAY<br>INSTALL</span>
+            </div>
+            <div class="trust-strip-item">
+              <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>PRICE MATCH<br>GUARANTEE</span>
+            </div>
           </div>
 
           <div class="hero-specs">
@@ -938,9 +475,18 @@
           <a href="#contact" class="hero-cta">Get Your Free Quote →</a>
         </div>
         <div class="hero-image-side">
-          <img src="images/title/title1.jpg" alt="Featured Work 1" fetchpriority="high">
-          <img src="images/title/title2.jpg" alt="Featured Work 2" fetchpriority="high">
-          <img src="images/title/title3.jpg" alt="Featured Work 3" fetchpriority="high">
+          <picture>
+            <source srcset="images/title/title1.webp" type="image/webp">
+            <img src="images/title/title1.jpg" alt="Featured Work 1" fetchpriority="high">
+          </picture>
+          <picture>
+            <source srcset="images/title/title2.webp" type="image/webp">
+            <img src="images/title/title2.jpg" alt="Featured Work 2" fetchpriority="high">
+          </picture>
+          <picture>
+            <source srcset="images/title/title3.webp" type="image/webp">
+            <img src="images/title/title3.jpg" alt="Featured Work 3" fetchpriority="high">
+          </picture>
         </div>
       </div>
       <div class="marquee-container">
@@ -952,73 +498,66 @@
     </div>
   </section>
 
+  <!-- Best Seller / Portfolio Section -->
   <section class="best-seller-section" id="portfolio">
     <div class="container">
       <div class="section-header">
-        <h2>Our Best Seller</h2>
-        <a href="portfolio.html" class="mono label view-all-btn">View All Portfolio →</a>
+        <h2>Portfolio & Pricing</h2>
+        <a href="portfolio.html" class="mono label view-all-btn">Full Portfolio →</a>
       </div>
-      <div class="best-seller-grid">
-        <a href="#contact" class="product-card">
-          <div class="product-carousel" data-path="images/vinyl/" data-prefix="Vinyl" data-ext=".jpg">
-            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
-            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
-            <div class="carousel-track"></div>
-          </div>
-          <div class="product-info">
-            <h4 class="product-title">Die Cut Windows Decals</h4>
-            <div class="product-price-row">
-              <span class="product-price">From $60</span>
-              <span class="product-action-link">Get Quote →</span>
-            </div>
-          </div>
-        </a>
-        <a href="#contact" class="product-card">
-          <div class="product-carousel" data-path="images/car/" data-prefix="car" data-ext=".jpg">
-            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
-            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
-            <div class="carousel-track"></div>
-          </div>
-          <div class="product-info">
-            <h4 class="product-title">Die Cut Car Decals</h4>
-            <div class="product-price-row">
-              <span class="product-price">From $50</span>
-              <span class="product-action-link">Get Quote →</span>
-            </div>
-          </div>
-        </a>
-        <a href="#contact" class="product-card">
-          <div class="product-carousel" data-path="images/neon/" data-prefix="Neon" data-ext=".jpeg">
-            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
-            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
-            <div class="carousel-track"></div>
-          </div>
-          <div class="product-info">
-            <h4 class="product-title">Neon sign</h4>
-            <div class="product-price-row">
-              <span class="product-price">From $300</span>
-              <span class="product-action-link">Get Quote →</span>
-            </div>
-          </div>
-        </a>
-        <a href="#contact" class="product-card">
-          <div class="product-carousel" data-path="images/pvc/" data-prefix="pvc" data-ext=".jpg">
-            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
-            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
-            <div class="carousel-track"></div>
-          </div>
-          <div class="product-info">
-            <h4 class="product-title">Display board Printing</h4>
-            <div class="product-price-row">
-              <span class="product-price">From $70</span>
-              <span class="product-action-link">Get Quote →</span>
-            </div>
-          </div>
-        </a>
+
+      <!-- Category 1 -->
+      <div class="portfolio-category">
+        <div class="portfolio-category-header">
+          <h3>Die Cut Windows Decals</h3>
+          <span class="price-tag">From $60</span>
+        </div>
+        <div class="portfolio-image-grid" data-path="images/vinyl/" data-prefix="Vinyl" data-ext=".jpg">
+          <!-- JS will inject up to 4 images here initially -->
+        </div>
+        <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
       </div>
+
+      <!-- Category 2 -->
+      <div class="portfolio-category">
+        <div class="portfolio-category-header">
+          <h3>Die Cut Car Decals</h3>
+          <span class="price-tag">From $50</span>
+        </div>
+        <div class="portfolio-image-grid" data-path="images/car/" data-prefix="car" data-ext=".jpg">
+          <!-- JS will inject up to 4 images here initially -->
+        </div>
+        <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
+      </div>
+
+      <!-- Category 3 -->
+      <div class="portfolio-category">
+        <div class="portfolio-category-header">
+          <h3>Neon Signs</h3>
+          <span class="price-tag">From $300</span>
+        </div>
+        <div class="portfolio-image-grid" data-path="images/neon/" data-prefix="Neon" data-ext=".jpeg">
+          <!-- JS will inject up to 4 images here initially -->
+        </div>
+        <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
+      </div>
+
+      <!-- Category 4 -->
+      <div class="portfolio-category">
+        <div class="portfolio-category-header">
+          <h3>Display Board Printing</h3>
+          <span class="price-tag">From $70</span>
+        </div>
+        <div class="portfolio-image-grid" data-path="images/pvc/" data-prefix="pvc" data-ext=".jpg">
+          <!-- JS will inject up to 4 images here initially -->
+        </div>
+        <button class="view-all-works-btn" type="button">VIEW ALL WORKS →</button>
+      </div>
+
     </div>
   </section>
 
+  <!-- Services Section -->
   <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header">
@@ -1092,6 +631,7 @@
     </div>
   </section>
 
+  <!-- About Section -->
   <section class="section" id="about" style="background: var(--surface);">
     <div class="container">
       <div class="section-header">
@@ -1104,7 +644,10 @@
           <p>We partner closely with our primary manufacturer, <strong>bufanflex.com</strong>, to provide premium wholesale banner materials alongside our rigorous in-house installations. We offer a true end-to-end service—from receiving your file to mounting it flawlessly on your wall or vehicle. We believe in "no cheapest, only cheaper." If you receive a lower verifiable quote elsewhere, we offer a strict <strong>price match guarantee</strong> on our printing fees.</p>
         </div>
         <div class="about-image">
-          <img src="images/about/about.gif" alt="Cheaper Brothers Studio - Brooklyn" loading="lazy">
+          <picture>
+            <source srcset="images/about/about.webp" type="image/webp">
+            <img src="images/about/about.gif" alt="Cheaper Brothers Studio - Brooklyn" loading="lazy" decoding="async">
+          </picture>
         </div>
       </div>
       <div class="about-specs">
@@ -1116,6 +659,7 @@
     </div>
   </section>
 
+  <!-- Contact Us Section (Two-Step Form) -->
   <section class="section contact-section" id="contact">
     <div class="container">
       <div class="section-header">
@@ -1125,43 +669,76 @@
 
       <div class="contact-grid">
         <div class="contact-form-area">
-          <form action="#" method="POST">
-            <div class="form-row">
-              <div class="form-group" style="margin-bottom:0;">
-                <label for="name">Your Name *</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+          <!-- 
+            NOTE: This form currently uses method="POST" with action="#". 
+            Form backend still needs to be connected to a service (e.g., Formspree, Netlify) to process emails.
+          -->
+          <form action="#" method="POST" id="quote-form">
+            
+            <!-- STEP 1: Service Selection -->
+            <div id="form-step-1" class="form-step">
+              <div class="step-indicator">STEP 1 OF 2</div>
+              <h3 class="form-step-title">What service do you need?</h3>
+              
+              <div class="service-cards-grid">
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="vinyl" required>
+                  <span class="card-content">Vinyl Decals &amp; Installation</span>
+                </label>
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="lightbox">
+                  <span class="card-content">Light Box Signage</span>
+                </label>
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="neon">
+                  <span class="card-content">Custom Neon Sign</span>
+                </label>
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="channel">
+                  <span class="card-content">Channel Letters / Metal</span>
+                </label>
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="digital">
+                  <span class="card-content">Display Boards &amp; Print</span>
+                </label>
+                <label class="service-card-label">
+                  <input type="radio" name="service" value="other">
+                  <span class="card-content">Other / Custom</span>
+                </label>
               </div>
-              <div class="form-group" style="margin-bottom:0;">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required>
+              
+              <button type="button" id="btn-next-step" class="submit-btn" disabled>CONTINUE →</button>
+            </div>
+
+            <!-- STEP 2: Contact Details -->
+            <div id="form-step-2" class="form-step" style="display: none;">
+              <div class="step-indicator">STEP 2 OF 2</div>
+              <button type="button" id="btn-prev-step" class="back-btn">← Back to Services</button>
+              
+              <div class="form-row">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="name">Your Name *</label>
+                  <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required>
+                </div>
               </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group" style="margin-bottom:0;">
-                <label for="service">Select Service *</label>
-                <select id="service" name="service" class="form-control" required>
-                  <option value="" disabled selected>Select a Service</option>
-                  <option value="vinyl">Vinyl Decals &amp; Installation</option>
-                  <option value="lightbox">Light Box</option>
-                  <option value="neon">Custom Neon Sign</option>
-                  <option value="channel">Channel Letters</option>
-                  <option value="other">Other / Custom</option>
-                </select>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number (Optional)</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="(917) 000-0000">
               </div>
-              <div class="form-group" style="margin-bottom:0;">
-                <label for="dimensions">Dimensions (Optional)</label>
-                <input type="text" id="dimensions" name="dimensions" class="form-control" placeholder="e.g., 48 x 24 inches">
+              
+              <div class="form-group">
+                <label for="message">Project Description & Dimensions *</label>
+                <textarea id="message" name="message" class="form-control" placeholder="Describe your project, approx dimensions, and mention if you have vector files ready!" required></textarea>
               </div>
+              
+              <button type="submit" class="submit-btn">GET MY FREE QUOTE →</button>
             </div>
-            <div class="form-group">
-              <label for="phone">Phone Number (Optional)</label>
-              <input type="tel" id="phone" name="phone" class="form-control" placeholder="(917) 000-0000">
-            </div>
-            <div class="form-group">
-              <label for="message">Project Description *</label>
-              <textarea id="message" name="message" class="form-control" placeholder="Describe your project... Mention if you have vector files ready!" required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">GET MY FREE QUOTE →</button>
+            
           </form>
         </div>
 
@@ -1194,6 +771,10 @@
     </div>
   </section>
 
+  <!-- Mobile Sticky CTA -->
+  <a href="#contact" class="mobile-sticky-cta" id="mobile-sticky-cta">GET A FREE QUOTE →</a>
+
+  <!-- Footer -->
   <footer class="footer container">
     <span>© 2026 Cheaper Brothers Inc.</span>
     <span>Bespoke Signage &amp; Printing — <a href="mailto:danielwuyanzu@icloud.com">Brooklyn, NY</a></span>
@@ -1202,6 +783,7 @@
   <script>
     (function() {
       'use strict';
+      
       // Mobile Menu Logic
       const hamburger = document.getElementById('hamburger');
       const nav = document.getElementById('mainNav');
@@ -1216,96 +798,174 @@
         });
       });
 
-      // Carousel Logic
-      const carousels = document.querySelectorAll('.product-carousel');
-      carousels.forEach(carousel => {
-        const track = carousel.querySelector('.carousel-track');
-        const prevBtn = carousel.querySelector('.prev');
-        const nextBtn = carousel.querySelector('.next');
-        const path = carousel.getAttribute('data-path');
-        const prefix = carousel.getAttribute('data-prefix');
-        const ext = carousel.getAttribute('data-ext');
-        let currentIndex = 0;
-        let slideCount = 0;
-        let autoPlayInterval;
-        let imageIndex = 1;
-        let isProbing = true;
+      // Two-Step Form Logic
+      const formStep1 = document.getElementById('form-step-1');
+      const formStep2 = document.getElementById('form-step-2');
+      const btnNextStep = document.getElementById('btn-next-step');
+      const btnPrevStep = document.getElementById('btn-prev-step');
+      const serviceRadios = document.querySelectorAll('input[name="service"]');
       
-        const altExt = (ext && ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
-        let currentExt = ext;
-        let triedAlternate = false;
-
-        function probeNextImage() {
-          if (!isProbing || !path || !prefix || !ext) {
-            initCarouselLogic();
-            return;
+      serviceRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          // Remove selected class from all
+          document.querySelectorAll('.service-card-label').forEach(lbl => lbl.classList.remove('selected'));
+          // Add to current
+          if(radio.checked) {
+            radio.closest('.service-card-label').classList.add('selected');
+            btnNextStep.disabled = false;
           }
+        });
+      });
 
-          const imgTest = new Image();
-          imgTest.src = `${path}${prefix}${imageIndex}${currentExt}`;
+      btnNextStep.addEventListener('click', () => {
+        formStep1.style.opacity = '0';
+        setTimeout(() => {
+          formStep1.style.display = 'none';
+          formStep2.style.display = 'block';
+          formStep2.style.opacity = '0';
+          // trigger reflow
+          void formStep2.offsetWidth; 
+          formStep2.style.opacity = '1';
+        }, 200);
+      });
 
-          imgTest.onload = function() {
-            const imgElement = document.createElement('img');
-            imgElement.src = imgTest.src;
-            imgElement.className = 'carousel-slide';
-            imgElement.alt = `${prefix} ${imageIndex}`;
-            imgElement.loading = 'lazy';
-            track.appendChild(imgElement);
-            
-            slideCount++;
-            imageIndex++;
-            currentExt = ext;
-            triedAlternate = false;
-            probeNextImage();
-          };
+      btnPrevStep.addEventListener('click', () => {
+        formStep2.style.opacity = '0';
+        setTimeout(() => {
+          formStep2.style.display = 'none';
+          formStep1.style.display = 'block';
+          formStep1.style.opacity = '0';
+          // trigger reflow
+          void formStep1.offsetWidth; 
+          formStep1.style.opacity = '1';
+        }, 200);
+      });
 
-          imgTest.onerror = function() {
-            if (!triedAlternate) {
-              triedAlternate = true;
-              currentExt = altExt;
-              probeNextImage();
+      // Sticky CTA Interaction Observer
+      const stickyCta = document.getElementById('mobile-sticky-cta');
+      const contactSection = document.getElementById('contact');
+      if (stickyCta && contactSection && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Hide sticky CTA when form section is in view
+              stickyCta.style.transform = 'translate(-50%, 150%)';
             } else {
-              isProbing = false;
-              initCarouselLogic();
+              // Show it otherwise
+              stickyCta.style.transform = 'translate(-50%, 0)';
             }
-          };
+          });
+        }, { threshold: 0.1 }); // Triggers when 10% of contact section is visible
+        observer.observe(contactSection);
+      }
+      
+      // Portfolio Deferred Image Loading Logic (Replacing old carousel)
+      const categories = document.querySelectorAll('.portfolio-category');
+      const INITIAL_IMAGE_LIMIT = 4;
+
+      categories.forEach(category => {
+        const grid = category.querySelector('.portfolio-image-grid');
+        const viewAllBtn = category.querySelector('.view-all-works-btn');
+        const path = grid.getAttribute('data-path');
+        const prefix = grid.getAttribute('data-prefix');
+        const ext = grid.getAttribute('data-ext');
+        const altExt = (ext && ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
+        
+        let imageIndex = 1;
+        let loadedCount = 0;
+        let isProbing = true;
+        let triedAlternate = false;
+        let currentExt = ext;
+        let isExpanded = false;
+
+        // Function to probe and load images recursively until limit is hit or directory empty
+        function loadImages(limit) {
+          if (!isProbing || !path) return;
+          const startCount = loadedCount;
+
+          function probeNext() {
+            // Stop if we hit the limit for this batch
+            if (loadedCount - startCount >= limit && limit !== Infinity) {
+              return;
+            }
+
+            const imgTest = new Image();
+            imgTest.src = `${path}${prefix}${imageIndex}${currentExt}`;
+
+            imgTest.onload = function() {
+              const picture = document.createElement('picture');
+              
+              // Structural WebP readiness
+              const sourceWebp = document.createElement('source');
+              sourceWebp.srcset = `${path}${prefix}${imageIndex}.webp`;
+              sourceWebp.type = 'image/webp';
+              
+              const imgElement = document.createElement('img');
+              imgElement.src = imgTest.src;
+              imgElement.alt = `${prefix} ${imageIndex}`;
+              imgElement.loading = 'lazy';
+              imgElement.decoding = 'async';
+              
+              picture.appendChild(sourceWebp);
+              picture.appendChild(imgElement);
+              grid.appendChild(picture);
+              
+              loadedCount++;
+              imageIndex++;
+              currentExt = ext; // reset to default extension on success
+              triedAlternate = false;
+              probeNext();
+            };
+
+            imgTest.onerror = function() {
+              if (!triedAlternate) {
+                triedAlternate = true;
+                currentExt = altExt;
+                probeNext();
+              } else {
+                // Exhausted images in this directory
+                isProbing = false;
+                if(loadedCount <= INITIAL_IMAGE_LIMIT) {
+                  viewAllBtn.style.display = 'none'; // hide button if fewer than 4 items exist
+                }
+              }
+            };
+          }
+          probeNext();
         }
 
-        probeNextImage();
+        // Initial Load (First 4 only)
+        loadImages(INITIAL_IMAGE_LIMIT);
 
-        function initCarouselLogic() {
-          function updateCarousel() {
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-          }
-          function nextSlide() {
-            if(slideCount === 0) return;
-            currentIndex = (currentIndex + 1) % slideCount;
-            updateCarousel();
-          }
-          function prevSlide() {
-            if(slideCount === 0) return;
-            currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-            updateCarousel();
-          }
-
-          if (nextBtn && prevBtn) {
-            nextBtn.addEventListener('click', (e) => { e.preventDefault(); nextSlide(); resetAutoPlay(); });
-            prevBtn.addEventListener('click', (e) => { e.preventDefault(); prevSlide(); resetAutoPlay(); });
-          }
-
-          function startAutoPlay() { autoPlayInterval = setInterval(nextSlide, 3000); }
-          function stopAutoPlay() { clearInterval(autoPlayInterval); }
-          function resetAutoPlay() { stopAutoPlay(); startAutoPlay(); }
-
-          carousel.addEventListener('mouseenter', stopAutoPlay);
-          carousel.addEventListener('mouseleave', startAutoPlay);
-
-          if(slideCount > 1) {
-            startAutoPlay();
-          } else {
-            if(prevBtn) prevBtn.style.display = 'none';
-            if(nextBtn) nextBtn.style.display = 'none';
-          }
+        // View All interaction
+        if(viewAllBtn) {
+          viewAllBtn.addEventListener('click', () => {
+            if (!isExpanded) {
+              // Expand
+              if(isProbing) {
+                // Fetch the rest
+                loadImages(Infinity);
+              } else {
+                // Show previously hidden items (if toggled back and forth)
+                const pics = grid.querySelectorAll('picture');
+                pics.forEach(p => p.style.display = 'block');
+              }
+              viewAllBtn.textContent = 'SHOW LESS ↑';
+              isExpanded = true;
+            } else {
+              // Collapse
+              const pics = grid.querySelectorAll('picture');
+              pics.forEach((p, i) => {
+                if (i >= INITIAL_IMAGE_LIMIT) {
+                  p.style.display = 'none';
+                }
+              });
+              viewAllBtn.textContent = 'VIEW ALL WORKS →';
+              isExpanded = false;
+              // Smooth scroll back to top of this category
+              category.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
         }
       });
     })();
