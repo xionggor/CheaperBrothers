@@ -311,6 +311,26 @@
     .spec-row .label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; }
     .spec-row .mono { font-size: 0.85rem; color: var(--text-primary); letter-spacing: 0.04em; }
 
+    /* ===== Customer Reviews Section ===== */
+    .reviews-section { border-top: 1px solid var(--border); }
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); margin-bottom: var(--space-2xl);
+    }
+    .review-card {
+      background: var(--surface); padding: var(--space-xl); border-radius: 4px;
+      border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: var(--space-sm);
+    }
+    .review-stars { color: #f4c754; font-size: 1.2rem; letter-spacing: 2px; line-height: 1; }
+    .review-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; flex-grow: 1; font-style: italic; }
+    .review-author { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--text-primary); margin-top: var(--space-sm); }
+    .review-service { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .review-cta-btn {
+      display: inline-block; padding: 14px 32px; background: transparent; border: 2px solid var(--text-primary);
+      color: var(--text-primary); font-family: var(--font-mono); font-weight: 600; font-size: 0.85rem;
+      text-transform: uppercase; letter-spacing: 0.08em; border-radius: 4px; transition: background 0.2s, color 0.2s;
+    }
+    .review-cta-btn:hover { background: var(--text-primary); color: var(--bg); }
+
     /* ===== Contact Section (Two-Step Form) ===== */
     .contact-section { border-top: 1px solid var(--border); padding-bottom: 120px; } /* Extra padding for mobile sticky CTA */
     .contact-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 4rem; }
@@ -385,6 +405,7 @@
       .about-grid > .about-image { order: 1; }
       .about-specs { grid-template-columns: repeat(2, 1fr); }
       .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .reviews-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
       .mobile-sticky-cta { display: block; }
@@ -397,6 +418,7 @@
       .about-specs { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
       .service-cards-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -655,6 +677,51 @@
         <div class="spec-row"><span class="label">Team</span><span class="mono">Daniel Wu, CFO &amp; Founder</span></div>
         <div class="spec-row"><span class="label">Turnaround</span><span class="mono">Same-day installation available</span></div>
         <div class="spec-row"><span class="label">Guarantee</span><span class="mono">Price match on print costs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Reviews Section (Social Proof) -->
+  <section class="section reviews-section" id="reviews" style="background: var(--bg);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Customer Reviews</h2>
+        <span class="mono label">Sample Experiences</span>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Daniel and the team knocked it out of the park. We needed a new storefront lightbox in Brooklyn on short notice, and they delivered. The price match guarantee is no joke."</p>
+          <div class="review-author">Michael T.</div>
+          <div class="review-service">Light Box Signage</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Fast, professional, and exactly what we asked for. The die-cut window decals for our Manhattan coffee shop look premium. Highly recommend Cheaper Brothers for local business owners."</p>
+          <div class="review-author">Sarah L.</div>
+          <div class="review-service">Window Decals</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I was blown away by the 2-hour quote turnaround. They handled our custom neon sign for an upcoming event, and the quality is fantastic. You can tell they actually care about the final product."</p>
+          <div class="review-author">David R.</div>
+          <div class="review-service">Custom Neon Sign</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We had some old, peeling vinyl on our company vans. The team removed it seamlessly and installed the new wraps the very same day. Awesome service and great guys to work with."</p>
+          <div class="review-author">Jessica M.</div>
+          <div class="review-service">Vehicle Decals & Removal</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Getting custom display boards printed in the city is usually a headache, but these guys made it frictionless. Direct studio pricing saved us a ton on our seasonal promo materials."</p>
+          <div class="review-author">James K.</div>
+          <div class="review-service">Display Boards</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: var(--space-xl);">
+        <a href="https://g.page/r/CVsuUOp0Sl29EAE/review" target="_blank" class="review-cta-btn">Share Your Experience on Google</a>
       </div>
     </div>
   </section>
