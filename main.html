@@ -3,8 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cheaper Brothers Inc. — Bespoke Signage & Printing</title>
-  <meta name="description" content="NYC-based premium bespoke print and signage studio specializing in custom vinyl decals, digital printing, light boxes, and neon signs." />
+  <title>Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC</title>
+  <meta name="description" content="NYC & Brooklyn-based premium custom signage and vinyl decal studio. Direct studio prices, professional installation, and quotes within 2 hours." />
+  
+  <link rel="canonical" href="https://cheaperbrothers.com/" />
+  <meta property="og:title" content="Cheaper Brothers Inc. — Custom Signage & Vinyl Decals NYC" />
+  <meta property="og:description" content="NYC-based premium bespoke print and signage studio specializing in custom vinyl decals, digital printing, light boxes, and neon signs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cheaperbrothers.com/" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -225,6 +232,7 @@
     .header-nav {
       display: flex;
       gap: var(--space-xl);
+      align-items: center;
     }
 
     .header-nav a {
@@ -236,6 +244,22 @@
 
     .header-nav a:hover {
       color: var(--text-primary);
+    }
+
+    .nav-cta-btn {
+      padding: 8px 16px;
+      background: #f4c754 !important;
+      color: #1d1d1f !important;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-size: 0.8rem !important;
+      letter-spacing: 0.06em;
+      transition: background 0.2s ease;
+    }
+
+    .nav-cta-btn:hover {
+      background: #e5b843 !important;
     }
 
     .hamburger {
@@ -266,7 +290,7 @@
 
     .hero-top-row {
       display: grid;
-      grid-template-columns: 0.8fr 2.2fr;
+      grid-template-columns: 0.9fr 2.1fr;
       gap: var(--space-3xl);
       align-items: start;
       margin-bottom: var(--space-xl);
@@ -275,23 +299,28 @@
     .hero-text-side {
       display: flex;
       flex-direction: column;
-      gap: var(--space-xl);
+      gap: var(--space-lg);
       padding-top: var(--space-sm);
     }
 
-    .hero-desc {
-      font-size: clamp(0.9rem, 1vw, 1.1rem);
-      color: rgba(255, 255, 255, 0.9);
-      line-height: 1.7;
+    .hero-commercial-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      color: #ffffff;
     }
 
-    .hero-desc .tagline {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.5);
-      display: block;
-      margin-top: var(--space-md);
+    .hero-desc {
+      font-size: clamp(0.9rem, 1vw, 1.05rem);
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    .hero-story-toggle {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 0.2rem;
     }
 
     .hero-specs {
@@ -311,6 +340,25 @@
       font-weight: 500;
     }
 
+    /* Trust & Speed Value Strip Above Fold */
+    .hero-trust-strip {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px;
+      border-radius: 4px;
+    }
+
+    .trust-strip-item {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
     .hero-image-side {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -326,20 +374,22 @@
 
     .hero-cta {
       align-self: flex-start;
-      padding: 0.9rem 2rem;
-      background: #ffffff;
-      color: #3b5284;
+      padding: 1rem 2.2rem;
+      background: #f4c754;
+      color: #1d1d1f;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       border: none;
-      transition: background 0.2s, color 0.2s;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .hero-cta:hover {
-      background: #f4c754;
-      color: #1d1d1f;
+      background: #f5cf6d;
+      transform: translateY(-1px);
     }
 
     @media (max-width: 1024px) {
@@ -402,6 +452,7 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-sm);
+      text-decoration: none;
     }
 
     .product-carousel {
@@ -470,10 +521,23 @@
       line-height: 1.3;
     }
 
+    .product-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+
     .product-price {
       font-size: clamp(0.85rem, 0.8vw + 0.5rem, 0.95rem);
       color: var(--text-secondary);
-      margin-top: 2px;
+    }
+
+    .product-action-link {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--accent-blue);
+      font-weight: 600;
     }
 
     @media (max-width: 900px) {
@@ -578,6 +642,15 @@
       margin-bottom: var(--space-md);
     }
 
+    .service-quote-link {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-top: var(--space-md);
+      display: inline-block;
+    }
+
     .svc-image {
       width: 100%;
       height: 12rem;
@@ -666,6 +739,15 @@
       margin-bottom: 1rem;
     }
 
+    .form-group label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      letter-spacing: 0.06em;
+    }
+
     .form-control {
       width: 100%;
       padding: 14px 16px;
@@ -684,7 +766,7 @@
 
     .form-control:focus {
       outline: none;
-      border-color: var(--text-secondary);
+      border-color: var(--accent-blue);
     }
 
     textarea.form-control {
@@ -695,22 +777,24 @@
     .submit-btn {
       display: inline-block;
       margin-top: 0.5rem;
-      padding: 14px 32px;
-      background: #1d1d1f;
-      color: #ffffff;
+      padding: 16px 36px;
+      background: #f4c754;
+      color: #1d1d1f;
       font-family: var(--font-body);
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       border: none;
-      border-radius: 2px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .submit-btn:hover {
-      background: #424245;
+      background: #f5cf6d;
+      transform: translateY(-1px);
     }
 
     .info-block {
@@ -781,6 +865,7 @@
         background: #fff;
         flex-direction: column;
         padding: var(--space-lg);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
       }
       .header-nav.open { display: flex; }
       .hamburger { display: flex; }
@@ -792,7 +877,6 @@
 </head>
 <body>
 
-  <!-- Top Bar -->
   <div class="top-bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">Free shipping on all US orders over $400.</div>
@@ -810,7 +894,6 @@
     </div>
   </div>
 
-  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="header-logo">
@@ -820,47 +903,55 @@
         <a href="main.html">Home</a>
         <a href="portfolio.html">Portfolio</a>
         <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
         <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="nav-cta-btn">Get a Quote</a>
       </nav>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container hero-content">
       <div class="hero-top-row">
         <div class="hero-text-side">
+          <h1 class="hero-commercial-title">Premium Custom Signage &amp; Decals in NYC</h1>
           <div class="hero-desc">
-            We closed our retail showroom to bring the savings directly to you. Operating as a private studio allows us to bypass inflation entirely. You still get industry-leading quality on all bespoke decals, light boxes, and commercial signage—just at prices designed to support the NYC business community.
-            <span class="tagline">FILE-TO-FINISH · NYC BASED</span>
+            Direct studio prices. Professional installation. Fast quotes.<br>
+            <span class="hero-story-toggle">We closed our retail showroom to pass wholesale savings directly to you.</span>
           </div>
+          
+          <div class="hero-trust-strip">
+            <div class="trust-strip-item">⚡ QUOTES WITHIN 2 HRS</div>
+            <div class="trust-strip-item">📍 NYC / BROOKLYN STUDIO</div>
+            <div class="trust-strip-item">🛠 SAME-DAY INSTALL</div>
+            <div class="trust-strip-item">💰 PRICE MATCH GUARANTEE</div>
+          </div>
+
           <div class="hero-specs">
             <div class="spec-item"><div class="mono">Est.</div><div class="value">2024</div></div>
             <div class="spec-item"><div class="mono">Projects</div><div class="value">Premium +</div></div>
             <div class="spec-item"><div class="mono">Coverage</div><div class="value">NYC + Nationwide</div></div>
           </div>
-          <a href="#contact" class="hero-cta">Get a Free Quote →</a>
+          <a href="#contact" class="hero-cta">Get Your Free Quote →</a>
         </div>
         <div class="hero-image-side">
-          <img src="images/title/title1.jpg" alt="Featured Work 1">
-          <img src="images/title/title2.jpg" alt="Featured Work 2">
-          <img src="images/title/title3.jpg" alt="Featured Work 3">
+          <img src="images/title/title1.jpg" alt="Featured Work 1" fetchpriority="high">
+          <img src="images/title/title2.jpg" alt="Featured Work 2" fetchpriority="high">
+          <img src="images/title/title3.jpg" alt="Featured Work 3" fetchpriority="high">
         </div>
       </div>
       <div class="marquee-container">
         <div class="marquee-track">
-          <h1 class="hero-headline">BIG IDEAS. SMALL BUDGETS. <span style="color: #f4c754;">WE GOT YOU.</span></h1>
-          <h1 class="hero-headline">BIG IDEAS. SMALL BUDGETS. <span style="color: #f4c754;">WE GOT YOU.</span></h1>
+          <h2 class="hero-headline">BIG IDEAS. SMALL BUDGETS. <span style="color: #f4c754;">WE GOT YOU.</span></h2>
+          <h2 class="hero-headline">BIG IDEAS. SMALL BUDGETS. <span style="color: #f4c754;">WE GOT YOU.</span></h2>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Best Seller Section -->
   <section class="best-seller-section" id="portfolio">
     <div class="container">
       <div class="section-header">
@@ -868,55 +959,66 @@
         <a href="portfolio.html" class="mono label view-all-btn">View All Portfolio →</a>
       </div>
       <div class="best-seller-grid">
-        <div class="product-card">
+        <a href="#contact" class="product-card">
           <div class="product-carousel" data-path="images/vinyl/" data-prefix="Vinyl" data-ext=".jpg">
-            <button class="carousel-btn prev">&#10094;</button>
-            <button class="carousel-btn next">&#10095;</button>
+            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
+            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
             <div class="carousel-track"></div>
           </div>
           <div class="product-info">
             <h4 class="product-title">Die Cut Windows Decals</h4>
-            <span class="product-price">From $60</span>
+            <div class="product-price-row">
+              <span class="product-price">From $60</span>
+              <span class="product-action-link">Get Quote →</span>
+            </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a href="#contact" class="product-card">
           <div class="product-carousel" data-path="images/car/" data-prefix="car" data-ext=".jpg">
-            <button class="carousel-btn prev">&#10094;</button>
-            <button class="carousel-btn next">&#10095;</button>
+            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
+            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
             <div class="carousel-track"></div>
           </div>
           <div class="product-info">
             <h4 class="product-title">Die Cut Car Decals</h4>
-            <span class="product-price">From $50</span>
+            <div class="product-price-row">
+              <span class="product-price">From $50</span>
+              <span class="product-action-link">Get Quote →</span>
+            </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a href="#contact" class="product-card">
           <div class="product-carousel" data-path="images/neon/" data-prefix="Neon" data-ext=".jpeg">
-            <button class="carousel-btn prev">&#10094;</button>
-            <button class="carousel-btn next">&#10095;</button>
+            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
+            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
             <div class="carousel-track"></div>
           </div>
           <div class="product-info">
             <h4 class="product-title">Neon sign</h4>
-            <span class="product-price">From $300</span>
+            <div class="product-price-row">
+              <span class="product-price">From $300</span>
+              <span class="product-action-link">Get Quote →</span>
+            </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a href="#contact" class="product-card">
           <div class="product-carousel" data-path="images/pvc/" data-prefix="pvc" data-ext=".jpg">
-            <button class="carousel-btn prev">&#10094;</button>
-            <button class="carousel-btn next">&#10095;</button>
+            <button class="carousel-btn prev" type="button" aria-label="Previous image">&#10094;</button>
+            <button class="carousel-btn next" type="button" aria-label="Next image">&#10095;</button>
             <div class="carousel-track"></div>
           </div>
           <div class="product-info">
             <h4 class="product-title">Display board Printing</h4>
-            <span class="product-price">From $70</span>
+            <div class="product-price-row">
+              <span class="product-price">From $70</span>
+              <span class="product-action-link">Get Quote →</span>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Services Section -->
   <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header">
@@ -934,56 +1036,62 @@
               <span class="badge primary" style="border-color: #e60000; color: #e60000; background: rgba(230,0,0,0.05);">INSTALLATION</span>
               <span class="badge primary" style="border-color: #00c78b; color: #00c78b; background: rgba(0,199,139,0.05);">DECAL REMOVAL</span>
             </div>
+            <span class="service-quote-link">Request Custom Installation Quote →</span>
           </div>
-          <div class="svc-icon" style="height: 100%; min-height: 16rem; background: url('images/services/service-01-vinyl.jpg') center/cover no-repeat; border-radius: 4px; border: 1px solid var(--border);"></div>
+          <div class="svc-icon" style="height: 100%; min-height: 16rem; background: url('images/services/service-01-vinyl.jpg') center/cover no-repeat; border-radius: 4px; border: 1px solid var(--border);" role="img" aria-label="Vinyl Decals"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">02</div>
           <h3>Digital<br>Printing</h3>
           <p>High-resolution digital prints on a wide range of materials — banners, posters, apparel, and event signage.</p>
           <div class="badge-row"><span class="badge">DIGITAL PRINT</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-02-print.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-02-print.jpg');" role="img" aria-label="Digital Printing"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">03</div>
           <h3>Light<br>Box</h3>
           <p>Illuminated light boxes for storefronts, indoor signage &amp; advertising — premium edge-lit or backlit options.</p>
           <div class="badge-row"><span class="badge">LIGHT BOX</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-03-lightbox.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-03-lightbox.jpg');" role="img" aria-label="Light Box"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">04</div>
           <h3>Custom<br>Neon Sign</h3>
           <p>LED neon flex signs in any shape, color &amp; size — for storefronts, weddings, offices and interiors.</p>
           <div class="badge-row"><span class="badge">CUSTOM NEON</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-04-neon.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-04-neon.jpg');" role="img" aria-label="Custom Neon Sign"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">05</div>
           <h3>Metal &amp;<br>Acrylic Signs</h3>
           <p>Custom dimensional signs, A-frame boards, and premium metal fabrications tailored exclusively to your vision.</p>
           <div class="badge-row"><span class="badge">METAL SIGNAGE</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-05-metal.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-05-metal.jpg');" role="img" aria-label="Metal and Acrylic Signs"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">06</div>
           <h3>Display Board<br>Printing</h3>
           <p>High-quality custom printing on rigid materials like foam core and PVC. Perfect for professional presentations.</p>
           <div class="badge-row"><span class="badge">DISPLAY BOARDS</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-06-PVC.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-06-PVC.jpg');" role="img" aria-label="Display Board Printing"></div>
         </a>
         <a href="#contact" class="service-card">
           <div class="svc-num">07</div>
           <h3>Other<br>Customization</h3>
           <p>Tell us what you want to customize! From t-shirts and tote bags to unique custom signboards, we can bring your ideas to life.</p>
           <div class="badge-row"><span class="badge">CUSTOM MERCH</span></div>
-          <div class="svc-image" style="background-image: url('images/services/service-07-tshirt&amp;totebag.jpg');"></div>
+          <span class="service-quote-link">Get a Quote →</span>
+          <div class="svc-image" style="background-image: url('images/services/service-07-tshirt&amp;totebag.jpg');" role="img" aria-label="Other Customization"></div>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
   <section class="section" id="about" style="background: var(--surface);">
     <div class="container">
       <div class="section-header">
@@ -996,7 +1104,7 @@
           <p>We partner closely with our primary manufacturer, <strong>bufanflex.com</strong>, to provide premium wholesale banner materials alongside our rigorous in-house installations. We offer a true end-to-end service—from receiving your file to mounting it flawlessly on your wall or vehicle. We believe in "no cheapest, only cheaper." If you receive a lower verifiable quote elsewhere, we offer a strict <strong>price match guarantee</strong> on our printing fees.</p>
         </div>
         <div class="about-image">
-          <img src="images/about/about.gif" alt="Cheaper Brothers Studio - Brooklyn">
+          <img src="images/about/about.gif" alt="Cheaper Brothers Studio - Brooklyn" loading="lazy">
         </div>
       </div>
       <div class="about-specs">
@@ -1008,39 +1116,52 @@
     </div>
   </section>
 
-  <!-- Contact Us Section (Identical to contact.html) -->
   <section class="section contact-section" id="contact">
     <div class="container">
       <div class="section-header">
-        <h2>Let's Work Together</h2>
-        <span class="mono label">Get in touch</span>
+        <h2>Get Your Free Quote</h2>
+        <span class="mono label">Fast response within 2 hours</span>
       </div>
 
       <div class="contact-grid">
         <div class="contact-form-area">
           <form action="#" method="POST">
             <div class="form-row">
-              <input type="text" class="form-control" placeholder="Your name" required>
-              <input type="email" class="form-control" placeholder="Email address" required>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required>
+              </div>
             </div>
             <div class="form-row">
-              <select class="form-control" required>
-                <option value="" disabled selected>Select a Service</option>
-                <option value="vinyl">Vinyl Decals &amp; Installation</option>
-                <option value="lightbox">Light Box</option>
-                <option value="neon">Custom Neon Sign</option>
-                <option value="channel">Channel Letters</option>
-                <option value="other">Other / Custom</option>
-              </select>
-              <input type="text" class="form-control" placeholder="Dimensions (e.g., 48 x 24 inches)">
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="service">Select Service *</label>
+                <select id="service" name="service" class="form-control" required>
+                  <option value="" disabled selected>Select a Service</option>
+                  <option value="vinyl">Vinyl Decals &amp; Installation</option>
+                  <option value="lightbox">Light Box</option>
+                  <option value="neon">Custom Neon Sign</option>
+                  <option value="channel">Channel Letters</option>
+                  <option value="other">Other / Custom</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="dimensions">Dimensions (Optional)</label>
+                <input type="text" id="dimensions" name="dimensions" class="form-control" placeholder="e.g., 48 x 24 inches">
+              </div>
             </div>
             <div class="form-group">
-              <input type="tel" class="form-control" placeholder="Phone (optional)">
+              <label for="phone">Phone Number (Optional)</label>
+              <input type="tel" id="phone" name="phone" class="form-control" placeholder="(917) 000-0000">
             </div>
             <div class="form-group">
-              <textarea class="form-control" placeholder="Describe your project... Don't forget to mention if you have your vector files ready!" required></textarea>
+              <label for="message">Project Description *</label>
+              <textarea id="message" name="message" class="form-control" placeholder="Describe your project... Mention if you have vector files ready!" required></textarea>
             </div>
-            <button type="submit" class="submit-btn">Send Request</button>
+            <button type="submit" class="submit-btn">GET MY FREE QUOTE →</button>
           </form>
         </div>
 
@@ -1073,7 +1194,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer container">
     <span>© 2026 Cheaper Brothers Inc.</span>
     <span>Bespoke Signage &amp; Printing — <a href="mailto:danielwuyanzu@icloud.com">Brooklyn, NY</a></span>
@@ -1086,11 +1206,13 @@
       const hamburger = document.getElementById('hamburger');
       const nav = document.getElementById('mainNav');
       hamburger.addEventListener('click', () => {
-        nav.classList.toggle('open');
+        const isOpen = nav.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', isOpen);
       });
       document.querySelectorAll('.header-nav a').forEach(link => {
         link.addEventListener('click', () => {
           nav.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
         });
       });
 
@@ -1106,50 +1228,48 @@
         let currentIndex = 0;
         let slideCount = 0;
         let autoPlayInterval;
-       let imageIndex = 1;
-      let isProbing = true;
+        let imageIndex = 1;
+        let isProbing = true;
       
-      // 新增：自动判断备用后缀
-      const altExt = (ext && ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
-      let currentExt = ext;
-      let triedAlternate = false;
+        const altExt = (ext && ext.toLowerCase() === '.jpg') ? '.jpeg' : '.jpg';
+        let currentExt = ext;
+        let triedAlternate = false;
 
-      function probeNextImage() {
-        if (!isProbing || !path || !prefix || !ext) {
-          initCarouselLogic();
-          return;
-        }
-
-        const imgTest = new Image();
-        imgTest.src = `${path}${prefix}${imageIndex}${currentExt}`;
-
-        imgTest.onload = function() {
-          const imgElement = document.createElement('img');
-          imgElement.src = imgTest.src;
-          imgElement.className = 'carousel-slide';
-          imgElement.alt = `${prefix} ${imageIndex}`;
-          track.appendChild(imgElement);
-          
-          slideCount++;
-          imageIndex++;
-          currentExt = ext; // 成功后，重置为默认后缀继续找下一张
-          triedAlternate = false;
-          probeNextImage();
-        };
-
-        imgTest.onerror = function() {
-          if (!triedAlternate) {
-            // 默认后缀没找到，换备用后缀再试一次
-            triedAlternate = true;
-            currentExt = altExt;
-            probeNextImage();
-          } else {
-            // 两个都找不到，说明这个产品目录的图片结束了，启动轮播逻辑
-            isProbing = false;
+        function probeNextImage() {
+          if (!isProbing || !path || !prefix || !ext) {
             initCarouselLogic();
+            return;
           }
-        };
-      }
+
+          const imgTest = new Image();
+          imgTest.src = `${path}${prefix}${imageIndex}${currentExt}`;
+
+          imgTest.onload = function() {
+            const imgElement = document.createElement('img');
+            imgElement.src = imgTest.src;
+            imgElement.className = 'carousel-slide';
+            imgElement.alt = `${prefix} ${imageIndex}`;
+            imgElement.loading = 'lazy';
+            track.appendChild(imgElement);
+            
+            slideCount++;
+            imageIndex++;
+            currentExt = ext;
+            triedAlternate = false;
+            probeNextImage();
+          };
+
+          imgTest.onerror = function() {
+            if (!triedAlternate) {
+              triedAlternate = true;
+              currentExt = altExt;
+              probeNextImage();
+            } else {
+              isProbing = false;
+              initCarouselLogic();
+            }
+          };
+        }
 
         probeNextImage();
 
@@ -1169,8 +1289,8 @@
           }
 
           if (nextBtn && prevBtn) {
-            nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
-            prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
+            nextBtn.addEventListener('click', (e) => { e.preventDefault(); nextSlide(); resetAutoPlay(); });
+            prevBtn.addEventListener('click', (e) => { e.preventDefault(); prevSlide(); resetAutoPlay(); });
           }
 
           function startAutoPlay() { autoPlayInterval = setInterval(nextSlide, 3000); }
