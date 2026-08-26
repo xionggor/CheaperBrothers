@@ -233,8 +233,14 @@
       transition: background 0.2s;
     }
 
-    .submit-btn:hover {
+    .submit-btn:hover:not(:disabled) {
       background: #424245;
+    }
+    
+    .submit-btn:disabled {
+      background: #e5e5ea;
+      color: #86868b;
+      cursor: not-allowed;
     }
 
     /* --- Sidebar Info Styles --- */
@@ -336,27 +342,28 @@
 
       <div class="contact-grid">
         <div class="contact-form-area">
-          <form action="#" method="POST">
+          <!-- 核心修改区：添加了 ID 以便 JS 拦截读取 -->
+          <form action="#" method="POST" id="contact-page-form">
             <div class="form-row">
-              <input type="text" class="form-control" placeholder="Your name" required>
-              <input type="email" class="form-control" placeholder="Email address" required>
+              <input type="text" id="contact-name" class="form-control" placeholder="Your name" required>
+              <input type="email" id="contact-email" class="form-control" placeholder="Email address" required>
             </div>
             <div class="form-row">
-              <select class="form-control" required>
+              <select id="contact-service" class="form-control" required>
                 <option value="" disabled selected>Select a Service</option>
-                <option value="vinyl">Vinyl Decals & Installation</option>
-                <option value="lightbox">Light Box</option>
-                <option value="neon">Custom Neon Sign</option>
-                <option value="channel">Channel Letters</option>
-                <option value="other">Other / Custom</option>
+                <option value="Vinyl Decals">Vinyl Decals & Installation</option>
+                <option value="Light Box">Light Box</option>
+                <option value="Custom Neon">Custom Neon Sign</option>
+                <option value="Channel Letters">Channel Letters</option>
+                <option value="Other">Other / Custom</option>
               </select>
-              <input type="text" class="form-control" placeholder="Dimensions (e.g., 48 x 24 inches)">
+              <input type="text" id="contact-dimensions" class="form-control" placeholder="Dimensions (e.g., 48 x 24 inches)">
             </div>
             <div class="form-group">
-              <input type="tel" class="form-control" placeholder="Phone (optional)">
+              <input type="tel" id="contact-phone" class="form-control" placeholder="Phone (optional)">
             </div>
             <div class="form-group">
-              <textarea class="form-control" placeholder="Describe your project... Don't forget to mention if you have your vector files ready!" required></textarea>
+              <textarea id="contact-message" class="form-control" placeholder="Describe your project... Don't forget to mention if you have your vector files ready!" required></textarea>
             </div>
             <button type="submit" class="submit-btn">Send Request</button>
           </form>
@@ -397,5 +404,52 @@
     <span>Brooklyn, NY</span>
   </footer>
 
+  <!-- 新增：处理表单发送的 JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const contactForm = document.getElementById('contact-page-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = 'SENDING...';
+          submitBtn.disabled = true;
+
+          // 把服务类型和尺寸拼接到一起
+          const serviceSelect = document.getElementById('contact-service').value;
+          const dimensions = document.getElementById('contact-dimensions').value;
+          const fullService = dimensions ? `${serviceSelect} (Dimensions: ${dimensions})` : serviceSelect;
+
+          const formData = {
+            service: fullService,
+            name: document.getElementById('contact-name').value,
+            email: document.getElementById('contact-email').value,
+            phone: document.getElementById('contact-phone').value,
+            message: document.getElementById('contact-message').value
+          };
+
+          try {
+            const response = await fetch('https://cheaper-quotes.cheaperbrothersnyc.workers.dev', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+              window.location.href = 'thank-you.html';
+            } else {
+              alert('Oops! Something went wrong. Please try again.');
+            }
+          } catch (error) {
+            alert('Network error. Please try again.');
+          } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
